@@ -20,7 +20,7 @@
 
 ## 适合人群
 
-为了你更好地熟悉和运用 DncZeus，你需要了解：
+由于 DncZeus 考虑到初级.NET 开发者来可以使用，所以后端项目未涉及过多架构和封装(代码逻辑一目了然)，但为了你更好地熟悉和运用 DncZeus，你需要了解：
 
 - ASP.NET Core
 - Vue.js
@@ -51,7 +51,7 @@ ASP.NET Core 的知识能确保你可以看懂和了解后端是如何实现和�
 - .NET Core 依赖注入
 - Swagger UI
 - Vue.js(ES6 语法)
-- iView
+- iView(基于 Vue.js 的 UI 框架)
 
 ## 安装
 
