@@ -110,10 +110,6 @@ npm run dev
 
 成功运行后会自动在浏览器中打开地址: http://localhost:9000
 
-## 开发
-
-1.xxxx
-2.xxxx
 
 [1]: https://github.com/iview/iview-admin
 [2]: https://docs.microsoft.com/en-us/aspnet/core/?view=aspnetcore-2.2
