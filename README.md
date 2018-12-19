@@ -18,6 +18,21 @@
 
 **DncZeus**并不是一个完整的业务系统，但她提供完成业务系统的绝大多数开发场景，让每一位.NET 开发者都能基于**DncZeus**快速开发出交互、体验以及功能具佳的.NET Core 单页应用程序(SPA)。
 
+## 支持DncZeus
+
+如果你觉得DncZeus对你或者他人有用，请为DncZeus点个赞，求扩散，让更多人获得帮助！！！
+
+## 在线体验(Demo)
+
+超级管理员：administrator 
+管理员：admin
+
+密码：111111
+
+地址：[https://dnczeus.codedefault.com][7]
+
+**由于是个人项目，资金有限，体验服是低配，请大家爱惜，轻戳，不胜感激！！！**
+
 ## 适合人群
 
 由于 DncZeus 考虑到初级.NET 开发者都可以使用，所以后端项目未涉及过多架构和封装(代码逻辑一目了然)，但为了你更好地熟悉和运用 DncZeus，你需要了解：
@@ -141,6 +156,13 @@ DncZeus项目是一个开源项目，你可以直接基于本项目进行扩展�
 
 **但请保留原文件中的版权信息，尊重本人的劳动成果，违者必究，谢谢合作**。
 
+## 问题与反馈
+
+遇到问题怎么办？
+
+* 直接提交issue
+* QQ群：483350228
+
 
 [1]: https://github.com/iview/iview-admin
 [2]: https://docs.microsoft.com/en-us/aspnet/core/?view=aspnetcore-2.2
@@ -148,3 +170,4 @@ DncZeus项目是一个开源项目，你可以直接基于本项目进行扩展�
 [4]: https://github.com/lampo1024/DncZeus
 [5]: https://statics.codedefault.com/uploads/2018/12/1.png
 [6]: https://statics.codedefault.com/uploads/2018/12/2.png
+[7]: https://dnczeus.codedefault.com
