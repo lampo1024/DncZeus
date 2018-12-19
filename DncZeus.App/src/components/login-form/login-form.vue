@@ -23,6 +23,7 @@
         :loading="loading"
       >{{btnLoginText}}</Button>
     </FormItem>
+    <p class="login-tip">欢迎使用DncZeus通用权限管理框架</p>
   </Form>
 </template>
 <script>
