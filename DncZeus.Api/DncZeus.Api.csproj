@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>\bin\Debug\netcoreapp2.1\DncZeus.Api.xml</DocumentationFile>
-    <OutputPath>\bin\Debug\netcoreapp2.1\</OutputPath>
+    <DocumentationFile>\bin\Debug\DncZeus.Api.xml</DocumentationFile>
+    <OutputPath></OutputPath>
   </PropertyGroup>
 
   <ItemGroup>

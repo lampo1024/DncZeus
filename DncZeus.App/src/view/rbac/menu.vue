@@ -383,7 +383,7 @@ export default {
                 });
               }
             },
-            { title: "菜单名称", key: "name", sortable: true, width: 250 },
+            { title: "菜单名称", key: "name", sortable: true,minWidth:200 },
             {
               title: "请求地址",
               key: "url",
@@ -497,7 +497,7 @@ export default {
             },
             {
               title: "创建时间",
-              width: 90,
+              width: 150,
               ellipsis: true,
               tooltip: true,
               key: "createdOn"

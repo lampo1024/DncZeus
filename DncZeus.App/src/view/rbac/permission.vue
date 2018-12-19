@@ -336,7 +336,7 @@ export default {
             { type: "selection", width: 50, key: "handle" },
             { title: "权限名称", key: "name", width: 250, sortable: true },
             { title: "关联菜单", key: "menuName", width: 250 },
-            { title: "操作码", key: "actionCode", width: 250 },
+            { title: "操作码", key: "actionCode", minWidth:200 },
             {
               title: "状态",
               key: "status",
