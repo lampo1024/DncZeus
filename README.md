@@ -100,7 +100,7 @@ npm i
 
 1. 使用Visual Studio开发工具打开DncZeus根目录中的VS解决方案文件[DncZeus.sln](或者你喜欢的话，使用VS Code来进行ASP.NET Core的开发也是可以的)，设置DncZeus.Api项目为默认启动项并运行此项目。
 
-> 这时在浏览器中打开地址：http://localhost:61532/swagger ，便可以查看到DncZeus已经实现的后端API接口服务了。
+> 这时在浏览器中打开地址：http://localhost:54321/swagger ，便可以查看到DncZeus已经实现的后端API接口服务了。
 
 2. 在命令行中进入到DncZeus的前端项目目录[DncZeus.App]，运行如下命令以启动前端项目服务：
 
