@@ -102,9 +102,9 @@ namespace DncZeus.Api
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                //app.UseDeveloperExceptionPage();
             }
-            
+            app.UseDeveloperExceptionPage();
             //app.UseExceptionHandler("/error/500");
             //app.UseStatusCodePagesWithReExecute("/error/{0}");
 
