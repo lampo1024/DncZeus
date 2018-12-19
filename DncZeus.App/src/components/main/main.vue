@@ -19,8 +19,10 @@
       >
         <!-- 需要放在菜单上面的内容，如Logo，写在side-menu标签内部，如下 -->
         <div class="logo-con">
-          <img v-show="!collapsed" :src="maxLogo" key="max-logo">
-          <img v-show="collapsed" :src="minLogo" key="min-logo">
+          <!-- <img v-show="!collapsed" :src="maxLogo" key="max-logo"> -->
+          <span v-show="!collapsed" style="color:#fff;font-size:26px;font-weight:700;text-align:center;display:block;letter-spacing:2px;padding-top:8px;">DncZeus</span>
+          <span v-show="collapsed" style="color:#fff;font-size:30px;font-weight:700;text-align:center;display:block;padding-top:5px;">DZ</span>
+          <!-- <img v-show="collapsed" :src="minLogo" key="min-logo"> -->
         </div>
       </side-menu>
     </Sider>
