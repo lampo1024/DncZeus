@@ -135,6 +135,12 @@ npm run dev
 
 成功运行后会自动在浏览器中打开地址: http://localhost:9000
 
+## 使用和授权
+
+DncZeus项目是一个开源项目，你可以直接基于本项目进行扩展或者二次开发，也可以修改其中的代码。
+
+**但请保留原文件中的版权信息，尊重本人的劳动成果，违者必究，谢谢合作**。
+
 
 [1]: https://github.com/iview/iview-admin
 [2]: https://docs.microsoft.com/en-us/aspnet/core/?view=aspnetcore-2.2
