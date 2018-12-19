@@ -78,6 +78,8 @@ git clone https://github.com/lampo1024/DncZeus.git
 
 ## 安装依赖
 
+### 前端项目
+
 在将DncZeus的源代码下载到本地之后，如果你使用的git管理工具，**可以不用**退出当前的git管理工具，输入如下命令：
 
 ```
@@ -95,6 +97,29 @@ npm install
 ```
 npm i
 ```
+
+### 后端项目
+
+在Visual Studio中打开解决方案[DncZeus.sln]。首先根据自己的开发环境(SQL Server数据库类型，本示例默认是SQL Server Localdb)修改配置文件`appsettings.json`中的数据库连接字符串，示例默认连接字符串为：
+
+```
+"ConnectionStrings": {
+    "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=DncZeus;Trusted_Connection=True;MultipleActiveResultSets=true"
+  }
+```
+
+再打开包管理控制台(Package Manager Console)，执行如下命令生成数据库表结构：
+
+```
+Update-Database -verbose
+```
+
+最后，打开项目根目录中的脚本文件夹[Scripts]，执行脚本文件[Init_data.sql]以初始化系统数据。
+
+恭喜你，到这里所有的准备工作就完成了。
+
+赶紧体验DncZeus框架吧！！！
+
 
 ## 运行
 
