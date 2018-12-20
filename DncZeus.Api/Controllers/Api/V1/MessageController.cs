@@ -27,7 +27,7 @@ namespace DncZeus.Api.Controllers.Api.V1
         [HttpGet]
         public IActionResult Count()
         {
-            return Ok(10);
+            return Ok(1);
         }
 
         /// <summary>

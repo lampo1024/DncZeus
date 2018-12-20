@@ -690,18 +690,26 @@ export default {
     },
     doCreateMenu() {
       createMenu(this.formModel.fields).then(res => {
-        this.$Message.success("操作成功");
-        this.handleCloseFormWindow();
-        this.loadMenuList();
-        this.handleRefreshMenuTreeData();
+        if (res.data.code === 200) {
+          this.$Message.success(res.data.message);
+          this.handleCloseFormWindow();
+          this.loadMenuList();
+          this.handleRefreshMenuTreeData();
+        } else {
+          this.$Message.warning(res.data.message);
+        }
       });
     },
     doEditMenu() {
       editMenu(this.formModel.fields).then(res => {
-        this.$Message.success("操作成功");
-        this.handleCloseFormWindow();
-        this.loadMenuList();
-        this.handleRefreshMenuTreeData();
+        if (res.data.code === 200) {
+          this.$Message.success(res.data.message);
+          this.handleCloseFormWindow();
+          this.loadMenuList();
+          this.handleRefreshMenuTreeData();
+        } else {
+          this.$Message.warning(res.data.message);
+        }
       });
     },
     validateMenuForm() {
@@ -731,8 +739,12 @@ export default {
         return;
       }
       deleteMenu(ids).then(res => {
-        this.$Message.success("操作成功");
-        this.loadMenuList();
+        if (res.data.code === 200) {
+          this.$Message.success(res.data.message);
+          this.loadMenuList();
+        } else {
+          this.$Message.warning(res.data.message);
+        }
       });
     },
     handleBatchCommand(command) {
@@ -757,9 +769,14 @@ export default {
         command: command,
         ids: this.selectedRowsId.join(",")
       }).then(res => {
-        this.$Message.success(res.data.message);
+        if (res.data.code === 200) {
+          this.$Message.success(res.data.message);
+          this.loadMenuList();
+          this.formModel.selection=[];
+        } else {
+          this.$Message.warning(res.data.message);
+        }
         this.$Modal.remove();
-        this.loadMenuList();
       });
     },
     handleSearchMenu() {

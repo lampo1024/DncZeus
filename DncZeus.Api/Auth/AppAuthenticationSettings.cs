@@ -5,7 +5,7 @@
  * 版权所有，请勿删除
  ******************************************/
 
-namespace DncZeus.Auth
+namespace DncZeus.Api.Auth
 {
     /// <summary>
     /// JWT授权的配置项

@@ -542,16 +542,24 @@ export default {
     },
     doCreateIcon() {
       createIcon(this.formModel.fields).then(res => {
-        this.$Message.success("操作成功");
-        this.handleCloseFormWindow();
-        this.loadIconList();
+        if (res.data.code === 200) {
+          this.$Message.success(res.data.message);
+          this.loadIconList();
+          this.handleCloseFormWindow();
+        } else {
+          this.$Message.warning(res.data.message);
+        }
       });
     },
     doEditIcon() {
       editIcon(this.formModel.fields).then(res => {
-        this.$Message.success("操作成功");
-        this.handleCloseFormWindow();
-        this.loadIconList();
+        if (res.data.code === 200) {
+          this.$Message.success(res.data.message);
+          this.loadIconList();
+          this.handleCloseFormWindow();
+        } else {
+          this.$Message.warning(res.data.message);
+        }
       });
     },
     validateIconForm() {
@@ -580,8 +588,12 @@ export default {
         return;
       }
       deleteIcon(ids).then(res => {
-        this.$Message.success("操作成功");
-        this.loadIconList();
+        if (res.data.code === 200) {
+          this.$Message.success(res.data.message);
+          this.loadIconList();
+        } else {
+          this.$Message.warning(res.data.message);
+        }
       });
     },
     handleBatchCommand(command) {
@@ -606,9 +618,16 @@ export default {
         command: command,
         ids: this.selectedRowsId.join(",")
       }).then(res => {
-        this.$Message.success(res.data.message);
+        if (res.data.code === 200) {
+          this.$Message.success(res.data.message);
+          this.handleCloseFormWindow();
+          this.formModel.batchImport.opened = false;
+          this.loadIconList();
+          this.formModel.selection=[];
+        } else {
+          this.$Message.warning(res.data.message);
+        }
         this.$Modal.remove();
-        this.loadIconList();
       });
     },
     handleSearchIcon() {
@@ -626,10 +645,14 @@ export default {
     handleBatchSubmitIcon() {
       var data = { icons: this.formModel.batchImport.icons };
       batchImportIcon(data).then(res => {
-        this.$Message.success("操作成功");
-        this.handleCloseFormWindow();
-        this.formModel.batchImport.opened = false;
-        this.loadIconList();
+        if (res.data.code === 200) {
+          this.$Message.success(res.data.message);
+          this.handleCloseFormWindow();
+          this.formModel.batchImport.opened = false;
+          this.loadIconList();
+        } else {
+          this.$Message.warning(res.data.message);
+        }
       });
     },
     handlePageChanged(page) {

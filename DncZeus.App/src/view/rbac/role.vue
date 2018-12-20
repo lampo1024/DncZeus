@@ -605,8 +605,12 @@ export default {
         return;
       }
       deleteRole(ids).then(res => {
-        this.$Message.success("操作成功");
-        this.loadRoleList();
+        if (res.data.code === 200) {
+          this.$Message.success(res.data.message);
+          this.loadRoleList();
+        } else {
+          this.$Message.warning(res.data.message);
+        }
       });
     },
     handleBatchCommand(command) {
@@ -631,9 +635,14 @@ export default {
         command: command,
         ids: this.selectedRowsId.join(",")
       }).then(res => {
-        this.$Message.success(res.data.message);
+        if (res.data.code === 200) {
+          this.$Message.success(res.data.message);
+          this.loadRoleList();
+          this.formModel.selection=[];
+        } else {
+          this.$Message.warning(res.data.message);
+        }
         this.$Modal.remove();
-        this.loadRoleList();
       });
     },
     handleSearchRole() {

@@ -12,9 +12,16 @@ using System.Threading.Tasks;
 
 namespace DncZeus.Api.Extensions.CustomException
 {
+    /// <summary>
+    /// 异常中间件
+    /// </summary>
     public class ExceptionMiddleware
     {
         private readonly RequestDelegate _next;
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="next"></param>
         public ExceptionMiddleware(RequestDelegate next)
         {
             _next = next;

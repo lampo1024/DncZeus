@@ -200,7 +200,14 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
         [ProducesResponseType(200)]
         public IActionResult Delete(string ids)
         {
-            var response = UpdateIsDelete(CommonEnum.IsDeleted.Yes, ids);
+           
+            var response = ResponseModelFactory.CreateInstance;
+            if (ConfigurationManager.AppSettings.IsTrialVersion)
+            {
+                response.SetIsTrial();
+                return Ok(response);
+            }
+            response = UpdateIsDelete(CommonEnum.IsDeleted.Yes, ids);
             return Ok(response);
         }
 
@@ -213,7 +220,13 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
         [ProducesResponseType(200)]
         public IActionResult Recover(string ids)
         {
-            var response = UpdateIsDelete(CommonEnum.IsDeleted.No, ids);
+            var response = ResponseModelFactory.CreateInstance;
+            if (ConfigurationManager.AppSettings.IsTrialVersion)
+            {
+                response.SetIsTrial();
+                return Ok(response);
+            }
+            response = UpdateIsDelete(CommonEnum.IsDeleted.No, ids);
             return Ok(response);
         }
 
@@ -231,13 +244,30 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
             switch (command)
             {
                 case "delete":
-                    response = UpdateIsDelete(CommonEnum.IsDeleted.Yes, ids);
+                    if (ConfigurationManager.AppSettings.IsTrialVersion)
+                    {
+                        response.SetIsTrial();
+                    }
+                    else
+                    {
+                        response = UpdateIsDelete(CommonEnum.IsDeleted.Yes, ids);
+                    }                   
+                    
                     break;
                 case "recover":
                     response = UpdateIsDelete(CommonEnum.IsDeleted.No, ids);
                     break;
                 case "forbidden":
-                    response = UpdateStatus(UserStatus.Forbidden, ids);
+                    
+                    if (ConfigurationManager.AppSettings.IsTrialVersion)
+                    {
+                        response.SetIsTrial();
+                    }
+                    else
+                    {
+                        response = UpdateStatus(UserStatus.Forbidden, ids);
+                    }
+                    response.SetIsTrial();
                     break;
                 case "normal":
                     response = UpdateStatus(UserStatus.Normal, ids);
@@ -258,6 +288,11 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
         public IActionResult Import(IconImportViewModel model)
         {
             var response = ResponseModelFactory.CreateInstance;
+            if (ConfigurationManager.AppSettings.IsTrialVersion)
+            {
+                response.SetIsTrial();
+                return Ok(response);
+            }
             if (model.Icons.Trim().Length <= 0)
             {
                 response.SetFailed("没有可用的图标");

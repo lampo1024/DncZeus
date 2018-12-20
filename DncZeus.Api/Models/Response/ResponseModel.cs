@@ -53,6 +53,16 @@ namespace DncZeus.Api.Models.Response
         }
 
         /// <summary>
+        /// 设置响应状态为体验版(返回失败结果)
+        /// </summary>
+        /// <param name="message"></param>
+        public void SetIsTrial(string message = "体验版,功能已被关闭")
+        {
+            Message = message;
+            Code = 999;
+        }
+
+        /// <summary>
         /// 设置响应状态为错误
         /// </summary>
         /// <param name="message"></param>

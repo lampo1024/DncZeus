@@ -686,9 +686,14 @@ export default {
         command: command,
         ids: this.selectedRowsId.join(",")
       }).then(res => {
-        this.$Message.success(res.data.message);
+        if (res.data.code === 200) {
+          this.$Message.success(res.data.message);
+          this.loadPermissionList();
+          this.formModel.selection=[];
+        } else {
+          this.$Message.warning(res.data.message);
+        }
         this.$Modal.remove();
-        this.loadPermissionList();
       });
     },
     handleSearchPermission() {

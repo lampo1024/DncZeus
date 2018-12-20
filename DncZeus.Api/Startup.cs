@@ -28,6 +28,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
+using DncZeus.Api.Auth;
 
 
 namespace DncZeus.Api

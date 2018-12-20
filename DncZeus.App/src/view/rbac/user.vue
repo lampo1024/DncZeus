@@ -594,16 +594,24 @@ export default {
     },
     doCreateUser() {
       createUser(this.formModel.fields).then(res => {
-        this.$Message.success("操作成功");
-        this.handleCloseFormWindow();
-        this.loadUserList();
+        if (res.data.code === 200) {
+          this.$Message.success(res.data.message);
+          this.handleCloseFormWindow();
+          this.loadUserList();
+        } else {
+          this.$Message.warning(res.data.message);
+        }
       });
     },
     doEditUser() {
       editUser(this.formModel.fields).then(res => {
-        this.$Message.success("操作成功");
-        this.handleCloseFormWindow();
-        this.loadUserList();
+        if (res.data.code === 200) {
+          this.$Message.success(res.data.message);
+          this.handleCloseFormWindow();
+          this.loadUserList();
+        } else {
+          this.$Message.warning(res.data.message);
+        }
       });
     },
     validateUserForm() {
@@ -631,8 +639,13 @@ export default {
         return;
       }
       deleteUser(ids).then(res => {
-        this.$Message.success("操作成功");
-        this.loadUserList();
+        if (res.data.code === 200) {
+          this.$Message.success(res.data.message);
+          this.loadUserList();
+          this.formModel.selection = [];
+        } else {
+          this.$Message.warning(res.data.message);
+        }
       });
     },
     handleBatchCommand(command) {
@@ -657,9 +670,14 @@ export default {
         command: command,
         ids: this.selectedRowsId.join(",")
       }).then(res => {
-        this.$Message.success(res.data.message);
+        if (res.data.code === 200) {
+          this.$Message.success(res.data.message);
+          this.loadUserList();
+          this.formModel.selection = [];
+        } else {
+          this.$Message.warning(res.data.message);
+        }
         this.$Modal.remove();
-        this.loadUserList();
       });
     },
     handleSearchUser() {

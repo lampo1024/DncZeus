@@ -154,6 +154,11 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
         public IActionResult Edit(PermissionEditViewModel model)
         {
             var response = ResponseModelFactory.CreateInstance;
+            if (ConfigurationManager.AppSettings.IsTrialVersion)
+            {
+                response.SetIsTrial();
+                return Ok(response);
+            }
             using (_dbContext)
             {
                 if (_dbContext.DncPermission.Count(x => x.ActionCode == model.ActionCode && x.Id != model.Id) > 0)
@@ -186,7 +191,13 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
         [ProducesResponseType(200)]
         public IActionResult Delete(string ids)
         {
-            var response = UpdateIsDelete(IsDeleted.Yes, ids);
+            var response = ResponseModelFactory.CreateInstance;
+            if (ConfigurationManager.AppSettings.IsTrialVersion)
+            {
+                response.SetIsTrial();
+                return Ok(response);
+            }
+            response = UpdateIsDelete(IsDeleted.Yes, ids);
             return Ok(response);
         }
 
@@ -217,12 +228,22 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
             switch (command)
             {
                 case "delete":
+                    if (ConfigurationManager.AppSettings.IsTrialVersion)
+                    {
+                        response.SetIsTrial();
+                        return Ok(response);
+                    }
                     response = UpdateIsDelete(IsDeleted.Yes, ids);
                     break;
                 case "recover":
                     response = UpdateIsDelete(IsDeleted.No, ids);
                     break;
                 case "forbidden":
+                    if (ConfigurationManager.AppSettings.IsTrialVersion)
+                    {
+                        response.SetIsTrial();
+                        return Ok(response);
+                    }
                     response = UpdateStatus(UserStatus.Forbidden, ids);
                     break;
                 case "normal":

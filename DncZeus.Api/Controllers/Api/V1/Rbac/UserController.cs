@@ -5,6 +5,7 @@ using AutoMapper;
 using DncZeus.Api.Entities;
 using DncZeus.Api.Entities.Enums;
 using DncZeus.Api.Extensions;
+using DncZeus.Api.Extensions.AuthContext;
 using DncZeus.Api.Models.Response;
 using DncZeus.Api.RequestPayload.Rbac.User;
 using DncZeus.Api.ViewModels.Rbac.DncUser;
@@ -135,22 +136,27 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
         [ProducesResponseType(200)]
         public IActionResult Edit(UserCreateViewModel model)
         {
+            var response = ResponseModelFactory.CreateInstance;
+            if (ConfigurationManager.AppSettings.IsTrialVersion)
+            {
+                response.SetIsTrial();
+                return Ok(response);
+            }
             using (_dbContext)
             {
                 var entity = _dbContext.DncUser.FirstOrDefault(x => x.Id == model.Id);
                 entity.DisplayName = model.DisplayName;
                 entity.IsDeleted = model.IsDeleted;
                 entity.IsLocked = model.IsLocked;
-                entity.ModifiedByUserId = 0;
-                entity.ModifiedByUserName = "";
+                entity.ModifiedByUserId = AuthContextService.CurrentUser.Id;
+                entity.ModifiedByUserName = AuthContextService.CurrentUser.DisplayName;
                 entity.ModifiedOn = DateTime.Now;
                 entity.Password = model.Password;
                 entity.Status = model.Status;
                 entity.UserType = model.UserType;
                 entity.Description = model.Description;
                 _dbContext.SaveChanges();
-                var response = ResponseModelFactory.CreateInstance;
-                response.SetSuccess();
+                response = ResponseModelFactory.CreateInstance;
                 return Ok(response);
             }
         }
@@ -164,7 +170,13 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
         [ProducesResponseType(200)]
         public IActionResult Delete(string ids)
         {
-            var response = UpdateIsDelete(CommonEnum.IsDeleted.Yes, ids);
+            var response = ResponseModelFactory.CreateInstance;
+            if (ConfigurationManager.AppSettings.IsTrialVersion)
+            {
+                response.SetIsTrial();
+                return Ok(response);
+            }
+            response = UpdateIsDelete(CommonEnum.IsDeleted.Yes, ids);
             return Ok(response);
         }
 
@@ -195,12 +207,22 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
             switch (command)
             {
                 case "delete":
+                    if (ConfigurationManager.AppSettings.IsTrialVersion)
+                    {
+                        response.SetIsTrial();
+                        return Ok(response);
+                    }
                     response = UpdateIsDelete(CommonEnum.IsDeleted.Yes, ids);
                     break;
                 case "recover":
                     response = UpdateIsDelete(CommonEnum.IsDeleted.No, ids);
                     break;
                 case "forbidden":
+                    if (ConfigurationManager.AppSettings.IsTrialVersion)
+                    {
+                        response.SetIsTrial();
+                        return Ok(response);
+                    }
                     response = UpdateStatus(UserStatus.Forbidden, ids);
                     break;
                 case "normal":
