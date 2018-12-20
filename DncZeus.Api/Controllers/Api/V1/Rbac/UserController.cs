@@ -1,9 +1,16 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Data.SqlClient;
+using System.Linq;
+using AutoMapper;
 using DncZeus.Api.Entities;
+using DncZeus.Api.Entities.Enums;
 using DncZeus.Api.Extensions;
 using DncZeus.Api.Models.Response;
 using DncZeus.Api.RequestPayload.Rbac.User;
 using DncZeus.Api.ViewModels.Rbac.DncUser;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 /******************************************
  * AUTHOR:          Rector
  * CREATEDON:       2018-09-26
@@ -11,15 +18,7 @@ using DncZeus.Api.ViewModels.Rbac.DncUser;
  * 版权所有，请勿删除
  ******************************************/
 
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Data.SqlClient;
-using System.Linq;
-using static DncZeus.Api.Entities.Enums.CommonEnum;
-
-namespace DncZeus.Controllers.Api.V1.Rbac
+namespace DncZeus.Api.Controllers.Api.V1.Rbac
 {
     /// <summary>
     /// 
@@ -57,7 +56,7 @@ namespace DncZeus.Controllers.Api.V1.Rbac
                 {
                     query = query.Where(x => x.LoginName.Contains(payload.Kw.Trim()) || x.DisplayName.Contains(payload.Kw.Trim()));
                 }
-                if (payload.IsDeleted > IsDeleted.All)
+                if (payload.IsDeleted > CommonEnum.IsDeleted.All)
                 {
                    query = query.Where(x => x.IsDeleted == payload.IsDeleted);
                 }
@@ -165,7 +164,7 @@ namespace DncZeus.Controllers.Api.V1.Rbac
         [ProducesResponseType(200)]
         public IActionResult Delete(string ids)
         {
-            var response = UpdateIsDelete(IsDeleted.Yes, ids);
+            var response = UpdateIsDelete(CommonEnum.IsDeleted.Yes, ids);
             return Ok(response);
         }
 
@@ -178,7 +177,7 @@ namespace DncZeus.Controllers.Api.V1.Rbac
         [ProducesResponseType(200)]
         public IActionResult Recover(string ids)
         {
-            var response = UpdateIsDelete(IsDeleted.No, ids);
+            var response = UpdateIsDelete(CommonEnum.IsDeleted.No, ids);
             return Ok(response);
         }
 
@@ -196,10 +195,10 @@ namespace DncZeus.Controllers.Api.V1.Rbac
             switch (command)
             {
                 case "delete":
-                    response = UpdateIsDelete(IsDeleted.Yes, ids);
+                    response = UpdateIsDelete(CommonEnum.IsDeleted.Yes, ids);
                     break;
                 case "recover":
-                    response = UpdateIsDelete(IsDeleted.No, ids);
+                    response = UpdateIsDelete(CommonEnum.IsDeleted.No, ids);
                     break;
                 case "forbidden":
                     response = UpdateStatus(UserStatus.Forbidden, ids);
@@ -253,7 +252,7 @@ namespace DncZeus.Controllers.Api.V1.Rbac
         /// <param name="isDeleted"></param>
         /// <param name="ids">用户ID字符串,多个以逗号隔开</param>
         /// <returns></returns>
-        private ResponseModel UpdateIsDelete(IsDeleted isDeleted, string ids)
+        private ResponseModel UpdateIsDelete(CommonEnum.IsDeleted isDeleted, string ids)
         {
             using (_dbContext)
             {

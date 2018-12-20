@@ -5,8 +5,12 @@
  * 版权所有，请勿删除
  ******************************************/
 
+using System;
+using System.Data.SqlClient;
+using System.Linq;
 using AutoMapper;
 using DncZeus.Api.Entities;
+using DncZeus.Api.Entities.Enums;
 using DncZeus.Api.Extensions;
 using DncZeus.Api.Extensions.AuthContext;
 using DncZeus.Api.Models.Response;
@@ -16,12 +20,8 @@ using DncZeus.Api.ViewModels.Rbac.DncRole;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Data.SqlClient;
-using System.Linq;
-using static DncZeus.Api.Entities.Enums.CommonEnum;
 
-namespace DncZeus.Controllers.Api.V1.Rbac
+namespace DncZeus.Api.Controllers.Api.V1.Rbac
 {
     /// <summary>
     /// 
@@ -60,11 +60,11 @@ namespace DncZeus.Controllers.Api.V1.Rbac
                 {
                     query = query.Where(x => x.Name.Contains(payload.Kw.Trim()) || x.Code.Contains(payload.Kw.Trim()));
                 }
-                if (payload.IsDeleted > IsDeleted.All)
+                if (payload.IsDeleted > CommonEnum.IsDeleted.All)
                 {
                     query = query.Where(x => x.IsDeleted == payload.IsDeleted);
                 }
-                if (payload.Status > Status.All)
+                if (payload.Status > CommonEnum.Status.All)
                 {
                     query = query.Where(x => x.Status == payload.Status);
                 }
@@ -177,7 +177,7 @@ namespace DncZeus.Controllers.Api.V1.Rbac
         [ProducesResponseType(200)]
         public IActionResult Delete(string ids)
         {
-            var response = UpdateIsDelete(IsDeleted.Yes, ids);
+            var response = UpdateIsDelete(CommonEnum.IsDeleted.Yes, ids);
             return Ok(response);
         }
 
@@ -190,7 +190,7 @@ namespace DncZeus.Controllers.Api.V1.Rbac
         [ProducesResponseType(200)]
         public IActionResult Recover(string ids)
         {
-            var response = UpdateIsDelete(IsDeleted.No, ids);
+            var response = UpdateIsDelete(CommonEnum.IsDeleted.No, ids);
             return Ok(response);
         }
 
@@ -208,10 +208,10 @@ namespace DncZeus.Controllers.Api.V1.Rbac
             switch (command)
             {
                 case "delete":
-                    response = UpdateIsDelete(IsDeleted.Yes, ids);
+                    response = UpdateIsDelete(CommonEnum.IsDeleted.Yes, ids);
                     break;
                 case "recover":
-                    response = UpdateIsDelete(IsDeleted.No, ids);
+                    response = UpdateIsDelete(CommonEnum.IsDeleted.No, ids);
                     break;
                 case "forbidden":
                     response = UpdateStatus(UserStatus.Forbidden, ids);
@@ -292,7 +292,7 @@ INNER JOIN DncRole AS R ON R.Code=URM.RoleCode
 WHERE URM.UserGuid={0}";
                 var query = _dbContext.DncRole.FromSql(sql, guid).ToList();
                 var assignedRoles = query.ToList().Select(x => x.Code).ToList();
-                var roles = _dbContext.DncRole.Where(x => x.IsDeleted == IsDeleted.No && x.Status == Status.Normal).ToList().Select(x => new { label = x.Name, key = x.Code });
+                var roles = _dbContext.DncRole.Where(x => x.IsDeleted == CommonEnum.IsDeleted.No && x.Status == CommonEnum.Status.Normal).ToList().Select(x => new { label = x.Name, key = x.Code });
                 response.SetData(new { roles, assignedRoles });
                 return Ok(response);
             }
@@ -308,7 +308,7 @@ WHERE URM.UserGuid={0}";
             var response = ResponseModelFactory.CreateInstance;
             using (_dbContext)
             {
-                var roles = _dbContext.DncRole.Where(x => x.IsDeleted == IsDeleted.No && x.Status == Status.Normal).Select(x => new { x.Name, x.Code }).ToList();
+                var roles = _dbContext.DncRole.Where(x => x.IsDeleted == CommonEnum.IsDeleted.No && x.Status == CommonEnum.Status.Normal).Select(x => new { x.Name, x.Code }).ToList();
                 response.SetData(roles);
             }
             return Ok(response);
@@ -322,7 +322,7 @@ WHERE URM.UserGuid={0}";
         /// <param name="isDeleted"></param>
         /// <param name="ids">角色ID字符串,多个以逗号隔开</param>
         /// <returns></returns>
-        private ResponseModel UpdateIsDelete(IsDeleted isDeleted, string ids)
+        private ResponseModel UpdateIsDelete(CommonEnum.IsDeleted isDeleted, string ids)
         {
             using (_dbContext)
             {

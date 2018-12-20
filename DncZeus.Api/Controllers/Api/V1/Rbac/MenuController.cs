@@ -5,8 +5,13 @@
  * 版权所有，请勿删除
  ******************************************/
 
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
 using AutoMapper;
 using DncZeus.Api.Entities;
+using DncZeus.Api.Entities.Enums;
 using DncZeus.Api.Extensions;
 using DncZeus.Api.Models.Response;
 using DncZeus.Api.RequestPayload.Rbac.Menu;
@@ -14,13 +19,8 @@ using DncZeus.Api.ViewModels.Rbac.DncMenu;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using static DncZeus.Api.Entities.Enums.CommonEnum;
 
-namespace DncZeus.Controllers.Api.V1.Rbac
+namespace DncZeus.Api.Controllers.Api.V1.Rbac
 {
     /// <summary>
     /// 
@@ -58,11 +58,11 @@ namespace DncZeus.Controllers.Api.V1.Rbac
                 {
                     query = query.Where(x => x.Name.Contains(payload.Kw.Trim()) || x.Url.Contains(payload.Kw.Trim()));
                 }
-                if (payload.IsDeleted > IsDeleted.All)
+                if (payload.IsDeleted > CommonEnum.IsDeleted.All)
                 {
                     query = query.Where(x => x.IsDeleted == payload.IsDeleted);
                 }
-                if (payload.Status > Status.All)
+                if (payload.Status > CommonEnum.Status.All)
                 {
                     query = query.Where(x => x.Status == payload.Status);
                 }
@@ -187,7 +187,7 @@ namespace DncZeus.Controllers.Api.V1.Rbac
         [ProducesResponseType(200)]
         public IActionResult Delete(string ids)
         {
-            var response = UpdateIsDelete(IsDeleted.Yes, ids);
+            var response = UpdateIsDelete(CommonEnum.IsDeleted.Yes, ids);
             return Ok(response);
         }
 
@@ -200,7 +200,7 @@ namespace DncZeus.Controllers.Api.V1.Rbac
         [ProducesResponseType(200)]
         public IActionResult Recover(string ids)
         {
-            var response = UpdateIsDelete(IsDeleted.No, ids);
+            var response = UpdateIsDelete(CommonEnum.IsDeleted.No, ids);
             return Ok(response);
         }
 
@@ -218,10 +218,10 @@ namespace DncZeus.Controllers.Api.V1.Rbac
             switch (command)
             {
                 case "delete":
-                    response = UpdateIsDelete(IsDeleted.Yes, ids);
+                    response = UpdateIsDelete(CommonEnum.IsDeleted.Yes, ids);
                     break;
                 case "recover":
-                    response = UpdateIsDelete(IsDeleted.No, ids);
+                    response = UpdateIsDelete(CommonEnum.IsDeleted.No, ids);
                     break;
                 case "forbidden":
                     response = UpdateStatus(UserStatus.Forbidden, ids);
@@ -241,7 +241,7 @@ namespace DncZeus.Controllers.Api.V1.Rbac
         /// <param name="isDeleted"></param>
         /// <param name="ids">菜单ID字符串,多个以逗号隔开</param>
         /// <returns></returns>
-        private ResponseModel UpdateIsDelete(IsDeleted isDeleted, string ids)
+        private ResponseModel UpdateIsDelete(CommonEnum.IsDeleted isDeleted, string ids)
         {
             using (_dbContext)
             {
@@ -277,7 +277,7 @@ namespace DncZeus.Controllers.Api.V1.Rbac
 
         private List<MenuTree> LoadMenuTree(string selectedGuid=null)
         {
-            var temp = _dbContext.DncMenu.Where(x => x.IsDeleted == IsDeleted.No && x.Status == Status.Normal).ToList().Select(x => new MenuTree
+            var temp = _dbContext.DncMenu.Where(x => x.IsDeleted == CommonEnum.IsDeleted.No && x.Status == CommonEnum.Status.Normal).ToList().Select(x => new MenuTree
             {
                 Guid = x.Guid.ToString(),
                 ParentGuid = x.ParentGuid,
