@@ -126,15 +126,15 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
         /// <summary>
         /// 编辑权限
         /// </summary>
-        /// <param name="id">权限ID</param>
+        /// <param name="code">权限惟一编码</param>
         /// <returns></returns>
-        [HttpGet("{id}")]
+        [HttpGet("{code}")]
         [ProducesResponseType(200)]
-        public IActionResult Edit(int id)
+        public IActionResult Edit(string code)
         {
             using (_dbContext)
             {
-                var entity = _dbContext.DncPermission.FirstOrDefault(x => x.Id == id);
+                var entity = _dbContext.DncPermission.FirstOrDefault(x => x.Code == code);
                 var response = ResponseModelFactory.CreateInstance;
                 var model = _mapper.Map<DncPermission, PermissionEditViewModel>(entity);
                 var menu = _dbContext.DncMenu.FirstOrDefault(x => x.Guid == entity.MenuGuid);
@@ -311,7 +311,7 @@ WHERE P.IsDeleted=0 AND P.Status=1";
             {
                 var parameters = ids.Split(",").Select((id, index) => new SqlParameter(string.Format("@p{0}", index), id)).ToList();
                 var parameterNames = string.Join(", ", parameters.Select(p => p.ParameterName));
-                var sql = string.Format("UPDATE DncPermission SET IsDeleted=@IsDeleted WHERE Id IN ({0})", parameterNames);
+                var sql = string.Format("UPDATE DncPermission SET IsDeleted=@IsDeleted WHERE Code IN ({0})", parameterNames);
                 parameters.Add(new SqlParameter("@IsDeleted", (int)isDeleted));
                 _dbContext.Database.ExecuteSqlCommand(sql, parameters);
                 var response = ResponseModelFactory.CreateInstance;
@@ -331,7 +331,7 @@ WHERE P.IsDeleted=0 AND P.Status=1";
             {
                 var parameters = ids.Split(",").Select((id, index) => new SqlParameter(string.Format("@p{0}", index), id)).ToList();
                 var parameterNames = string.Join(", ", parameters.Select(p => p.ParameterName));
-                var sql = string.Format("UPDATE DncPermission SET Status=@Status WHERE Id IN ({0})", parameterNames);
+                var sql = string.Format("UPDATE DncPermission SET Status=@Status WHERE Code IN ({0})", parameterNames);
                 parameters.Add(new SqlParameter("@Status", status));
                 _dbContext.Database.ExecuteSqlCommand(sql, parameters);
                 var response = ResponseModelFactory.CreateInstance;

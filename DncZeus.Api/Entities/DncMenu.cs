@@ -20,11 +20,6 @@ namespace DncZeus.Api.Entities
     public class DncMenu
     {
         /// <summary>
-        /// 
-        /// </summary>
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-        /// <summary>
         /// GUID
         /// </summary>
         [Key,Required]

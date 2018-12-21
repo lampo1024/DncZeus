@@ -19,7 +19,7 @@ namespace DncZeus.Api.ViewModels.Rbac.DncUser
         /// <summary>
         /// 
         /// </summary>
-        public int Id { get; set; }
+        public Guid Guid { get; set; }
         /// <summary>
         /// 
         /// </summary>

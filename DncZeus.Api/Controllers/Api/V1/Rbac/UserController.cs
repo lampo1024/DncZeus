@@ -100,7 +100,6 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
                 entity.CreatedOn = DateTime.Now;
                 entity.Guid = Guid.NewGuid();
                 entity.Status = model.Status;
-                entity.Id = 0;
                 _dbContext.DncUser.Add(entity);
                 _dbContext.SaveChanges();
                 
@@ -112,15 +111,15 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
         /// <summary>
         /// 编辑用户
         /// </summary>
-        /// <param name="id">用户ID</param>
+        /// <param name="guid">用户GUID</param>
         /// <returns></returns>
-        [HttpGet("{id}")]
+        [HttpGet("{guid}")]
         [ProducesResponseType(200)]
-        public IActionResult Edit(int id)
+        public IActionResult Edit(Guid guid)
         {
             using (_dbContext)
             {
-                var entity = _dbContext.DncUser.FirstOrDefault(x => x.Id == id);
+                var entity = _dbContext.DncUser.FirstOrDefault(x => x.Guid == guid);
                 var response = ResponseModelFactory.CreateInstance;
                 response.SetData(_mapper.Map<DncUser, UserCreateViewModel>(entity));
                 return Ok(response);
@@ -144,7 +143,7 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
             }
             using (_dbContext)
             {
-                var entity = _dbContext.DncUser.FirstOrDefault(x => x.Id == model.Id);
+                var entity = _dbContext.DncUser.FirstOrDefault(x => x.Guid == model.Guid);
                 entity.DisplayName = model.DisplayName;
                 entity.IsDeleted = model.IsDeleted;
                 entity.IsLocked = model.IsLocked;
@@ -164,7 +163,7 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
         /// <summary>
         /// 删除用户
         /// </summary>
-        /// <param name="ids">用户ID,多个以逗号分隔</param>
+        /// <param name="ids">用户GUID,多个以逗号分隔</param>
         /// <returns></returns>
         [HttpGet("{ids}")]
         [ProducesResponseType(200)]
@@ -183,7 +182,7 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
         /// <summary>
         /// 恢复用户
         /// </summary>
-        /// <param name="ids">用户ID,多个以逗号分隔</param>
+        /// <param name="ids">用户GUID,多个以逗号分隔</param>
         /// <returns></returns>
         [HttpGet("{ids}")]
         [ProducesResponseType(200)]
@@ -285,7 +284,7 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
                 //_dbContext.Database.ExecuteSqlCommand($"UPDATE DncUser SET IsDeleted={(int)isDeleted} WHERE Id IN ({ids})");
                 var parameters = ids.Split(",").Select((id, index) => new SqlParameter(string.Format("@p{0}", index), id)).ToList();
                 var parameterNames = string.Join(", ", parameters.Select(p => p.ParameterName));
-                var sql = string.Format("UPDATE DncUser SET IsDeleted=@IsDeleted WHERE Id IN ({0})", parameterNames);
+                var sql = string.Format("UPDATE DncUser SET IsDeleted=@IsDeleted WHERE Guid IN ({0})", parameterNames);
                 parameters.Add(new SqlParameter("@IsDeleted", (int)isDeleted));
                 _dbContext.Database.ExecuteSqlCommand(sql, parameters);
                 var response = ResponseModelFactory.CreateInstance;
@@ -305,7 +304,7 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
             {
                 var parameters = ids.Split(",").Select((id, index) => new SqlParameter(string.Format("@p{0}", index), id)).ToList();
                 var parameterNames = string.Join(", ", parameters.Select(p => p.ParameterName));
-                var sql = string.Format("UPDATE DncUser SET Status=@Status WHERE Id IN ({0})", parameterNames);
+                var sql = string.Format("UPDATE DncUser SET Status=@Status WHERE Guid IN ({0})", parameterNames);
                 parameters.Add(new SqlParameter("@Status", (int)status));
                 _dbContext.Database.ExecuteSqlCommand(sql, parameters);
                 var response = ResponseModelFactory.CreateInstance;

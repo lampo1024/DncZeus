@@ -26,11 +26,6 @@ namespace DncZeus.Api.Entities
             Roles = new HashSet<DncRolePermissionMapping>();
         }
         /// <summary>
-        /// 自增ID
-        /// </summary>
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-        /// <summary>
         /// 权限编码
         /// </summary>
         [Required]

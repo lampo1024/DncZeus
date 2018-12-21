@@ -28,11 +28,6 @@ namespace DncZeus.Api.Entities
         /// <summary>
         /// 
         /// </summary>
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
         [Required]
         [Key]
         [Column(TypeName = "nvarchar(50)")]

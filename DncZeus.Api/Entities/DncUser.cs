@@ -18,10 +18,8 @@ namespace DncZeus.Api.Entities
     public class DncUser
     {
         /// <summary>
-        /// 
+        /// 用户GUID
         /// </summary>
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         [Key]
         [DefaultValue("newid()")]
