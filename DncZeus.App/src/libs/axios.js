@@ -53,7 +53,6 @@ class HttpRequest {
   }
 
   showError(error, errorInfo) {
-    console.error("error:", JSON.stringify(error));
     let message = "接口服务错误,请稍候再试.";
 
     let statusCode =  -1;
