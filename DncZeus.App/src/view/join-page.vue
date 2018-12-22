@@ -1,16 +1,14 @@
 <template>
   <div>
-    <Row :gutter="20">
-      <i-col span="12">
-        <Card title="iview-admin交流群(已满)" shadow>
+    <Row>
+      <i-col span="8">
+        <Card title="DncZeus/.NET Core交流群" shadow>
           <img class="qq-group-img" :src="qqFans" alt="">
-          <p class="qq-group-intro">本群为使用iview-admin或者对iview-admin感兴趣的开发者提供交流平台，在这里，解决你开发中的疑惑，共同进步。</p>
-        </Card>
-      </i-col>
-      <i-col span="12">
-        <Card title="iview-admin交流群2" shadow>
-          <img class="qq-group-img" :src="qqFans2" alt="">
-          <p class="qq-group-intro">本群为使用iview-admin或者对iview-admin感兴趣的开发者提供交流平台，在这里，解决你开发中的疑惑，共同进步。</p>
+          <p class="qq-join">QQ扫一扫二维码加群</p>
+          <p class="qq-group-intro">本群为使用DncZeus/.NET Core或者对DncZeus/.NET Core感兴趣的开发者提供交流平台。在这里，解决你开发中的疑惑，共同进步。</p>
+          <p class="addtional">
+            本框架<a href="https://github.com/lampo1024/DncZeus">[DncZeus]</a>由 <a href="https://codedefault.com">码友网</a> 创建者<b>Rector</b>主导开发和维护。
+          </p>
         </Card>
       </i-col>
     </Row>
@@ -19,19 +17,18 @@
 
 <script>
 import qqFans from '@/assets/images/qq-group1.jpg'
-import qqFans2 from '@/assets/images/qq-group2.jpg'
 export default {
   name: 'join_page',
   data () {
     return {
-      qqFans,
-      qqFans2
+      qqFans
     }
   }
 }
 </script>
 
 <style>
+.qq-join{color: #999; text-align: center;}
 .qq-group-img{
   display: block;
   margin: 0 auto;
@@ -41,4 +38,5 @@ export default {
   padding: 20px;
   font-size: 16px;
 }
+.addtional{padding: 20px; color: #777;}
 </style>
