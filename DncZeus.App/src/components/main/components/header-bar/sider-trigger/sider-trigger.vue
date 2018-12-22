@@ -1,14 +1,16 @@
 <template>
-  <a @click="handleChange" type="text" :class="['sider-trigger-a', collapsed ? 'collapsed' : '']"><Icon :type="icon" :size="size" /></a>
+  <a @click="handleChange" type="text" :class="['sider-trigger-a', collapsed ? 'collapsed' : '']">
+    <Icon :type="icon" :size="size"/>
+  </a>
 </template>
 <script>
 export default {
-  name: 'siderTrigger',
+  name: "siderTrigger",
   props: {
     collapsed: Boolean,
     icon: {
       type: String,
-      default: 'navicon-round'
+      default: "navicon-round"
     },
     size: {
       type: Number,
@@ -16,12 +18,17 @@ export default {
     }
   },
   methods: {
-    handleChange () {
-      this.$emit('on-change', !this.collapsed)
+    handleChange() {
+      this.$emit("on-change", !this.collapsed);
+      setTimeout(function(){
+        var evt = window.document.createEvent("UIEvents");
+        evt.initUIEvent("resize", true, false, window, 0);
+        window.dispatchEvent(evt);
+      },200);
     }
   }
-}
+};
 </script>
 <style lang="less">
-@import './sider-trigger.less';
+@import "./sider-trigger.less";
 </style>
