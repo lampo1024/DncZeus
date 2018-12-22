@@ -7,7 +7,7 @@
           <p class="qq-join">QQ扫一扫二维码加群</p>
           <p class="qq-group-intro">本群为使用DncZeus/.NET Core或者对DncZeus/.NET Core感兴趣的开发者提供交流平台。在这里，解决你开发中的疑惑，共同进步。</p>
           <p class="addtional">
-            本框架<a href="https://github.com/lampo1024/DncZeus">[DncZeus]</a>由 <a href="https://codedefault.com">码友网</a> 创建者<b>Rector</b>主导开发和维护。
+            本框架 <a href="https://github.com/lampo1024/DncZeus" target="_blank">[DncZeus]</a> 由 <a href="https://codedefault.com" target="_blank">码友网</a> 创建者<b>Rector</b>主导开发和维护。
           </p>
         </Card>
       </i-col>
