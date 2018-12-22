@@ -5,7 +5,6 @@
  * 版权所有，请勿删除
  ******************************************/
 
-using DncZeus.Auth;
 using DncZeus.Api.Entities;
 using DncZeus.Api.Extensions;
 using Microsoft.AspNetCore.Mvc;
@@ -74,7 +73,7 @@ namespace DncZeus.Api.Controllers
             var claimsIdentity = new ClaimsIdentity(new Claim[]
                 {
                     new Claim(ClaimTypes.Name, username),
-                    new Claim("id",user.Id.ToString()),
+                    new Claim("guid",user.Guid.ToString()),
                     new Claim("avatar",""),
                     new Claim("displayName",user.DisplayName),
                     new Claim("loginName",user.LoginName),

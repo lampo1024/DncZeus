@@ -20,7 +20,7 @@ export const createUser = (data) => {
 //loadUser
 export const loadUser = (data) => {
   return axios.request({
-    url: 'rbac/user/edit/' + data.id,
+    url: 'rbac/user/edit/' + data.guid,
     method: 'get'
   })
 }

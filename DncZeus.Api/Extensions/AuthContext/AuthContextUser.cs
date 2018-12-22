@@ -16,10 +16,6 @@ namespace DncZeus.Api.Extensions.AuthContext
     public class AuthContextUser
     {
         /// <summary>
-        /// 用户ID
-        /// </summary>
-        public int Id { get; set; }
-        /// <summary>
         /// 用户GUID
         /// </summary>
         public Guid Guid { get; set; }

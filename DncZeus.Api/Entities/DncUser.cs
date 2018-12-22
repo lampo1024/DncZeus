@@ -38,11 +38,29 @@ namespace DncZeus.Api.Entities
         //[EnumDataType(typeof(UserStatus))]
         public UserStatus Status { get; set; }
         public IsDeleted IsDeleted { get; set; }
+        /// <summary>
+        /// 创建时间
+        /// </summary>
         public DateTime CreatedOn { get; set; }
-        public int CreatedByUserId { get; set; }
+        /// <summary>
+        /// 创建者ID
+        /// </summary>
+        public Guid CreatedByUserGuid { get; set; }
+        /// <summary>
+        /// 创建者姓名
+        /// </summary>
         public string CreatedByUserName { get; set; }
+        /// <summary>
+        /// 最近修改时间
+        /// </summary>
         public DateTime? ModifiedOn { get; set; }
-        public int ModifiedByUserId { get; set; }
+        /// <summary>
+        /// 最近修改者ID
+        /// </summary>
+        public Guid? ModifiedByUserGuid { get; set; }
+        /// <summary>
+        /// 最近修改者姓名
+        /// </summary>
         public string ModifiedByUserName { get; set; }
         /// <summary>
         /// 用户描述信息

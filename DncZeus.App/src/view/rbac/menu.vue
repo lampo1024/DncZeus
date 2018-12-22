@@ -72,7 +72,7 @@
                           <span v-text="stores.menu.query.parentName"></span>
                           <Icon type="ios-arrow-down"></Icon>
                         </Button>
-                        <div class="text-left pad10" slot="list" style="min-width:360px;">
+                        <div class="text-left" slot="list" style="min-width:390px;">
                           <div>
                             <Button
                               type="primary"
@@ -226,7 +226,7 @@
           </Col>
           <Col span="12">
             <FormItem label="默认路由" label-position="left">
-              <i-switch size="large" v-model="formModel.fields.isDefaultRouter">
+              <i-switch size="large" v-model="formModel.fields.isDefaultRouter" :true-value="1" :false-value="0">
                 <span slot="open">是</span>
                 <span slot="close">否</span>
               </i-switch>
@@ -455,7 +455,7 @@ export default {
                 let statusColor = "default";
                 let statusText = "否";
                 switch (status) {
-                  case true:
+                  case 1:
                     statusText = "是";
                     statusColor = "success";
                     break;

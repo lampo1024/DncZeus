@@ -168,7 +168,6 @@ export default {
         mode: "create",
         selection: [],
         fields: {
-          id: 0,
           code: "",
           name: "",
           avatar: "",
@@ -200,7 +199,7 @@ export default {
             sort: [
               {
                 direct: "DESC",
-                field: "id"
+                field: "CreatedOn"
               }
             ]
           },
@@ -503,7 +502,7 @@ export default {
       return this.formModel.selection;
     },
     selectedRowsId() {
-      return this.formModel.selection.map(x => x.id);
+      return this.formModel.selection.map(x => x.code);
     }
   },
   methods: {
@@ -529,7 +528,7 @@ export default {
     handleEdit(params) {
       this.handleSwitchFormModeToEdit();
       this.handleResetFormRole();
-      this.doLoadRole(params.row.id);
+      this.doLoadRole(params.row.code);
     },
     handleSelect(selection, row) {},
     handleSelectionChange(selection) {
@@ -591,13 +590,13 @@ export default {
       });
       return _valid;
     },
-    doLoadRole(id) {
-      loadRole({ id: id }).then(res => {
+    doLoadRole(code) {
+      loadRole({ code: code }).then(res => {
         this.formModel.fields = res.data.data;
       });
     },
     handleDelete(params) {
-      this.doDelete(params.row.id);
+      this.doDelete(params.row.code);
     },
     doDelete(ids) {
       if (!ids) {

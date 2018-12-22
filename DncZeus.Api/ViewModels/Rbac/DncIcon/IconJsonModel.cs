@@ -4,6 +4,8 @@
  * OFFICAL_SITE:    码友网(https://codedefault.com)--专注.NET/.NET Core
  * DESCRIPTION:     图标信息实体类
  ******************************************/
+
+using System;
 using static DncZeus.Api.Entities.Enums.CommonEnum;
 
 namespace DncZeus.Api.ViewModels.Rbac.DncIcon
@@ -52,7 +54,7 @@ namespace DncZeus.Api.ViewModels.Rbac.DncIcon
         /// <summary>
         /// 
         /// </summary>
-        public int CreatedByUserId { get; set; }
+        public Guid CreatedByUserGuid { get; set; }
         /// <summary>
         /// 
         /// </summary>
@@ -64,7 +66,7 @@ namespace DncZeus.Api.ViewModels.Rbac.DncIcon
         /// <summary>
         /// 
         /// </summary>
-        public int ModifiedByUserId { get; set; }
+        public Guid? ModifiedByUserGuid { get; set; }
         /// <summary>
         /// 
         /// </summary>

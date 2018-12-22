@@ -5,10 +5,6 @@
  * 版权所有，请勿删除
  ******************************************/
 
-using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
 using AutoMapper;
 using DncZeus.Api.Entities;
 using DncZeus.Api.Entities.Enums;
@@ -20,6 +16,10 @@ using DncZeus.Api.ViewModels.Rbac.DncMenu;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
 
 namespace DncZeus.Api.Controllers.Api.V1.Rbac
 {
@@ -94,8 +94,8 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
                 var entity = _mapper.Map<MenuCreateViewModel, DncMenu>(model);
                 entity.CreatedOn = DateTime.Now;
                 entity.Guid = Guid.NewGuid();
-                entity.CreatedByUserId = 1;
-                entity.CreatedByUserName = "超级管理员";
+                entity.CreatedByUserGuid = AuthContextService.CurrentUser.Guid;
+                entity.CreatedByUserName = AuthContextService.CurrentUser.DisplayName;
                 _dbContext.DncMenu.Add(entity);
                 _dbContext.SaveChanges();
                 var response = ResponseModelFactory.CreateInstance;
@@ -127,7 +127,7 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
                 //    }
                 //}
                 var tree = LoadMenuTree(model.ParentGuid.ToString());
-                response.SetData(new { model,tree });
+                response.SetData(new { model, tree });
                 return Ok(response);
             }
         }
@@ -149,13 +149,13 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
                 entity.Level = 1;
                 entity.ParentGuid = model.ParentGuid;
                 entity.Sort = model.Sort;
-                entity.Url = model.Url;                               
-                entity.ModifiedByUserId = AuthContextService.CurrentUser.Id;
+                entity.Url = model.Url;
+                entity.ModifiedByUserGuid = AuthContextService.CurrentUser.Guid;
                 entity.ModifiedByUserName = AuthContextService.CurrentUser.DisplayName;
-                entity.ModifiedOn = DateTime.Now;                
+                entity.ModifiedOn = DateTime.Now;
                 entity.Description = model.Description;
                 entity.ParentName = model.ParentName;
-                
+
                 if (!ConfigurationManager.AppSettings.IsTrialVersion)
                 {
                     entity.Alias = model.Alias;
@@ -296,7 +296,7 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
             }
         }
 
-        private List<MenuTree> LoadMenuTree(string selectedGuid=null)
+        private List<MenuTree> LoadMenuTree(string selectedGuid = null)
         {
             var temp = _dbContext.DncMenu.Where(x => x.IsDeleted == CommonEnum.IsDeleted.No && x.Status == CommonEnum.Status.Normal).ToList().Select(x => new MenuTree
             {

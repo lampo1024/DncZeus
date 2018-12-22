@@ -5,17 +5,19 @@
  * 版权所有，请勿删除
  ******************************************/
 
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using DncZeus.Api.Auth;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 
-namespace DncZeus.Auth
+namespace DncZeus.Api.Auth
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public static class JwtBearerAuthenticationExtension
     {
         /// <summary>

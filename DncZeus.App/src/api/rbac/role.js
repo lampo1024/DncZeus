@@ -20,7 +20,7 @@ export const createRole = (data) => {
 //loadRole
 export const loadRole = (data) => {
   return axios.request({
-    url: 'rbac/role/edit/' + data.id,
+    url: 'rbac/role/edit/' + data.code,
     method: 'get'
   })
 }

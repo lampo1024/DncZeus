@@ -9,9 +9,9 @@ using AutoMapper;
 using DncZeus.Api.Entities;
 using DncZeus.Api.ViewModels.Rbac.DncIcon;
 using DncZeus.Api.ViewModels.Rbac.DncMenu;
+using DncZeus.Api.ViewModels.Rbac.DncPermission;
 using DncZeus.Api.ViewModels.Rbac.DncRole;
 using DncZeus.Api.ViewModels.Rbac.DncUser;
-using DncZeus.ViewModel.Rbac.DncPermission;
 
 namespace DncZeus.Api.Configurations
 {
@@ -51,6 +51,7 @@ namespace DncZeus.Api.Configurations
                 .ForMember(d=>d.MenuName,s=>s.MapFrom(x=>x.Menu.Name));
             CreateMap<PermissionCreateViewModel, DncPermission>();
             CreateMap<PermissionEditViewModel, DncPermission>();
+            CreateMap<DncPermission,PermissionEditViewModel>();
             #endregion
         }
     }

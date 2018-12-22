@@ -267,7 +267,6 @@ export default {
         mode: "create",
         selection: [],
         fields: {
-          id: 0,
           code: "",
           name: "",
           actionCode: "",
@@ -328,7 +327,7 @@ export default {
             sort: [
               {
                 direct: "DESC",
-                field: "id"
+                field: "CreatedOn"
               }
             ]
           },
@@ -550,7 +549,7 @@ export default {
       return this.formModel.selection;
     },
     selectedRowsId() {
-      return this.formModel.selection.map(x => x.id);
+      return this.formModel.selection.map(x => x.code);
     }
   },
   methods: {
@@ -576,7 +575,7 @@ export default {
     handleEdit(params) {
       this.handleSwitchFormModeToEdit();
       this.handleResetFormPermission();
-      this.doLoadPermission(params.row.id);
+      this.doLoadPermission(params.row.code);
     },
     handleSelect(selection, row) {},
     handleSelectionChange(selection) {
@@ -641,14 +640,14 @@ export default {
       });
       return _valid;
     },
-    doLoadPermission(id) {
-      loadPermission({ id: id }).then(res => {
+    doLoadPermission(code) {
+      loadPermission({ code: code }).then(res => {
         this.formModel.fields = res.data.data;
         this.handleRefreshMenuTreeData(this.formModel.fields.menuGuid);
       });
     },
     handleDelete(params) {
-      this.doDelete(params.row.id);
+      this.doDelete(params.row.code);
     },
     doDelete(ids) {
       if (!ids) {

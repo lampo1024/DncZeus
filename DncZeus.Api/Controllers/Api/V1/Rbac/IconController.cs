@@ -12,6 +12,7 @@ using AutoMapper;
 using DncZeus.Api.Entities;
 using DncZeus.Api.Entities.Enums;
 using DncZeus.Api.Extensions;
+using DncZeus.Api.Extensions.AuthContext;
 using DncZeus.Api.Models.Response;
 using DncZeus.Api.RequestPayload.Rbac.Icon;
 using DncZeus.Api.ViewModels.Rbac.DncIcon;
@@ -124,8 +125,8 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
                 }
                 var entity = _mapper.Map<IconCreateViewModel, DncIcon>(model);
                 entity.CreatedOn = DateTime.Now;
-                entity.CreatedByUserId = 1;
-                entity.CreatedByUserName = "超级管理员";
+                entity.CreatedByUserGuid = AuthContextService.CurrentUser.Guid;
+                entity.CreatedByUserName = AuthContextService.CurrentUser.DisplayName;
                 _dbContext.DncIcon.Add(entity);
                 _dbContext.SaveChanges();
 
@@ -180,8 +181,8 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
                 entity.Custom = model.Custom;
                 entity.Size = model.Size;
                 entity.IsDeleted = model.IsDeleted;
-                entity.ModifiedByUserId = 0;
-                entity.ModifiedByUserName = "";
+                entity.ModifiedByUserGuid = AuthContextService.CurrentUser.Guid;
+                entity.ModifiedByUserName = AuthContextService.CurrentUser.DisplayName;
                 entity.ModifiedOn = DateTime.Now;
                 entity.Status = model.Status;
                 entity.Description = model.Description;
@@ -301,7 +302,7 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
             var models = model.Icons.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries).Select(x => new DncIcon
             {
                 Code = x.Trim(),
-                CreatedByUserId = 1,
+                CreatedByUserGuid = AuthContextService.CurrentUser.Guid,
                 CreatedOn = DateTime.Now,
                 CreatedByUserName = "超级管理员"
             });

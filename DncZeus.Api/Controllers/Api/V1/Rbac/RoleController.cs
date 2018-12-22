@@ -102,8 +102,10 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
                 var entity = _mapper.Map<RoleCreateViewModel, DncRole>(model);
                 entity.CreatedOn = DateTime.Now;
                 entity.Code = RandomHelper.GetRandomizer(8, true, false, true, true);
-                entity.CreatedByUserId = 1;
-                entity.CreatedByUserName = "超级管理员";
+                entity.IsSuperAdministrator = false;
+                entity.IsBuiltin = false;
+                entity.CreatedByUserGuid = AuthContextService.CurrentUser.Guid;
+                entity.CreatedByUserName = AuthContextService.CurrentUser.DisplayName;
                 _dbContext.DncRole.Add(entity);
                 _dbContext.SaveChanges();
 
@@ -163,7 +165,7 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
 
                 entity.Name = model.Name;
                 entity.IsDeleted = model.IsDeleted;
-                entity.ModifiedByUserId = AuthContextService.CurrentUser.Id;
+                entity.ModifiedByUserGuid = AuthContextService.CurrentUser.Guid;
                 entity.ModifiedByUserName = AuthContextService.CurrentUser.DisplayName;
                 entity.ModifiedOn = DateTime.Now;
                 entity.Status = model.Status;

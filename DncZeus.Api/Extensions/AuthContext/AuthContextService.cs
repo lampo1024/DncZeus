@@ -41,7 +41,6 @@ namespace DncZeus.Api.Extensions.AuthContext
                 {
                     LoginName = Current.User.FindFirstValue(ClaimTypes.NameIdentifier),
                     DisplayName = Current.User.FindFirstValue("displayName"),
-                    Id = Convert.ToInt32(Current.User.FindFirstValue("id")),
                     EmailAddress = Current.User.FindFirstValue("emailAddress"),
                     UserType = (UserType)Convert.ToInt32(Current.User.FindFirstValue("userType")),
                     Avator= Current.User.FindFirstValue("avator"),

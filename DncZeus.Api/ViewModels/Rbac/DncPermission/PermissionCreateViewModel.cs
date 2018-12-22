@@ -6,9 +6,9 @@
  ******************************************/
 
 using System;
-using static DncZeus.Api.Entities.Enums.CommonEnum;
+using DncZeus.Api.Entities.Enums;
 
-namespace DncZeus.ViewModel.Rbac.DncPermission
+namespace DncZeus.Api.ViewModels.Rbac.DncPermission
 {
     /// <summary>
     /// 权限实体类
@@ -42,14 +42,14 @@ namespace DncZeus.ViewModel.Rbac.DncPermission
         /// <summary>
         /// 状态
         /// </summary>
-        public Status Status { get; set; }
+        public CommonEnum.Status Status { get; set; }
         /// <summary>
         /// 是否已删
         /// </summary>
-        public IsDeleted IsDeleted { get; set; }
+        public CommonEnum.IsDeleted IsDeleted { get; set; }
         /// <summary>
         /// 权限类型(0:菜单,1:按钮/操作/功能等)
         /// </summary>
-        public PermissionType Type { get; set; }
+        public CommonEnum.PermissionType Type { get; set; }
     }
 }

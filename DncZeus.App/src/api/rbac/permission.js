@@ -20,7 +20,7 @@ export const createPermission = (data) => {
 //edit
 export const loadPermission = (data) => {
   return axios.request({
-    url: 'rbac/permission/edit/' + data.id,
+    url: 'rbac/permission/edit/' + data.code,
     method: 'get'
   })
 }

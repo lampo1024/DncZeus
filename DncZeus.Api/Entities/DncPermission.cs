@@ -70,13 +70,13 @@ namespace DncZeus.Api.Entities
         /// </summary>
         public PermissionType Type { get; set; }
         /// <summary>
+        /// 创建者ID
+        /// </summary>
+        public Guid CreatedByUserGuid { get; set; }
+        /// <summary>
         /// 创建时间
         /// </summary>
         public DateTime CreatedOn { get; set; }
-        /// <summary>
-        /// 创建者ID
-        /// </summary>
-        public int CreatedByUserId { get; set; }
         /// <summary>
         /// 创建者姓名
         /// </summary>
@@ -88,9 +88,9 @@ namespace DncZeus.Api.Entities
         /// <summary>
         /// 最近修改者ID
         /// </summary>
-        public int ModifiedByUserId { get; set; }
+        public Guid? ModifiedByUserGuid { get; set; }
         /// <summary>
-        /// 最近修改者
+        /// 最近修改者姓名
         /// </summary>
         public string ModifiedByUserName { get; set; }
 
@@ -102,5 +102,7 @@ namespace DncZeus.Api.Entities
         /// 权限所属的角色集合
         /// </summary>
         public ICollection<DncRolePermissionMapping> Roles { get; set; }
+
+     
     }
 }

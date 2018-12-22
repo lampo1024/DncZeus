@@ -52,34 +52,30 @@ class HttpRequest {
     }
   }
 
-  showError(error) {
-    if (!error.status) {
-      Modal.error({
-        title: "错误提示",
-        content: "网络出错,请检查你的网络或者服务是否可用<br />请求地址:[" + error.config.url + "]",
-        duration: 15,
-        closable: false
-      });
-      iView.LoadingBar.finish();
-      // Message.error({
-      //   content: "网络出错,请检查你的网络或者服务是否可用",
-      //   duration: 0
-      // });
-      return;
+  showError(error, errorInfo) {
+    console.error("error:", JSON.stringify(error));
+    let message = "接口服务错误,请稍候再试.";
+
+    let statusCode =  -1;
+    if(error.response&& error.response.status){
+      statusCode = error.response.status;
     }
-    var status = error.response.status;
-    switch (status) {
-      case 400:
+
+    switch (statusCode) {
+      case 500:
+        message = "接口服务错误,原因:[" + error.response.statusText + "]";
+        break;
+      case -1:
+        message = "网络出错,请检查你的网络或者服务是否可用<br />请求地址:[" + error.config.url + "]";
         break;
     }
-    if (status != 200) {
-      Modal.error({
-        title: "错误提示",
-        content: "请求资源错误",
-        duration: 15,
-        closable: true
-      })
-    }
+    Modal.error({
+      title: "错误提示",
+      content: message,
+      duration: 15,
+      closable: false
+    });
+    iView.LoadingBar.finish();
   }
 
   interceptors(instance, url) {

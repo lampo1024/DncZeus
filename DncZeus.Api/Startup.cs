@@ -6,7 +6,6 @@
  ******************************************/
 
 using AutoMapper;
-using DncZeus.Auth;
 using DncZeus.Api.Entities;
 using DncZeus.Api.Extensions.AuthContext;
 using DncZeus.Api.Extensions.CustomException;
@@ -110,6 +109,7 @@ namespace DncZeus.Api
             //app.UseStatusCodePagesWithReExecute("/error/{0}");
 
             app.UseStaticFiles();
+            app.UseFileServer();
             app.UseAuthentication();
             app.UseCors("*");
             app.ConfigureCustomExceptionMiddleware();

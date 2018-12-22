@@ -9,11 +9,11 @@ using AutoMapper;
 using DncZeus.Api.Entities;
 using DncZeus.Api.Entities.QueryModels.DncPermission;
 using DncZeus.Api.Extensions;
+using DncZeus.Api.Extensions.AuthContext;
 using DncZeus.Api.Models.Response;
 using DncZeus.Api.RequestPayload.Rbac.Permission;
 using DncZeus.Api.Utils;
 using DncZeus.Api.ViewModels.Rbac.DncMenu;
-using DncZeus.ViewModel.Rbac.DncPermission;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using DncZeus.Api.ViewModels.Rbac.DncPermission;
 using static DncZeus.Api.Entities.Enums.CommonEnum;
 
 namespace DncZeus.Api.Controllers.Api.V1.Rbac
@@ -113,8 +114,8 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
                 var entity = _mapper.Map<PermissionCreateViewModel, DncPermission>(model);
                 entity.CreatedOn = DateTime.Now;
                 entity.Code = RandomHelper.GetRandomizer(8, true, false, true, true);
-                entity.CreatedByUserId = 1;
-                entity.CreatedByUserName = "超级管理员";
+                entity.CreatedByUserGuid = AuthContextService.CurrentUser.Guid;
+                entity.CreatedByUserName = AuthContextService.CurrentUser.DisplayName;
                 _dbContext.DncPermission.Add(entity);
                 _dbContext.SaveChanges();
 
@@ -161,18 +162,23 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
             }
             using (_dbContext)
             {
-                if (_dbContext.DncPermission.Count(x => x.ActionCode == model.ActionCode && x.Id != model.Id) > 0)
+                if (_dbContext.DncPermission.Count(x => x.ActionCode == model.ActionCode && x.Code != model.Code) > 0)
                 {
                     response.SetFailed("权限操作码已存在");
                     return Ok(response);
                 }
-                var entity = _dbContext.DncPermission.FirstOrDefault(x => x.Id == model.Id);
+                var entity = _dbContext.DncPermission.FirstOrDefault(x => x.Code == model.Code);
+                if (entity == null)
+                {
+                    response.SetFailed("权限不存在");
+                    return Ok(response);
+                }
                 entity.Name = model.Name;
                 entity.ActionCode = model.ActionCode;
                 entity.MenuGuid = model.MenuGuid;
                 entity.IsDeleted = model.IsDeleted;
-                entity.ModifiedByUserId = 0;
-                entity.ModifiedByUserName = "";
+                entity.ModifiedByUserGuid = AuthContextService.CurrentUser.Guid;
+                entity.ModifiedByUserName = AuthContextService.CurrentUser.DisplayName;
                 entity.ModifiedOn = DateTime.Now;
                 entity.Status = model.Status;
                 entity.Description = model.Description;

@@ -63,7 +63,7 @@ namespace DncZeus.Api.Entities
         /// <summary>
         /// 
         /// </summary>
-        public int CreatedByUserId { get; set; }
+        public Guid CreatedByUserGuid { get; set; }
         /// <summary>
         /// 
         /// </summary>
@@ -75,7 +75,7 @@ namespace DncZeus.Api.Entities
         /// <summary>
         /// 
         /// </summary>
-        public int ModifiedByUserId { get; set; }
+        public Guid? ModifiedByUserGuid { get; set; }
         /// <summary>
         /// 
         /// </summary>

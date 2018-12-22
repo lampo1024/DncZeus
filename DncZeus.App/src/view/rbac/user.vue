@@ -229,7 +229,6 @@ export default {
         mode: "create",
         selection: [],
         fields: {
-          id: 0,
           guid: "",
           loginName: "",
           displayName: "",
@@ -240,10 +239,10 @@ export default {
           status: 1,
           isDeleted: 0,
           createdOn: null,
-          createdByUserId: 0,
+          createdByUserGuid: "",
           createdByUserName: "",
           modifiedOn: null,
-          modifiedByUserId: 0,
+          modifiedByUserGuid: "",
           modifiedByUserName: ""
         },
         rules: {
@@ -538,7 +537,7 @@ export default {
       return this.formModel.selection;
     },
     selectedRowsId() {
-      return this.formModel.selection.map(x => x.id);
+      return this.formModel.selection.map(x => x.guid);
     }
   },
   methods: {
@@ -564,7 +563,7 @@ export default {
     handleEdit(params) {
       this.handleSwitchFormModeToEdit();
       this.handleResetFormUser();
-      this.doLoadUser(params.row.id);
+      this.doLoadUser(params.row.guid);
     },
     handleSelect(selection, row) {},
     handleSelectionChange(selection) {
@@ -625,13 +624,13 @@ export default {
       });
       return _valid;
     },
-    doLoadUser(id) {
-      loadUser({ id: id }).then(res => {
+    doLoadUser(guid) {
+      loadUser({ guid: guid }).then(res => {
         this.formModel.fields = res.data.data;
       });
     },
     handleDelete(params) {
-      this.doDelete(params.row.id);
+      this.doDelete(params.row.guid);
     },
     doDelete(ids) {
       if (!ids) {
@@ -730,19 +729,6 @@ export default {
           this.$Message.warning(res.data.message);
         }
       });
-    },
-    createTagParams() {
-      const id = parseInt(Math.random() * 100000);
-      const route = {
-        name: "params",
-        params: {
-          id
-        },
-        meta: {
-          title: "动态路由"
-        }
-      };
-      this.$router.push(route);
     }
   },
   mounted() {

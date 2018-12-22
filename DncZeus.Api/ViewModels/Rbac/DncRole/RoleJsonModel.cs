@@ -21,10 +21,10 @@ namespace DncZeus.Api.ViewModels.Rbac.DncRole
         public Status Status { get; set; }
         public IsDeleted IsDeleted { get; set; }
         public string CreatedOn { get; set; }
-        public int CreatedByUserId { get; set; }
+        public Guid CreatedByUserGuid { get; set; }
         public string CreatedByUserName { get; set; }
         public string ModifiedOn { get; set; }
-        public int ModifiedByUserId { get; set; }
+        public Guid? ModifiedByUserGuid { get; set; }
         public string ModifiedByUserName { get; set; }
         /// <summary>
         /// 是否是超级管理员(超级管理员拥有系统的所有权限)

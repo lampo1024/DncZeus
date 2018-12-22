@@ -144,10 +144,15 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
             using (_dbContext)
             {
                 var entity = _dbContext.DncUser.FirstOrDefault(x => x.Guid == model.Guid);
+                if (entity == null)
+                {
+                    response.SetFailed("用户不存在");
+                    return Ok(response);
+                }
                 entity.DisplayName = model.DisplayName;
                 entity.IsDeleted = model.IsDeleted;
                 entity.IsLocked = model.IsLocked;
-                entity.ModifiedByUserId = AuthContextService.CurrentUser.Id;
+                entity.ModifiedByUserGuid = AuthContextService.CurrentUser.Guid;
                 entity.ModifiedByUserName = AuthContextService.CurrentUser.DisplayName;
                 entity.ModifiedOn = DateTime.Now;
                 entity.Password = model.Password;

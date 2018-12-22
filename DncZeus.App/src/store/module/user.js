@@ -21,7 +21,7 @@ import staticRouters from '@/router/static-routers'
 export default {
   state: {
     userName: '',
-    userId: '',
+    userGuid: '',
     user_type: -1,
     avatorImgPath: '',
     token: getToken(),
@@ -40,8 +40,8 @@ export default {
     setAvator(state, avatorPath) {
       state.avatorImgPath = avatorPath
     },
-    setUserId(state, id) {
-      state.userId = id
+    setUserGuid(state, guid) {
+      state.userGuid = guid
     },
     setUserType(state, type) {
       state.user_type = type
@@ -164,7 +164,7 @@ export default {
             const data = res.data.data
             commit('setAvator', data.avator)
             commit('setUserName', data.user_name)
-            commit('setUserId', data.user_id)
+            commit('setUserGuid', data.user_guid)
             commit('setAccess', data.access)
             commit('setPages', getUnion(data.pages, staticRouters))
             commit('setPermissions', data.permissions)

@@ -114,7 +114,7 @@ export default {
       const {
         user: {
           token,
-          userId,
+          userGuid,
           userName
         }
       } = rootState
@@ -122,7 +122,7 @@ export default {
         ...info,
         time: Date.parse(new Date()),
         token,
-        userId,
+        userGuid,
         userName
       }
       saveErrorLogger(info).then(() => {

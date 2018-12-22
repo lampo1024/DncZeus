@@ -18,10 +18,6 @@ namespace DncZeus.Api.ViewModels.Rbac.DncUser
         /// <summary>
         /// 
         /// </summary>
-        public int Id { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
         public Guid Guid { get; set; }
         /// <summary>
         /// 
@@ -62,7 +58,7 @@ namespace DncZeus.Api.ViewModels.Rbac.DncUser
         /// <summary>
         /// 
         /// </summary>
-        public int CreatedByUserId { get; set; }
+        public Guid CreatedByUserGuid { get; set; }
         /// <summary>
         /// 
         /// </summary>
@@ -74,7 +70,7 @@ namespace DncZeus.Api.ViewModels.Rbac.DncUser
         /// <summary>
         /// 
         /// </summary>
-        public int ModifiedByUserId { get; set; }
+        public Guid? ModifiedByUserGuid { get; set; }
         /// <summary>
         /// 
         /// </summary>

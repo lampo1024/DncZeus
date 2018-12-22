@@ -86,7 +86,7 @@ namespace DncZeus.Api.Entities
         /// <summary>
         /// 创建者ID
         /// </summary>
-        public int CreatedByUserId { get; set; }
+        public Guid CreatedByUserGuid { get; set; }
         /// <summary>
         /// 创建者姓名
         /// </summary>
@@ -98,7 +98,7 @@ namespace DncZeus.Api.Entities
         /// <summary>
         /// 最近修改者ID
         /// </summary>
-        public int ModifiedByUserId { get; set; }
+        public Guid? ModifiedByUserGuid { get; set; }
         /// <summary>
         /// 最近修改者姓名
         /// </summary>

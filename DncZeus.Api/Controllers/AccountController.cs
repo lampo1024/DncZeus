@@ -86,7 +86,6 @@ WHERE P.IsDeleted=0 AND P.Status=1";
                 {
                     access = new string[] { },
                     avator = user.Avatar,
-                    user_id = user.Id,
                     user_guid = user.Guid,
                     user_name = user.DisplayName,
                     user_type = user.UserType,

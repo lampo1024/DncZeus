@@ -8,7 +8,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace DncZeus.Api.ViewModels.Rbac.DncMenu
+namespace DncZeus.Api.ViewModels.Rbac.DncPermission
 {
     /// <summary>
     /// 用于角色权限的菜单树
