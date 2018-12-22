@@ -1,0 +1,19 @@
+如果你是初次下载本项目，请忽略所有关于升级的脚本！！！
+如果你是初次下载本项目，请忽略所有关于升级的脚本！！！
+如果你是初次下载本项目，请忽略所有关于升级的脚本！！！
+
+重要的事情说三遍！！！
+
+1. 初始化DncZeus的数据库和表结构有两个方式：
+
+a). 使用Entity Framework的迁移命令，操作方式： 使用Visual Studio打开DncZeus.sln解决方案，在"包管理控制台(Package Mananger Console)"中输入更新数据库更新命令即可，如下：
+Update-Database -verbose
+使用此方式创建数据的话，不需要再另外执行其他的SQL脚本（如果要初始化数据库的数据，请看下面的初始化数据部分）。
+
+b). 使用SQL脚本，打开脚本文件[/Scripts/DncZeus-schema-and-data-version-latest(全量脚本,包含结构和数据).sql]，指定到项目所在的数据库，默认为：DncZeus， 执行脚本即可。
+注意，此方式不需要（！！！不需要！！！不需要）再执行下面的"初始化数据"这个步骤了。
+
+
+2.初始化数据
+
+打开脚本文件夹中的数据脚本文件[/Scripts/DncZeus-data-version-latest(全量脚本，只有数据).sql]，指定到项目所在的数据库，默认为：DncZeus， 执行脚本即可。
