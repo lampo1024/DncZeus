@@ -64,6 +64,24 @@ export default [{
     }]
   },
   {
+    path: '/demo',
+    name: 'demo',
+    component: Main,
+    meta: {
+      icon:"logo-buffer",
+      title:"示例菜单"
+    },
+    children: [{
+      path: 'demo-page',
+      name: 'demo_page',
+      meta: {
+        title: '示例页面',
+        icon: 'md-home'
+      },
+      component: () => import('@/view/demo/demo-page')
+    }]
+  },
+  {
     path: '/message',
     name: 'message',
     component: Main,
@@ -204,7 +222,7 @@ export default [{
         name: 'params',
         meta: {
           icon: 'md-flower',
-          title: route => `{{ params }}-${route.params.id}`,
+          title: route => `动态参数-${route.params.id}`,
           notCache: true,
           beforeCloseName: 'before_close_normal'
         },
@@ -215,7 +233,7 @@ export default [{
         name: 'query',
         meta: {
           icon: 'md-flower',
-          title: route => `{{ query }}-${route.query.id}`,
+          title: route => `查询参数-${route.query.id}`,
           notCache: true
         },
         component: () => import('@/view/argu-page/query.vue')

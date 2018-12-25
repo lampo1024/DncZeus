@@ -149,8 +149,8 @@
         <FormItem label="菜单名称" prop="name" label-position="left">
           <Input v-model="formModel.fields.name" placeholder="请输入菜单名称"/>
         </FormItem>
-        <FormItem label="菜单别名" prop="alias" label-position="left">
-          <Input v-model="formModel.fields.alias" placeholder="请输入菜单别名"/>
+        <FormItem label="路由名称" prop="alias" label-position="left">
+          <Input v-model="formModel.fields.alias" placeholder="请输入路由名称"/>
         </FormItem>
         <FormItem label="URL地址" prop="url" label-position="left">
           <Input v-model="formModel.fields.url" placeholder="请输入URL地址"/>
@@ -392,7 +392,7 @@ export default {
               ellipsis: true,
               tooltip: true
             },
-            { title: "菜单别名", key: "alias", width: 200 },
+            { title: "路由名称", key: "alias", width: 200 },
             { title: "上级菜单", key: "parentName", width: 150 },
             { title: "排序", key: "sort", width: 60, align: "center" },
             {

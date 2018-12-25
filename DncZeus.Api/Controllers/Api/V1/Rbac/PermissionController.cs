@@ -106,7 +106,7 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
             }
             using (_dbContext)
             {
-                if (_dbContext.DncPermission.Count(x => x.ActionCode == model.ActionCode) > 0)
+                if (_dbContext.DncPermission.Count(x => x.ActionCode == model.ActionCode && x.MenuGuid==model.MenuGuid) > 0)
                 {
                     response.SetFailed("权限操作码已存在");
                     return Ok(response);
