@@ -79,5 +79,9 @@ namespace DncZeus.Api.ViewModels.Rbac.DncPermission
         /// 最近修改者
         /// </summary>
         public string ModifiedByUserName { get; set; }
+        /// <summary>
+        /// 权限类型的显示文本
+        /// </summary>
+        public string PermissionTypeText { get; set; }
     }
 }

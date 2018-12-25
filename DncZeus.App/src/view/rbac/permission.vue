@@ -340,7 +340,7 @@ export default {
               title: "状态",
               key: "status",
               align: "center",
-              width: 120,
+              width: 100,
               render: (h, params) => {
                 let status = params.row.status;
                 let statusColor = "success";
@@ -349,6 +349,59 @@ export default {
                   case 0:
                     statusText = "禁用";
                     statusColor = "default";
+                    break;
+                }
+                return h(
+                  "Tooltip",
+                  {
+                    props: {
+                      placement: "top",
+                      transfer: true,
+                      delay: 500
+                    }
+                  },
+                  [
+                    //这个中括号表示是Tooltip标签的子标签
+                    h(
+                      "Tag",
+                      {
+                        props: {
+                          //type: "dot",
+                          color: statusColor
+                        }
+                      },
+                      statusText
+                    ), //表格列显示文字
+                    h(
+                      "p",
+                      {
+                        slot: "content",
+                        style: {
+                          whiteSpace: "normal"
+                        }
+                      },
+                      statusText //整个的信息即气泡内文字
+                    )
+                  ]
+                );
+              }
+            },
+            {
+              title: "类型",
+              key: "permissionTypeText",
+              align: "center",
+              width: 100,
+              render: (h, params) => {
+                let permissionTypeText = params.row.permissionTypeText;
+                let statusColor = "success";
+                let statusText = "未知";
+                switch (permissionTypeText) {
+                  case "Action":
+                    statusText = "按钮";
+                    break;
+                    case "Menu":
+                    statusText = "菜单";
+                    statusColor = "primary";
                     break;
                 }
                 return h(

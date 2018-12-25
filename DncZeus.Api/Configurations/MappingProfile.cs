@@ -48,7 +48,8 @@ namespace DncZeus.Api.Configurations
 
             #region DncPermission
             CreateMap<DncPermission, PermissionJsonModel>()
-                .ForMember(d=>d.MenuName,s=>s.MapFrom(x=>x.Menu.Name));
+                .ForMember(d=>d.MenuName,s=>s.MapFrom(x=>x.Menu.Name))
+                .ForMember(d => d.PermissionTypeText, s => s.MapFrom(x => x.Type.ToString()));
             CreateMap<PermissionCreateViewModel, DncPermission>();
             CreateMap<PermissionEditViewModel, DncPermission>();
             CreateMap<DncPermission,PermissionEditViewModel>();
