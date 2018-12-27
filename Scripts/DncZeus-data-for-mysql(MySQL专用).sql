@@ -1,3 +1,6 @@
+/*
+MySQL的表结构迁移请查看:https://www.cnblogs.com/swindyChen/p/10173585.html
+*/
 USE  DncZeus ;
 DELETE FROM      DncIcon;
 DELETE FROM      __EFMigrationsHistory ;
