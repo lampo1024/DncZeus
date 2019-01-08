@@ -55,6 +55,7 @@ namespace DncZeus.Api
                         .AllowAnyOrigin()
                         .AllowCredentials()
                 ));
+            services.AddMemoryCache();
             services.AddHttpContextAccessor();
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
             var appSettingsSection = Configuration.GetSection("AppSettings");
