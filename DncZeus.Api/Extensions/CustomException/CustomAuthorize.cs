@@ -6,22 +6,30 @@
  ******************************************/
 
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
 
 namespace DncZeus.Api.Extensions.CustomException
 {
+    /// <summary>
+    /// 
+    /// </summary>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
     public class CustomAuthorizeAttribute : AuthorizeAttribute, IAuthorizationFilter
     {
         //private readonly string _someFilterParameter;
-
+        /// <summary>
+        /// 
+        /// </summary>
         public CustomAuthorizeAttribute()
         {
             //_someFilterParameter = someFilterParameter;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="context"></param>
         public void OnAuthorization(AuthorizationFilterContext context)
         {
             var user = context.HttpContext.User;

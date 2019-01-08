@@ -13,8 +13,6 @@ using DncZeus.Api.Extensions.AuthContext;
 using DncZeus.Api.Models.Response;
 using DncZeus.Api.RequestPayload.Rbac.Permission;
 using DncZeus.Api.Utils;
-using DncZeus.Api.ViewModels.Rbac.DncMenu;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -23,6 +21,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using DncZeus.Api.ViewModels.Rbac.DncPermission;
 using static DncZeus.Api.Entities.Enums.CommonEnum;
+using DncZeus.Api.Extensions.CustomException;
 
 namespace DncZeus.Api.Controllers.Api.V1.Rbac
 {
@@ -31,7 +30,7 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
     /// </summary>
     [Route("api/v1/rbac/[controller]/[action]")]
     [ApiController]
-    [Authorize]
+    [CustomAuthorize]
     public class PermissionController : Controller
     {
         private readonly DncZeusDbContext _dbContext;

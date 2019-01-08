@@ -6,10 +6,10 @@ using DncZeus.Api.Entities;
 using DncZeus.Api.Entities.Enums;
 using DncZeus.Api.Extensions;
 using DncZeus.Api.Extensions.AuthContext;
+using DncZeus.Api.Extensions.CustomException;
 using DncZeus.Api.Models.Response;
 using DncZeus.Api.RequestPayload.Rbac.User;
 using DncZeus.Api.ViewModels.Rbac.DncUser;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 /******************************************
@@ -27,7 +27,7 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
     //[CustomAuthorize]
     [Route("api/v1/rbac/[controller]/[action]")]
     [ApiController]
-    [Authorize]
+    [CustomAuthorize]
     public class UserController : ControllerBase
     {
         private readonly DncZeusDbContext _dbContext;
