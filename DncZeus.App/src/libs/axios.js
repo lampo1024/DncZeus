@@ -59,9 +59,11 @@ class HttpRequest {
     if(error.response&& error.response.status){
       statusCode = error.response.status;
     }
-
     switch (statusCode) {
-      case 500:
+      case 401:
+        message = "接口服务错误,原因:未授权的访问(没有权限或者登录已超时)";
+        break;
+        case 500:
         message = "接口服务错误,原因:[" + error.response.statusText + "]";
         break;
       case -1:
