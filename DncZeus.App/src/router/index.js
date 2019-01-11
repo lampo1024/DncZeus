@@ -48,7 +48,7 @@ const turnTo = (to, pages, checkPermission, permissions, next) => {
     }
     next();
   } else {
-    console.log("to 6...");
+    //console.log("to 6...");
     next({
       replace: true,
       name: "error_401"
