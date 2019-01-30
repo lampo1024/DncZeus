@@ -171,7 +171,7 @@ DncZeus项目是一个开源项目，你可以直接基于本项目进行扩展�
 
 ## 捐赠作者
 
-如果你觉得**DncZeus**是你喜欢的类型，或者能为帮你找到一些开发的灵感，请你捐赠我一杯啤酒，谢谢你的支持！！！
+如果你觉得**DncZeus**是你喜欢的类型，或者能帮你找到一些开发的灵感，请你捐赠我一杯啤酒，谢谢你的支持！！！
 
 <p style="text-align:center;">
 <img width="200" src="https://statics.codedefault.com/img/codedefault/public/pay/alipay.png" alt="支付宝支付" />
