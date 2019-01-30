@@ -169,6 +169,15 @@ DncZeus项目是一个开源项目，你可以直接基于本项目进行扩展�
 
 **但请保留原文件中的版权信息，尊重本人的劳动成果，违者必究，谢谢合作**。
 
+## 捐赠作者
+
+如果你觉得**DncZeus**是你喜欢的类型，或者能为你的开发提供参考，请你捐赠我，谢谢你的支持！！！
+
+<p style="text-align:center;">
+<img width="200" src="https://statics.codedefault.com/img/codedefault/public/pay/alipay.png" alt="支付宝支付" />
+<img width="200" src="https://statics.codedefault.com/img/codedefault/public/pay/wechatpay.png" alt="微信支付" />
+</p>
+
 ## 问题与反馈
 
 遇到问题怎么办？
