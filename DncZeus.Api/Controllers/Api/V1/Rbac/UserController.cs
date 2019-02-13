@@ -121,7 +121,7 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
             {
                 var entity = _dbContext.DncUser.FirstOrDefault(x => x.Guid == guid);
                 var response = ResponseModelFactory.CreateInstance;
-                response.SetData(_mapper.Map<DncUser, UserCreateViewModel>(entity));
+                response.SetData(_mapper.Map<DncUser, UserEditViewModel>(entity));
                 return Ok(response);
             }
         }
@@ -133,7 +133,7 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
         /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(200)]
-        public IActionResult Edit(UserCreateViewModel model)
+        public IActionResult Edit(UserEditViewModel model)
         {
             var response = ResponseModelFactory.CreateInstance;
             if (ConfigurationManager.AppSettings.IsTrialVersion)

@@ -14,8 +14,12 @@ namespace DncZeus.Api.ViewModels.Rbac.DncUser
     /// <summary>
     /// 
     /// </summary>
-    public class UserCreateViewModel
+    public class UserEditViewModel
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        public Guid Guid { get; set; }
         /// <summary>
         /// 
         /// </summary>

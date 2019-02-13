@@ -27,7 +27,8 @@ namespace DncZeus.Api.Configurations
         {
             #region DncUser
             CreateMap<DncUser, UserJsonModel>();
-            CreateMap<UserCreateViewModel, DncUser>(); 
+            CreateMap<UserCreateViewModel, DncUser>();
+            CreateMap<UserEditViewModel, DncUser>();
             #endregion
 
             #region DncRole
