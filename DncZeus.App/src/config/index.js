@@ -17,8 +17,9 @@ export default {
    * @description api请求基础路径
    */
   baseUrl: {
-    dev: 'http://localhost:54321/api/v1/',
-    pro: 'http://localhost:54321/api/v1/'
+    dev: 'http://localhost:54321/',
+    pro: 'http://localhost:54321/',
+    prefix:"api/v1/"
   },
   authUrl: {
     dev: 'http://localhost:54321/api/oauth/auth',

@@ -32,8 +32,9 @@ const addErrorLog = errorInfo => {
 }
 
 class HttpRequest {
-  constructor(baseUrl = baseURL) {
+  constructor(baseUrl = baseURL, prefix) {
     this.baseUrl = baseUrl
+    this.prefix = prefix
     this.queue = {}
   }
   getInsideConfig() {
@@ -55,15 +56,15 @@ class HttpRequest {
   showError(error, errorInfo) {
     let message = "接口服务错误,请稍候再试.";
 
-    let statusCode =  -1;
-    if(error.response&& error.response.status){
+    let statusCode = -1;
+    if (error.response && error.response.status) {
       statusCode = error.response.status;
     }
     switch (statusCode) {
       case 401:
         message = "接口服务错误,原因:未授权的访问(没有权限或者登录已超时)";
         break;
-        case 500:
+      case 500:
         message = "接口服务错误,原因:[" + error.response.statusText + "]";
         break;
       case -1:
@@ -136,6 +137,18 @@ class HttpRequest {
   }
   request(options) {
     const instance = axios.create()
+    let withPrefix = true
+    if (options.withPrefix !== undefined && options.withPrefix == false) {
+      withPrefix = false
+    }
+    let url = options.url
+    if (options.prefix !== undefined && options.prefix.length > 0) {
+      url = options.prefix + options.url
+    }
+    else if (withPrefix) {
+      url = this.prefix + options.url
+    }
+    options.url = url
     options = Object.assign(this.getInsideConfig(), options)
     this.interceptors(instance, options.url)
     return instance(options)
