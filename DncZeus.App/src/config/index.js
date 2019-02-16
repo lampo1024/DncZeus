@@ -19,7 +19,7 @@ export default {
   baseUrl: {
     dev: 'http://localhost:54321/',
     pro: 'http://localhost:54321/',
-    prefix:"api/v1/"
+    defaultPrefix:"api/v1/"
   },
   authUrl: {
     dev: 'http://localhost:54321/api/oauth/auth',

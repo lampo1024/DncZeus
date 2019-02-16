@@ -32,9 +32,9 @@ const addErrorLog = errorInfo => {
 }
 
 class HttpRequest {
-  constructor(baseUrl = baseURL, prefix) {
+  constructor(baseUrl = baseURL, defaultPrefix= defaultPrefix) {
     this.baseUrl = baseUrl
-    this.prefix = prefix
+    this.defaultPrefix = defaultPrefix
     this.queue = {}
   }
   getInsideConfig() {
@@ -146,7 +146,7 @@ class HttpRequest {
       url = options.prefix + options.url
     }
     else if (withPrefix) {
-      url = this.prefix + options.url
+      url = this.defaultPrefix + options.url
     }
     options.url = url
     options = Object.assign(this.getInsideConfig(), options)
