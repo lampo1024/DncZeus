@@ -5,9 +5,6 @@
  * 版权所有，请勿删除
  ******************************************/
 
-using System;
-using System.Data.SqlClient;
-using System.Linq;
 using AutoMapper;
 using DncZeus.Api.Entities;
 using DncZeus.Api.Entities.Enums;
@@ -19,6 +16,9 @@ using DncZeus.Api.RequestPayload.Rbac.Icon;
 using DncZeus.Api.ViewModels.Rbac.DncIcon;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Data.SqlClient;
+using System.Linq;
 
 namespace DncZeus.Api.Controllers.Api.V1.Rbac
 {
@@ -33,6 +33,7 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
     {
         private readonly DncZeusDbContext _dbContext;
         private readonly IMapper _mapper;
+
         /// <summary>
         /// 
         /// </summary>
@@ -66,7 +67,7 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
                 {
                     query = query.Where(x => x.Status == payload.Status);
                 }
-                var list = query.Paged(payload.CurrentPage,payload.PageSize).ToList();
+                var list = query.Paged(payload.CurrentPage, payload.PageSize).ToList();
                 var totalCount = query.Count();
                 var data = list.Select(_mapper.Map<DncIcon, IconJsonModel>);
                 var response = ResponseModelFactory.CreateResultInstance;
@@ -94,7 +95,7 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
                 var query = _dbContext.DncIcon.Where(x => x.Code.Contains(kw));
 
                 var list = query.ToList();
-                var data = list.Select(x=>new { x.Code,x.Color,x.Size });
+                var data = list.Select(x => new { x.Code, x.Color, x.Size });
 
                 response.SetData(data);
                 return Ok(response);
@@ -201,7 +202,7 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
         [ProducesResponseType(200)]
         public IActionResult Delete(string ids)
         {
-           
+
             var response = ResponseModelFactory.CreateInstance;
             if (ConfigurationManager.AppSettings.IsTrialVersion)
             {
@@ -252,14 +253,12 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
                     else
                     {
                         response = UpdateIsDelete(CommonEnum.IsDeleted.Yes, ids);
-                    }                   
-                    
+                    }
                     break;
                 case "recover":
                     response = UpdateIsDelete(CommonEnum.IsDeleted.No, ids);
                     break;
                 case "forbidden":
-                    
                     if (ConfigurationManager.AppSettings.IsTrialVersion)
                     {
                         response.SetIsTrial();
@@ -268,7 +267,6 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
                     {
                         response = UpdateStatus(UserStatus.Forbidden, ids);
                     }
-                    response.SetIsTrial();
                     break;
                 case "normal":
                     response = UpdateStatus(UserStatus.Normal, ids);
