@@ -13,7 +13,6 @@ import {
   getUnion
 } from '@/libs/tools'
 import staticRouters from '@/router/static-routers'
-import axios from "axios";
 import config from "@/config";
 const {
   homeName
@@ -41,6 +40,7 @@ const turnTo = (to, pages, checkPermission, permissions, next) => {
 
   // 有权限，可访问
   if (pages.includes(to.name)) {
+    console.log("r7...");
     to.meta.checkPermission = checkPermission;
     permissions = permissions || [];
     if (permissions && permissions[to.name]) {
@@ -48,7 +48,7 @@ const turnTo = (to, pages, checkPermission, permissions, next) => {
     }
     next();
   } else {
-    //console.log("to 6...");
+    console.log("r8...");
     next({
       replace: true,
       name: "error_401"
@@ -57,31 +57,38 @@ const turnTo = (to, pages, checkPermission, permissions, next) => {
 };
 
 router.beforeEach((to, from, next) => {
-  //console.log("to:", to);
-  //console.log("from:", from);
+  console.log("to:", to);
+  console.log("from:", from);
   iView.LoadingBar.start();
   const token = getToken();
   if (!token && to.name !== LOGIN_PAGE_NAME) {
+    console.log("r1...");
     // 未登录且要跳转的页面不是登录页
     next({
       name: LOGIN_PAGE_NAME // 跳转到登录页
     });
   } else if (!token && to.name === LOGIN_PAGE_NAME) {
+    console.log("r2...");
     // 未登陆且要跳转的页面是登录页
     next(); // 跳转
   } else if (token && to.name === LOGIN_PAGE_NAME) {
+    console.log("r3...");
     // 已登录且要跳转的页面是登录页
     next({
       name: homeName // 跳转到homeName页
     });
   } else {
+    console.log("r4...");
     let checkPermission = true;
     if (store.state.user.hasGetInfo) {
+      console.log("r5...");
       checkPermission = store.state.user.user_type != 0;
       turnTo(to, store.state.user.pages, checkPermission, store.state.user.permissions, next)
     } else {
+      console.log("r6...");
       store.dispatch('getUserInfo').then(user => {
         // 拉取用户信息，通过用户权限和跳转的页面的name来判断是否有权限访问;access必须是一个数组，如：['super_admin']
+        console.log("user:",user);
         checkPermission = user.user_type != 0;
         turnTo(to, getUnion(user.pages, staticRouters), checkPermission, user.permissions, next)
       }).catch(() => {
