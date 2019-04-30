@@ -43,14 +43,36 @@ namespace DncZeus.Api.RequestPayload
             get
             {
                 var orderBy = "";
-                var sort = Sort.Where(x => string.IsNullOrEmpty(x.Field) && string.IsNullOrEmpty(x.Direction)).ToList();
+                var sort = Sort.Where(x => string.IsNullOrEmpty(x.Field) && string.IsNullOrEmpty(x.Direct)).ToList();
                 if (sort.Count > 0)
                 {
-                    orderBy = "ORDER BY " + string.Join(",", sort.Select(x => $"{x.Field} {x.Direction}"));
+                    orderBy = "ORDER BY " + string.Join(",", sort.Select(x => $"{x.Field} {x.Direct}"));
                 }
                 return orderBy;
             }
         }
+
+        /// <summary>
+        /// 第一个排序字段(单个字段排序)
+        /// </summary>
+        public Sort FirstSort
+        {
+            get
+            {
+                var fs = Sort[0];
+                if (fs == null)
+                {
+                    return null;
+                }
+                var sort = new Sort
+                {
+                    Direct = fs.Direct.ToUpper(),
+                    Field = fs.Field
+                };
+                return sort;
+            }
+        }
+
         /// <summary>
         /// 搜索关键字
         /// </summary>
@@ -67,7 +89,7 @@ namespace DncZeus.Api.RequestPayload
         /// </summary>
         public Sort()
         {
-            Direction = "DESC";
+            Direct = "DESC";
         }
         /// <summary>
         /// 排序字段
@@ -76,6 +98,6 @@ namespace DncZeus.Api.RequestPayload
         /// <summary>
         /// 排序方向
         /// </summary>
-        public string Direction { get; set; }
+        public string Direct { get; set; }
     }
 }

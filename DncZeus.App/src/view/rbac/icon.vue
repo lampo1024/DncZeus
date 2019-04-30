@@ -577,6 +577,9 @@ export default {
     doLoadIcon(id) {
       loadIcon({ id: id }).then(res => {
         this.formModel.fields = res.data.data;
+        if(this.formModel.fields.color===null){
+          this.formModel.fields.color="";
+        }
       });
     },
     handleDelete(params) {

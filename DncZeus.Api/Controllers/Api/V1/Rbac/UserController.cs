@@ -1,21 +1,22 @@
-﻿using System;
-using System.Data.SqlClient;
-using System.Linq;
-using AutoMapper;
+﻿using AutoMapper;
 using DncZeus.Api.Entities;
 using DncZeus.Api.Entities.Enums;
 using DncZeus.Api.Extensions;
 using DncZeus.Api.Extensions.AuthContext;
 using DncZeus.Api.Extensions.CustomException;
+using DncZeus.Api.Extensions.DataAccess;
 using DncZeus.Api.Models.Response;
 using DncZeus.Api.RequestPayload.Rbac.User;
 using DncZeus.Api.ViewModels.Rbac.DncUser;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Data.SqlClient;
+using System.Linq;
 /******************************************
  * AUTHOR:          Rector
  * CREATEDON:       2018-09-26
- * OFFICAL_SITE:    码友网(https://codedefault.com)--专注.NET/.NET Core
+ * OFFICIAL_SITE:    码友网(https://codedefault.com)--专注.NET/.NET Core
  * 版权所有，请勿删除
  ******************************************/
 
@@ -59,11 +60,16 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
                 }
                 if (payload.IsDeleted > CommonEnum.IsDeleted.All)
                 {
-                   query = query.Where(x => x.IsDeleted == payload.IsDeleted);
+                    query = query.Where(x => x.IsDeleted == payload.IsDeleted);
                 }
                 if (payload.Status > UserStatus.All)
                 {
-                   query = query.Where(x => x.Status == payload.Status);
+                    query = query.Where(x => x.Status == payload.Status);
+                }
+
+                if (payload.FirstSort != null)
+                {
+                    query = query.OrderBy(payload.FirstSort.Field, payload.FirstSort.Direct == "DESC");
                 }
                 var list = query.Paged(payload.CurrentPage, payload.PageSize).ToList();
                 var totalCount = query.Count();
@@ -102,7 +108,7 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
                 entity.Status = model.Status;
                 _dbContext.DncUser.Add(entity);
                 _dbContext.SaveChanges();
-                
+
                 response.SetSuccess();
                 return Ok(response);
             }
@@ -121,7 +127,7 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
             {
                 var entity = _dbContext.DncUser.FirstOrDefault(x => x.Guid == guid);
                 var response = ResponseModelFactory.CreateInstance;
-                response.SetData(_mapper.Map<DncUser, UserCreateViewModel>(entity));
+                response.SetData(_mapper.Map<DncUser, UserEditViewModel>(entity));
                 return Ok(response);
             }
         }
@@ -133,7 +139,7 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
         /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(200)]
-        public IActionResult Edit(UserCreateViewModel model)
+        public IActionResult Edit(UserEditViewModel model)
         {
             var response = ResponseModelFactory.CreateInstance;
             if (ConfigurationManager.AppSettings.IsTrialVersion)
@@ -245,22 +251,25 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost("/api/v1/rbac/user/save_roles")]
-        public IActionResult SaveRoles(SaveUserRolesViewModel model) {
+        public IActionResult SaveRoles(SaveUserRolesViewModel model)
+        {
             var response = ResponseModelFactory.CreateInstance;
-            var roles = model.AssignedRoles.Select(x=> new DncUserRoleMapping {
-                UserGuid= model.UserGuid,
-                CreatedOn=DateTime.Now,
-                RoleCode= x.Trim()
+            var roles = model.AssignedRoles.Select(x => new DncUserRoleMapping
+            {
+                UserGuid = model.UserGuid,
+                CreatedOn = DateTime.Now,
+                RoleCode = x.Trim()
             }).ToList();
-            _dbContext.Database.ExecuteSqlCommand("DELETE FROM DncUserRoleMapping WHERE UserGuid={0}",model.UserGuid);
+            _dbContext.Database.ExecuteSqlCommand("DELETE FROM DncUserRoleMapping WHERE UserGuid={0}", model.UserGuid);
             var success = true;
             if (roles.Count > 0)
             {
                 _dbContext.DncUserRoleMapping.AddRange(roles);
-                success = _dbContext.SaveChanges() >0 ;
+                success = _dbContext.SaveChanges() > 0;
             }
-            
-            if (success) {
+
+            if (success)
+            {
                 response.SetSuccess();
             }
             else

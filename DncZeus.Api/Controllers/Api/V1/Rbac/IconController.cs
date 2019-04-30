@@ -5,9 +5,6 @@
  * 版权所有，请勿删除
  ******************************************/
 
-using System;
-using System.Data.SqlClient;
-using System.Linq;
 using AutoMapper;
 using DncZeus.Api.Entities;
 using DncZeus.Api.Entities.Enums;
@@ -19,6 +16,9 @@ using DncZeus.Api.RequestPayload.Rbac.Icon;
 using DncZeus.Api.ViewModels.Rbac.DncIcon;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Data.SqlClient;
+using System.Linq;
 
 namespace DncZeus.Api.Controllers.Api.V1.Rbac
 {
@@ -33,6 +33,7 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
     {
         private readonly DncZeusDbContext _dbContext;
         private readonly IMapper _mapper;
+
         /// <summary>
         /// 
         /// </summary>
@@ -49,7 +50,6 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        [CustomAuthorize(ActionAlias = "list")]
         public IActionResult List(IconRequestPayload payload)
         {
             using (_dbContext)
@@ -254,13 +254,11 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
                     {
                         response = UpdateIsDelete(CommonEnum.IsDeleted.Yes, ids);
                     }
-
                     break;
                 case "recover":
                     response = UpdateIsDelete(CommonEnum.IsDeleted.No, ids);
                     break;
                 case "forbidden":
-
                     if (ConfigurationManager.AppSettings.IsTrialVersion)
                     {
                         response.SetIsTrial();
@@ -269,7 +267,6 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
                     {
                         response = UpdateStatus(UserStatus.Forbidden, ids);
                     }
-                    response.SetIsTrial();
                     break;
                 case "normal":
                     response = UpdateStatus(UserStatus.Normal, ids);

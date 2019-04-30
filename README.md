@@ -10,7 +10,7 @@
 
 "Zeus"--中文译为**宙斯**，是古希腊神话中的众神之王，奥林匹斯十二主神之首，统治宇宙万物的至高无上的主神（在古希腊神话中主神专指宙斯），人们常用“众神和人类的父亲”、“神王”来称呼他，是希腊神话诸神中最伟大的神。
 
-**DncZeus**的愿景就是做一个.NET Core 领域的简易精致的通用后台权限管理模板系统基础框架，努力向.NET Core 领域的"宙斯"看齐。
+**DncZeus**的愿景就是做一个.NET Core 领域的简易精致的通用后台权限管理模板系统基础框架，作.NET Core 领域低调但有内容的小"宙斯"。
 
 ## 项目简介
 
@@ -18,7 +18,7 @@
 
 **DncZeus**并不是一个完整的业务系统，但她提供完成业务系统的绝大多数开发场景，让每一位.NET 开发者都能基于**DncZeus**快速开发出交互、体验以及功能具佳的.NET Core 单页应用程序(SPA)。
 
-## 支持DncZeus(求Start :))
+## 支持DncZeus(求Star :))
 
 如果你觉得DncZeus对你或者他人有用，请为DncZeus点个赞，求扩散，让更多人获得帮助！！！
 
@@ -168,6 +168,15 @@ npm run dev
 DncZeus项目是一个开源项目，你可以直接基于本项目进行扩展或者二次开发，也可以修改其中的代码。
 
 **但请保留原文件中的版权信息，尊重本人的劳动成果，违者必究，谢谢合作**。
+
+## 捐赠作者
+
+如果你觉得**DncZeus**是你喜欢的类型，或者能帮你找到一些开发的灵感，请你捐赠我一杯啤酒，谢谢你的支持！！！
+
+<p style="text-align:center;">
+<img width="200" src="https://statics.codedefault.com/img/codedefault/public/pay/alipay.png" alt="支付宝支付" />
+<img width="200" src="https://statics.codedefault.com/img/codedefault/public/pay/wechatpay.png" alt="微信支付" />
+</p>
 
 ## 问题与反馈
 

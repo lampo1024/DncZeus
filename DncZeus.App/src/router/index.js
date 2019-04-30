@@ -13,7 +13,6 @@ import {
   getUnion
 } from '@/libs/tools'
 import staticRouters from '@/router/static-routers'
-import axios from "axios";
 import config from "@/config";
 const {
   homeName
@@ -48,7 +47,6 @@ const turnTo = (to, pages, checkPermission, permissions, next) => {
     }
     next();
   } else {
-    console.log("to 6...");
     next({
       replace: true,
       name: "error_401"
@@ -57,8 +55,6 @@ const turnTo = (to, pages, checkPermission, permissions, next) => {
 };
 
 router.beforeEach((to, from, next) => {
-  //console.log("to:", to);
-  //console.log("from:", from);
   iView.LoadingBar.start();
   const token = getToken();
   if (!token && to.name !== LOGIN_PAGE_NAME) {
