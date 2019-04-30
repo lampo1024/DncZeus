@@ -6,9 +6,11 @@
  ******************************************/
 
 using DncZeus.Api.Entities;
+using DncZeus.Api.Entities.Enums;
 using DncZeus.Api.Extensions;
 using DncZeus.Api.Extensions.AuthContext;
 using DncZeus.Api.Extensions.DataAccess;
+using DncZeus.Api.ViewModels.Rbac.DncMenu;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -64,8 +66,8 @@ INNER JOIN DncMenu AS M ON M.Guid = P.MenuGuid
 WHERE P.IsDeleted=0 AND P.Status=1";
                 }
                 var permissions = _dbContext.DncPermissionWithMenu.FromSql(sqlPermission, user.Guid).ToList();
-                var allowPages = new List<string> {  };
-                
+                var allowPages = new List<string> { };
+
                 if (user.UserType == UserType.SuperAdministator)
                 {
                     allowPages.AddRange(menus.Select(x => x.Alias));
@@ -78,10 +80,10 @@ WHERE P.IsDeleted=0 AND P.Status=1";
                         allowPages.AddRange(FindParentMenuAlias(menus, permission.MenuGuid));
                     }
                 }
-                
+
                 //var allowPages = FindParentMenuAlias(menus);
                 var pages = allowPages.Distinct().ToList();
-                var pagePermissions = permissions.GroupBy(x => x.MenuAlias).ToDictionary(g=>g.Key,g=>g.Select(x=>x.PermissionActionCode));
+                var pagePermissions = permissions.GroupBy(x => x.MenuAlias).ToDictionary(g => g.Key, g => g.Select(x => x.PermissionActionCode));
                 response.SetData(new
                 {
                     access = new string[] { },
@@ -119,6 +121,78 @@ WHERE P.IsDeleted=0 AND P.Status=1";
             }
 
             return pages.Distinct().ToList();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult Menu()
+        {
+            //Guid.Empty.ToString()
+            var menu = MenuItemHelper.LoadMenuTree(_dbContext, "0");
+            return Ok(menu);
+        }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public static class MenuItemHelper
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="menus"></param>
+        /// <param name="selectedGuid"></param>
+        /// <returns></returns>
+        public static List<MenuItem> BuildTree(this List<MenuItem> menus, string selectedGuid = null)
+        {
+            var lookup = menus.ToLookup(x => x.ParentId);
+            Func<string, List<MenuItem>> build = null;
+            build = pid =>
+            {
+                return lookup[pid]
+                 .Select(x => new MenuItem()
+                 {
+                     Guid = x.Guid,
+                     ParentId = x.ParentId,
+                     Children = build(x.Guid),
+                     Component = x.Component,
+                     Name = x.Name,
+                     Path = x.Path,
+                     Meta = new MenuMeta
+                     {
+                         ConfirmBeforeClose = x.MetaConfirmBeforeClose,
+                         HideInMenu = x.MetaHideInMenu,
+                         Icon = x.MetaIcon,
+                         NotCache = x.MetaNotCache,
+                         Title = x.MetaTitle,
+                         Permission = x.MetaPermission
+                     }
+                 })
+                 .ToList();
+            };
+            var result = build(selectedGuid);
+            return result;
+        }
+
+        public static List<MenuItem> LoadMenuTree(DncZeusDbContext dbContext, string selectedGuid = null)
+        {
+            var temp = dbContext.DncMenu.Where(x => x.IsDeleted == CommonEnum.IsDeleted.No && x.Status == CommonEnum.Status.Normal).ToList().Select(x => new MenuItem
+            {
+                Guid = x.Guid.ToString(),
+                ParentId = ((Guid)x.ParentGuid) == Guid.Empty ? "0" : x.ParentGuid?.ToString(),
+                Name = x.Alias,
+                Path = $"/{x.Url}",
+                Component = "/rbac/user.vue",
+                MetaTitle = x.Name,
+                MetaIcon = x.Icon
+            }).ToList();
+            var tree = temp.BuildTree(selectedGuid);
+            return tree;
         }
     }
 }

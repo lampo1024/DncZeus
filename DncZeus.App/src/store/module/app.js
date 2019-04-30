@@ -18,6 +18,7 @@ import {
 import router from '@/router'
 import routers from '@/router/routers'
 import config from '@/config'
+import { loadMenu } from '@/libs/router-util'
 const {
   homeName
 } = config
@@ -37,13 +38,17 @@ export default {
     homeRoute: {},
     local: localRead('local'),
     errorList: [],
-    hasReadErrorPage: false
+    hasReadErrorPage: false,
+    // 定义菜单变量
+    menuList: []
   },
   getters: {
     menuList: (state, getters, rootState) => {
       return getMenuByRouter(routers, rootState.user.access, rootState.user.pages);
     },
-    errorCount: state => state.errorList.length
+    errorCount: state => state.errorList.length,
+    // 通过路由列表得到菜单列表
+    menuList: (state, getters, rootState) => getMenuByRouter(loadMenu(), rootState.user.access)
   },
   mutations: {
     setBreadCrumb(state, route) {
@@ -103,6 +108,11 @@ export default {
     },
     setHasReadErrorLoggerStatus(state, status = true) {
       state.hasReadErrorPage = status
+    },
+    // 接受前台数组，刷新菜单
+    updateMenuList (state, routes) {
+      router.addRoutes(routes)
+      state.menuList = routes
     }
   },
   actions: {

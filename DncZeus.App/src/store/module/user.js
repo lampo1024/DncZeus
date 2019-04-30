@@ -11,8 +11,7 @@ import {
 } from '@/api/user'
 import {
   setToken,
-  getToken,
-  setTagNavListInLocalstorage,
+  getToken
 } from '@/libs/util'
 import {
   getUnion
@@ -151,7 +150,6 @@ export default {
         commit('setAccess', [])
         commit('setPages', [])
         commit('setPermissions', {})
-        setTagNavListInLocalstorage([]);
         resolve()
       })
     },

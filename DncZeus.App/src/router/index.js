@@ -13,7 +13,11 @@ import {
   getUnion
 } from '@/libs/tools'
 import staticRouters from '@/router/static-routers'
+import axios from "axios";
 import config from "@/config";
+// 引入加载菜单
+import { loadMenu } from '@/libs/router-util'
+
 const {
   homeName
 } = config;
@@ -24,7 +28,7 @@ const baseUrl =
 
 Vue.use(Router);
 const router = new Router({
-  routes,
+  routes: [...routes, ...loadMenu()],
   mode: "history"
 });
 const LOGIN_PAGE_NAME = "login";
@@ -47,6 +51,7 @@ const turnTo = (to, pages, checkPermission, permissions, next) => {
     }
     next();
   } else {
+    console.log("to 6...");
     next({
       replace: true,
       name: "error_401"
@@ -55,6 +60,8 @@ const turnTo = (to, pages, checkPermission, permissions, next) => {
 };
 
 router.beforeEach((to, from, next) => {
+  //console.log("to:", to);
+  //console.log("from:", from);
   iView.LoadingBar.start();
   const token = getToken();
   if (!token && to.name !== LOGIN_PAGE_NAME) {
