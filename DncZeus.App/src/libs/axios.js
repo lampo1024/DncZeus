@@ -32,15 +32,16 @@ const addErrorLog = errorInfo => {
 }
 
 class HttpRequest {
-  constructor(baseUrl = baseURL) {
+  constructor(baseUrl = baseURL, defaultPrefix= defaultPrefix) {
     this.baseUrl = baseUrl
+    this.defaultPrefix = defaultPrefix
     this.queue = {}
   }
   getInsideConfig() {
     const config = {
       baseURL: this.baseUrl,
       headers: {
-        "Authorization": "Bearer " + getToken()
+        "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImFkbWluIiwiZ3VpZCI6WyI2ODRlY2E1ZS0yYWViLTQ0NzgtYmE3MC04YTZiMjlmNzg2OTYiLCI2ODRlY2E1ZS0yYWViLTQ0NzgtYmE3MC04YTZiMjlmNzg2OTYiXSwiYXZhdGFyIjoiIiwiZGlzcGxheU5hbWUiOiLnrqHnkIblkZgiLCJsb2dpbk5hbWUiOiJhZG1pbiIsImVtYWlsQWRkcmVzcyI6IiIsInVzZXJUeXBlIjoiMSIsIm5iZiI6MTU1Njk1MjQ5NiwiZXhwIjoxNTU3NTU3Mjk2LCJpYXQiOjE1NTY5NTI0OTZ9.11iOgf3U8NKtGqN4ec0IcPVM_3P3R8tkllGXu3Wj1wo" // + getToken()
       }
     }
     return config
@@ -55,15 +56,15 @@ class HttpRequest {
   showError(error, errorInfo) {
     let message = "接口服务错误,请稍候再试.";
 
-    let statusCode =  -1;
-    if(error.response&& error.response.status){
+    let statusCode = -1;
+    if (error.response && error.response.status) {
       statusCode = error.response.status;
     }
     switch (statusCode) {
       case 401:
         message = "接口服务错误,原因:未授权的访问(没有权限或者登录已超时)";
         break;
-        case 500:
+      case 500:
         message = "接口服务错误,原因:[" + error.response.statusText + "]";
         break;
       case -1:
@@ -136,6 +137,18 @@ class HttpRequest {
   }
   request(options) {
     const instance = axios.create()
+    let withPrefix = true
+    if (options.withPrefix !== undefined && options.withPrefix == false) {
+      withPrefix = false
+    }
+    let url = options.url
+    if (options.prefix !== undefined && options.prefix.length > 0) {
+      url = options.prefix + options.url
+    }
+    else if (withPrefix) {
+      url = this.defaultPrefix + options.url
+    }
+    options.url = url
     options = Object.assign(this.getInsideConfig(), options)
     this.interceptors(instance, options.url)
     return instance(options)

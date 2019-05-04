@@ -1,7 +1,7 @@
 ﻿/******************************************
  * AUTHOR:          Rector
  * CREATEDON:       2018-11-13
- * OFFICAL_SITE:    码友网(https://codedefault.com)--专注.NET/.NET Core
+ * OFFICIAL_SITE:    码友网(https://codedefault.com)--专注.NET/.NET Core
  * DESCRIPTION:     菜单实体类
  ******************************************/
 
@@ -103,6 +103,25 @@ namespace DncZeus.Api.Entities
         /// 最近修改者姓名
         /// </summary>
         public string ModifiedByUserName { get; set; }
+        /// <summary>
+        /// 前端组件(.vue)
+        /// </summary>
+        [StringLength(255)]
+        public string Component { get; set; }
+
+        /// <summary>
+        /// 在菜单中隐藏
+        /// </summary>
+        public YesOrNo? HideInMenu { get; set; }
+        /// <summary>
+        /// 不缓存页面
+        /// </summary>
+        public YesOrNo? NotCache { get; set; }
+        /// <summary>
+        /// 页面关闭前的回调函数
+        /// </summary>
+        [StringLength(255)]
+        public string BeforeCloseFun { get; set; }
         
         /// <summary>
         /// 菜单拥有的权限列表

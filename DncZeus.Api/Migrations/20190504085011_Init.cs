@@ -22,10 +22,10 @@ namespace DncZeus.Api.Migrations
                     Status = table.Column<int>(nullable: false),
                     IsDeleted = table.Column<int>(nullable: false),
                     CreatedOn = table.Column<DateTime>(nullable: false),
-                    CreatedByUserId = table.Column<int>(nullable: false),
+                    CreatedByUserGuid = table.Column<Guid>(nullable: false),
                     CreatedByUserName = table.Column<string>(nullable: true),
                     ModifiedOn = table.Column<DateTime>(nullable: true),
-                    ModifiedByUserId = table.Column<int>(nullable: false),
+                    ModifiedByUserGuid = table.Column<Guid>(nullable: true),
                     ModifiedByUserName = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -37,8 +37,6 @@ namespace DncZeus.Api.Migrations
                 name: "DncMenu",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Guid = table.Column<Guid>(nullable: false),
                     Name = table.Column<string>(type: "nvarchar(50)", nullable: false),
                     Url = table.Column<string>(type: "nvarchar(255)", nullable: true),
@@ -53,11 +51,15 @@ namespace DncZeus.Api.Migrations
                     IsDeleted = table.Column<int>(nullable: false),
                     IsDefaultRouter = table.Column<int>(nullable: false),
                     CreatedOn = table.Column<DateTime>(nullable: false),
-                    CreatedByUserId = table.Column<int>(nullable: false),
+                    CreatedByUserGuid = table.Column<Guid>(nullable: false),
                     CreatedByUserName = table.Column<string>(nullable: true),
                     ModifiedOn = table.Column<DateTime>(nullable: true),
-                    ModifiedByUserId = table.Column<int>(nullable: false),
-                    ModifiedByUserName = table.Column<string>(nullable: true)
+                    ModifiedByUserGuid = table.Column<Guid>(nullable: true),
+                    ModifiedByUserName = table.Column<string>(nullable: true),
+                    Component = table.Column<string>(maxLength: 255, nullable: true),
+                    HideInMenu = table.Column<int>(nullable: true),
+                    NotCache = table.Column<int>(nullable: true),
+                    BeforeCloseFun = table.Column<string>(maxLength: 255, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -68,18 +70,16 @@ namespace DncZeus.Api.Migrations
                 name: "DncRole",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Code = table.Column<string>(type: "nvarchar(50)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(50)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Status = table.Column<int>(nullable: false),
                     IsDeleted = table.Column<int>(nullable: false),
                     CreatedOn = table.Column<DateTime>(nullable: false),
-                    CreatedByUserId = table.Column<int>(nullable: false),
+                    CreatedByUserGuid = table.Column<Guid>(nullable: false),
                     CreatedByUserName = table.Column<string>(nullable: true),
                     ModifiedOn = table.Column<DateTime>(nullable: true),
-                    ModifiedByUserId = table.Column<int>(nullable: false),
+                    ModifiedByUserGuid = table.Column<Guid>(nullable: true),
                     ModifiedByUserName = table.Column<string>(nullable: true),
                     IsSuperAdministrator = table.Column<bool>(nullable: false),
                     IsBuiltin = table.Column<bool>(nullable: false)
@@ -93,8 +93,6 @@ namespace DncZeus.Api.Migrations
                 name: "DncUser",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Guid = table.Column<Guid>(nullable: false),
                     LoginName = table.Column<string>(type: "nvarchar(50)", nullable: false),
                     DisplayName = table.Column<string>(type: "nvarchar(50)", nullable: true),
@@ -105,10 +103,10 @@ namespace DncZeus.Api.Migrations
                     Status = table.Column<int>(nullable: false),
                     IsDeleted = table.Column<int>(nullable: false),
                     CreatedOn = table.Column<DateTime>(nullable: false),
-                    CreatedByUserId = table.Column<int>(nullable: false),
+                    CreatedByUserGuid = table.Column<Guid>(nullable: false),
                     CreatedByUserName = table.Column<string>(nullable: true),
                     ModifiedOn = table.Column<DateTime>(nullable: true),
-                    ModifiedByUserId = table.Column<int>(nullable: false),
+                    ModifiedByUserGuid = table.Column<Guid>(nullable: true),
                     ModifiedByUserName = table.Column<string>(nullable: true),
                     Description = table.Column<string>(type: "nvarchar(800)", nullable: true)
                 },
@@ -121,8 +119,6 @@ namespace DncZeus.Api.Migrations
                 name: "DncPermission",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Code = table.Column<string>(type: "nvarchar(20)", nullable: false),
                     MenuGuid = table.Column<Guid>(nullable: false),
                     Name = table.Column<string>(type: "nvarchar(50)", nullable: false),
@@ -132,11 +128,11 @@ namespace DncZeus.Api.Migrations
                     Status = table.Column<int>(nullable: false),
                     IsDeleted = table.Column<int>(nullable: false),
                     Type = table.Column<int>(nullable: false),
+                    CreatedByUserGuid = table.Column<Guid>(nullable: false),
                     CreatedOn = table.Column<DateTime>(nullable: false),
-                    CreatedByUserId = table.Column<int>(nullable: false),
                     CreatedByUserName = table.Column<string>(nullable: true),
                     ModifiedOn = table.Column<DateTime>(nullable: true),
-                    ModifiedByUserId = table.Column<int>(nullable: false),
+                    ModifiedByUserGuid = table.Column<Guid>(nullable: true),
                     ModifiedByUserName = table.Column<string>(nullable: true)
                 },
                 constraints: table =>

@@ -10,14 +10,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DncZeus.Api.Migrations
 {
     [DbContext(typeof(DncZeusDbContext))]
-    [Migration("20181219071659_Init")]
+    [Migration("20190504085011_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.4-rtm-31024")
+                .HasAnnotation("ProductVersion", "2.1.8-servicing-32085")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -34,7 +34,7 @@ namespace DncZeus.Api.Migrations
                     b.Property<string>("Color")
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("CreatedByUserId");
+                    b.Property<Guid>("CreatedByUserGuid");
 
                     b.Property<string>("CreatedByUserName");
 
@@ -48,7 +48,7 @@ namespace DncZeus.Api.Migrations
 
                     b.Property<int>("IsDeleted");
 
-                    b.Property<int>("ModifiedByUserId");
+                    b.Property<Guid?>("ModifiedByUserGuid");
 
                     b.Property<string>("ModifiedByUserName");
 
@@ -71,7 +71,13 @@ namespace DncZeus.Api.Migrations
                     b.Property<string>("Alias")
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<int>("CreatedByUserId");
+                    b.Property<string>("BeforeCloseFun")
+                        .HasMaxLength(255);
+
+                    b.Property<string>("Component")
+                        .HasMaxLength(255);
+
+                    b.Property<Guid>("CreatedByUserGuid");
 
                     b.Property<string>("CreatedByUserName");
 
@@ -80,12 +86,10 @@ namespace DncZeus.Api.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(800)");
 
+                    b.Property<int?>("HideInMenu");
+
                     b.Property<string>("Icon")
                         .HasColumnType("nvarchar(128)");
-
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("IsDefaultRouter");
 
@@ -93,7 +97,7 @@ namespace DncZeus.Api.Migrations
 
                     b.Property<int>("Level");
 
-                    b.Property<int>("ModifiedByUserId");
+                    b.Property<Guid?>("ModifiedByUserGuid");
 
                     b.Property<string>("ModifiedByUserName");
 
@@ -102,6 +106,8 @@ namespace DncZeus.Api.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<int?>("NotCache");
 
                     b.Property<Guid?>("ParentGuid");
 
@@ -129,7 +135,7 @@ namespace DncZeus.Api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(80)");
 
-                    b.Property<int>("CreatedByUserId");
+                    b.Property<Guid>("CreatedByUserGuid");
 
                     b.Property<string>("CreatedByUserName");
 
@@ -140,15 +146,11 @@ namespace DncZeus.Api.Migrations
 
                     b.Property<string>("Icon");
 
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
                     b.Property<int>("IsDeleted");
 
                     b.Property<Guid>("MenuGuid");
 
-                    b.Property<int>("ModifiedByUserId");
+                    b.Property<Guid?>("ModifiedByUserGuid");
 
                     b.Property<string>("ModifiedByUserName");
 
@@ -178,7 +180,7 @@ namespace DncZeus.Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("CreatedByUserId");
+                    b.Property<Guid>("CreatedByUserGuid");
 
                     b.Property<string>("CreatedByUserName");
 
@@ -187,17 +189,13 @@ namespace DncZeus.Api.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
                     b.Property<bool>("IsBuiltin");
 
                     b.Property<int>("IsDeleted");
 
                     b.Property<bool>("IsSuperAdministrator");
 
-                    b.Property<int>("ModifiedByUserId");
+                    b.Property<Guid?>("ModifiedByUserGuid");
 
                     b.Property<string>("ModifiedByUserName");
 
@@ -241,7 +239,7 @@ namespace DncZeus.Api.Migrations
                     b.Property<string>("Avatar")
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<int>("CreatedByUserId");
+                    b.Property<Guid>("CreatedByUserGuid");
 
                     b.Property<string>("CreatedByUserName");
 
@@ -253,10 +251,6 @@ namespace DncZeus.Api.Migrations
                     b.Property<string>("DisplayName")
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
                     b.Property<int>("IsDeleted");
 
                     b.Property<int>("IsLocked");
@@ -265,7 +259,7 @@ namespace DncZeus.Api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("ModifiedByUserId");
+                    b.Property<Guid?>("ModifiedByUserGuid");
 
                     b.Property<string>("ModifiedByUserName");
 

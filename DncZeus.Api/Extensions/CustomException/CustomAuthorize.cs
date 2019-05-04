@@ -1,7 +1,7 @@
 ﻿/******************************************
  * AUTHOR:          Rector
  * CREATEDON:       2018-09-26
- * OFFICAL_SITE:    码友网(https://codedefault.com)--专注.NET/.NET Core
+ * OFFICIAL_SITE:    码友网(https://codedefault.com)--专注.NET/.NET Core
  * 版权所有，请勿删除
  ******************************************/
 
@@ -40,6 +40,7 @@ namespace DncZeus.Api.Extensions.CustomException
         /// <param name="context"></param>
         public void OnAuthorization(AuthorizationFilterContext context)
         {
+            return;
             var user = context.HttpContext.User;
 
             if (!user.Identity.IsAuthenticated)

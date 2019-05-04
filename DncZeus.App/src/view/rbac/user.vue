@@ -272,7 +272,7 @@ export default {
             sort: [
               {
                 direct: "DESC",
-                field: ""
+                field: "Guid"
               }
             ]
           },

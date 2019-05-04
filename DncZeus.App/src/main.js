@@ -52,9 +52,16 @@ new Vue({
   router,
   i18n,
   store,
+  created(){
+
+  },
   mounted() {
+    var target = this;
+    //initRouter(target);
     // 调用方法，动态生成路由
-    initRouter(this);
+    setTimeout(function(){
+      //initRouter(target);
+    },1500);
   },
   render: h => h(App)
 })

@@ -141,8 +141,8 @@
       :title="formTitle"
       v-model="formModel.opened"
       width="400"
-      :mask-closable="false"
-      :mask="false"
+      :mask-closable="true"
+      :mask="true"
       :styles="styles"
     >
       <Form :model="formModel.fields" ref="formMenu" :rules="formModel.rules" label-position="left">
@@ -154,6 +154,9 @@
         </FormItem>
         <FormItem label="URL地址" prop="url" label-position="left">
           <Input v-model="formModel.fields.url" placeholder="请输入URL地址"/>
+        </FormItem>
+        <FormItem label="前端组件(.vue)" prop="url" label-position="left">
+          <Input v-model="formModel.fields.component" placeholder="前端组件(以.vue结尾,组件必须位于/views文件夹)"/>
         </FormItem>
         <Row :gutter="8">
           <Col span="12">

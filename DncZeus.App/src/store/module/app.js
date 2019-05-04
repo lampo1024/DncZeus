@@ -9,16 +9,16 @@ import {
   routeEqual,
   getRouteTitleHandled,
   localSave,
-  localRead
+  localRead,
+  getMenuListByRoutes,
+  getTagNavByRouteName
 } from '@/libs/util'
 import beforeClose from '@/router/before-close'
 import {
   saveErrorLogger
 } from '@/api/data'
 import router from '@/router'
-import routers from '@/router/routers'
 import config from '@/config'
-import { loadMenu } from '@/libs/router-util'
 const {
   homeName
 } = config
@@ -43,12 +43,13 @@ export default {
     menuList: []
   },
   getters: {
-    menuList: (state, getters, rootState) => {
-      return getMenuByRouter(routers, rootState.user.access, rootState.user.pages);
-    },
+    // menuList: (state, getters, rootState) => {
+    //    return getMenuByRouter(routers, rootState.user.access, rootState.user.pages);
+    //  },
     errorCount: state => state.errorList.length,
+    menuList: state => state.menuList
     // 通过路由列表得到菜单列表
-    menuList: (state, getters, rootState) => getMenuByRouter(loadMenu(), rootState.user.access)
+    //menuList: (state, getters, rootState) => getMenuListByRoutes(routes)
   },
   mutations: {
     setBreadCrumb(state, route) {
@@ -109,9 +110,15 @@ export default {
     setHasReadErrorLoggerStatus(state, status = true) {
       state.hasReadErrorPage = status
     },
+    setMenuList(state, routes) {
+      state.menuList = getMenuListByRoutes(routes);
+    },
     // 接受前台数组，刷新菜单
-    updateMenuList (state, routes) {
-      router.addRoutes(routes)
+    refreshMenuList(state, routes) {
+      router.addRoutes(routes.concat([{
+        path: '*',
+        redirect: '/404'
+      }]))
       state.menuList = routes
     }
   },
@@ -138,6 +145,21 @@ export default {
       saveErrorLogger(info).then(() => {
         commit('addError', data)
       })
+    },
+    refreshMenuList({state,commit},list){
+      return new Promise((resolve, reject) => {
+        try {
+          commit("setMenuList",list)
+          commit("refreshMenuList",list)
+          resolve()
+
+        } catch (error) {
+          reject(error)
+        }
+      })
+    },
+    closeTag({state,commit},routeName){
+      commit("closeTag",{name:routeName})
     }
   }
 }

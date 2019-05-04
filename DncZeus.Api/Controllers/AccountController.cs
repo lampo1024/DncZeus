@@ -1,7 +1,7 @@
 ﻿/******************************************
  * AUTHOR:          Rector
  * CREATEDON:       2018-09-26
- * OFFICAL_SITE:    码友网(https://codedefault.com)--专注.NET/.NET Core
+ * OFFICIAL_SITE:    码友网(https://codedefault.com)--专注.NET/.NET Core
  * 版权所有，请勿删除
  ******************************************/
 
@@ -128,7 +128,6 @@ WHERE P.IsDeleted=0 AND P.Status=1";
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [AllowAnonymous]
         public IActionResult Menu()
         {
             //Guid.Empty.ToString()
@@ -181,15 +180,18 @@ WHERE P.IsDeleted=0 AND P.Status=1";
 
         public static List<MenuItem> LoadMenuTree(DncZeusDbContext dbContext, string selectedGuid = null)
         {
-            var temp = dbContext.DncMenu.Where(x => x.IsDeleted == CommonEnum.IsDeleted.No && x.Status == CommonEnum.Status.Normal).ToList().Select(x => new MenuItem
+            var temp = dbContext.DncMenu.Where(x => x.IsDeleted == IsDeleted.No && x.Status == Status.Normal).ToList().Select(x => new MenuItem
             {
                 Guid = x.Guid.ToString(),
-                ParentId = ((Guid)x.ParentGuid) == Guid.Empty ? "0" : x.ParentGuid?.ToString(),
+                ParentId = x.ParentGuid != null && ((Guid)x.ParentGuid) == Guid.Empty ? "0" : x.ParentGuid?.ToString(),
                 Name = x.Alias,
                 Path = $"/{x.Url}",
-                Component = "/rbac/user.vue",
+                Component = x.Component,
                 MetaTitle = x.Name,
-                MetaIcon = x.Icon
+                MetaIcon = x.Icon,
+                MetaHideInMenu = false,
+                MetaConfirmBeforeClose = false,
+                MetaNotCache =  false
             }).ToList();
             var tree = temp.BuildTree(selectedGuid);
             return tree;

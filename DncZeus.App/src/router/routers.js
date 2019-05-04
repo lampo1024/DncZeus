@@ -146,7 +146,7 @@ export const mainRouter = [{
     component: () => import('@/view/error-page/500.vue')
   },
   {
-    path: '*',
+    path: '/404',
     name: 'error_404',
     meta: {
       hideInMenu: true
