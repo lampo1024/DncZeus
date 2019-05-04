@@ -50,7 +50,7 @@ const initRouter = () => {
   return list
 }
 
-const turnTo = (to, pages, checkPermission, permissions, next) => {
+const turnTo = (to, checkPermission, permissions, next) => {
   // if (canTurnTo(to.name, access, routes)) next();
   // // 有权限，可访问
   // else
@@ -60,19 +60,12 @@ const turnTo = (to, pages, checkPermission, permissions, next) => {
   //   }); // 无权限，重定向到401页面
 
   // 有权限，可访问
-  if (pages.includes(to.name)) {
-    to.meta.checkPermission = checkPermission;
-    permissions = permissions || [];
-    if (permissions && permissions[to.name]) {
-      to.meta.permissions = permissions[to.name];
-    }
-    next();
-  } else {
-    next({
-      replace: true,
-      name: "error_401"
-    }); // 无权限，重定向到401页面
+  to.meta.checkPermission = checkPermission;
+  permissions = permissions || [];
+  if (permissions && permissions[to.name]) {
+    to.meta.permissions = permissions[to.name];
   }
+  next();
 };
 
 router.beforeEach((to, from, next) => {
@@ -99,18 +92,18 @@ router.beforeEach((to, from, next) => {
       name: homeName // 跳转到homeName页
     });
   } else {
-    let checkPermission = false;
+    let checkPermission = true;
     if (store.state.user.hasGetInfo) {
       checkPermission = store.state.user.user_type != 0;
       next()
-      //turnTo(to, store.state.user.pages, checkPermission, store.state.user.permissions, next)
+      turnTo(to, checkPermission, store.state.user.permissions, next)
     } else {
       store.dispatch('getUserInfo').then(user => {
         // 拉取用户信息，通过用户权限和跳转的页面的name来判断是否有权限访问;access必须是一个数组，如：['super_admin']
-        checkPermission = false; //user.user_type != 0;
+        checkPermission = user.user_type != 0;
         initRouter();
         next()
-        //turnTo(to, getUnion(user.pages, staticRouters), checkPermission, user.permissions, next)
+        turnTo(to, checkPermission, user.permissions, next)
       }).catch(() => {
         setToken('')
         next({

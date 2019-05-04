@@ -44,6 +44,7 @@ export default {
         cancelText:"再想想",
         loading:true,
         onOk(){
+
           setTimeout(function(){
             $this.handleLogOut().then(() => {
             $this.$Modal.remove();
