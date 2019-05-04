@@ -140,7 +140,7 @@
     <Drawer
       :title="formTitle"
       v-model="formModel.opened"
-      width="400"
+      width="600"
       :mask-closable="true"
       :mask="true"
       :styles="styles"
@@ -230,6 +230,29 @@
           <Col span="12">
             <FormItem label="默认路由" label-position="left">
               <i-switch size="large" v-model="formModel.fields.isDefaultRouter" :true-value="1" :false-value="0">
+                <span slot="open">是</span>
+                <span slot="close">否</span>
+              </i-switch>
+            </FormItem>
+          </Col>
+        </Row>
+        <Row>
+          <Col span="12">
+            <FormItem label="菜单隐藏" label-position="left">
+              <i-switch
+                size="large"
+                v-model="formModel.fields.hideInMenu"
+                :true-value="1"
+                :false-value="0"
+              >
+                <span slot="open">是</span>
+                <span slot="close">否</span>
+              </i-switch>
+            </FormItem>
+          </Col>
+          <Col span="12">
+            <FormItem label="不缓存页面" label-position="left">
+              <i-switch size="large" v-model="formModel.fields.notCache" :true-value="1" :false-value="0">
                 <span slot="open">是</span>
                 <span slot="close">否</span>
               </i-switch>

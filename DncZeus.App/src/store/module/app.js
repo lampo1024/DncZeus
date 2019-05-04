@@ -18,6 +18,7 @@ import {
   saveErrorLogger
 } from '@/api/data'
 import router from '@/router'
+import {resetRouter} from '@/router'
 import config from '@/config'
 const {
   homeName
@@ -28,6 +29,7 @@ const closePage = (state, route) => {
   state.tagNavList = state.tagNavList.filter(item => {
     return !routeEqual(item, route)
   })
+  setTagNavListInLocalstorage(state.tagNavList);
   router.push(nextRoute)
 }
 
@@ -115,10 +117,11 @@ export default {
     },
     // 接受前台数组，刷新菜单
     refreshMenuList(state, routes) {
+      resetRouter();
       router.addRoutes(routes.concat([{
         path: '*',
         redirect: '/404'
-      }]))
+      }]), { replace: true })
       state.menuList = routes
     }
   },
@@ -146,11 +149,11 @@ export default {
         commit('addError', data)
       })
     },
-    refreshMenuList({state,commit},list){
+    refreshMenuList({ state, commit }, list) {
       return new Promise((resolve, reject) => {
         try {
-          commit("setMenuList",list)
-          commit("refreshMenuList",list)
+          commit("setMenuList", list)
+          commit("refreshMenuList", list)
           resolve()
 
         } catch (error) {
@@ -158,8 +161,8 @@ export default {
         }
       })
     },
-    closeTag({state,commit},routeName){
-      commit("closeTag",{name:routeName})
+    closeTag({ state, commit }, routeName) {
+      commit("closeTag", { name: routeName })
     }
   }
 }

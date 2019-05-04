@@ -94,5 +94,17 @@ namespace DncZeus.Api.ViewModels.Rbac.DncMenu
         /// 前端组件(.vue)
         /// </summary>
         public string Component { get; set; }
+        /// <summary>
+        /// 在菜单中隐藏
+        /// </summary>
+        public YesOrNo HideInMenu { get; set; }
+        /// <summary>
+        /// 不缓存页面
+        /// </summary>
+        public YesOrNo NotCache { get; set; }
+        /// <summary>
+        /// 页面关闭前的回调函数
+        /// </summary>
+        public string BeforeCloseFun { get; set; }
     }
 }

@@ -68,7 +68,7 @@ namespace DncZeus.Api.Extensions.AuthContext
         {
             get
             {
-                return ((UserType)Convert.ToInt32(Current.User.FindFirstValue("userType"))== UserType.SuperAdministator);
+                return ((UserType)Convert.ToInt32(Current.User.FindFirstValue("userType"))== UserType.SuperAdministrator);
             }
         }
     }

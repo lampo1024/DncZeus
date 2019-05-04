@@ -11,7 +11,8 @@ import {
 } from '@/api/user'
 import {
   setToken,
-  getToken
+  getToken,
+  setTagNavListInLocalstorage
 } from '@/libs/util'
 import {
   getUnion
@@ -150,7 +151,9 @@ export default {
         commit('setAccess', [])
         commit('setPages', [])
         commit('setPermissions', {})
+        setTagNavListInLocalstorage([]);
         resolve()
+        //location.reload();
       })
     },
     // 获取用户相关信息

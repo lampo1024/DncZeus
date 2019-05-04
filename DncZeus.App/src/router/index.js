@@ -34,9 +34,6 @@ const router = new Router({
 const LOGIN_PAGE_NAME = "login";
 
 const initRouter = () => {
-  // if (!getToken()) {
-  //   return
-  // }
   let list = []
   axios.request({
     url: 'account/menu',
@@ -81,8 +78,8 @@ const turnTo = (to, pages, checkPermission, permissions, next) => {
 router.beforeEach((to, from, next) => {
   if (!to.matched || to.matched.length <= 0) {
     if (store.state.user.hasGetInfo) {
-      store.dispatch("closeTag",to.name);
-      next({ path: "/404",replace:true });
+      store.dispatch("closeTag", to.name);
+      next({ path: "/404", replace: true });
     }
   }
 
@@ -131,3 +128,13 @@ router.afterEach(to => {
 });
 
 export default router;
+
+const createRouter = () => new Router({
+  mode: 'history',
+  routes: [...routes]
+})
+
+export function resetRouter() {
+  const newRouter = createRouter()
+  router.matcher = newRouter.matcher
+}

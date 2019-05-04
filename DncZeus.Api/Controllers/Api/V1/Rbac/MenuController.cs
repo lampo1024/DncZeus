@@ -156,6 +156,9 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
                 entity.Description = model.Description;
                 entity.ParentName = model.ParentName;
                 entity.Component = model.Component;
+                entity.HideInMenu = model.HideInMenu;
+                entity.NotCache = model.NotCache;
+                entity.BeforeCloseFun = model.BeforeCloseFun;
                 if (!ConfigurationManager.AppSettings.IsTrialVersion)
                 {
                     entity.Alias = model.Alias;

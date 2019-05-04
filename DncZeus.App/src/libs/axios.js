@@ -41,7 +41,7 @@ class HttpRequest {
     const config = {
       baseURL: this.baseUrl,
       headers: {
-        "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImFkbWluIiwiZ3VpZCI6WyI2ODRlY2E1ZS0yYWViLTQ0NzgtYmE3MC04YTZiMjlmNzg2OTYiLCI2ODRlY2E1ZS0yYWViLTQ0NzgtYmE3MC04YTZiMjlmNzg2OTYiXSwiYXZhdGFyIjoiIiwiZGlzcGxheU5hbWUiOiLnrqHnkIblkZgiLCJsb2dpbk5hbWUiOiJhZG1pbiIsImVtYWlsQWRkcmVzcyI6IiIsInVzZXJUeXBlIjoiMSIsIm5iZiI6MTU1Njk1MjQ5NiwiZXhwIjoxNTU3NTU3Mjk2LCJpYXQiOjE1NTY5NTI0OTZ9.11iOgf3U8NKtGqN4ec0IcPVM_3P3R8tkllGXu3Wj1wo" // + getToken()
+        "Authorization": "Bearer " + getToken()
       }
     }
     return config

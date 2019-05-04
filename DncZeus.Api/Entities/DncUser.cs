@@ -81,7 +81,7 @@ namespace DncZeus.Api.Entities
         /// <summary>
         /// 超级管理员
         /// </summary>
-        SuperAdministator = 0,
+        SuperAdministrator = 0,
         /// <summary>
         /// 管理员
         /// </summary>

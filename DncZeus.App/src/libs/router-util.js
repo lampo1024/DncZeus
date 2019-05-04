@@ -25,7 +25,7 @@ export const initRouter = (vm) => {
     // 格式化菜单
     list = formatMenu(menuData)
     // 刷新界面菜单
-    vm.$store.commit('setMenuList', list)
+    //vm.$store.commit('setMenuList', list)
     vm.$store.commit('refreshMenuList', list)
   });
 
