@@ -28,7 +28,7 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
     //[CustomAuthorize]
     [Route("api/v1/rbac/[controller]/[action]")]
     [ApiController]
-    [CustomAuthorize]
+    //[CustomAuthorize]
     public class UserController : ControllerBase
     {
         private readonly DncZeusDbContext _dbContext;

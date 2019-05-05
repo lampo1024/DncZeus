@@ -16,7 +16,7 @@ import Main from '@/components/main'
  * }
  */
 
-export default [{
+export const mainRouter = [{
     path: '/login',
     name: 'login',
     meta: {
@@ -47,41 +47,6 @@ export default [{
     }]
   },
   {
-    path: '/join',
-    name: 'join',
-    component: Main,
-    meta: {
-      hideInBread: true
-    },
-    children: [{
-      path: 'join_page',
-      name: 'join_page',
-      meta: {
-        icon: '_qq',
-        title: 'QQ群'
-      },
-      component: () => import('@/view/join-page.vue')
-    }]
-  },
-  {
-    path: '/demo',
-    name: 'demo',
-    component: Main,
-    meta: {
-      icon:"logo-buffer",
-      title:"示例菜单"
-    },
-    children: [{
-      path: 'demo-page',
-      name: 'demo_page',
-      meta: {
-        title: '示例页面',
-        icon: 'md-home'
-      },
-      component: () => import('@/view/demo/demo-page')
-    }]
-  },
-  {
     path: '/message',
     name: 'message',
     component: Main,
@@ -97,82 +62,6 @@ export default [{
         title: '消息中心'
       },
       component: () => import('@/view/single-page/message/index.vue')
-    }]
-  },
-  {
-    path: '/rbac',
-    name: 'rbac',
-    meta: {
-      icon: 'logo-buffer',
-      title: '用户及授权'
-    },
-    component: Main,
-    children: [{
-      path: 'user',
-      name: 'rbac_user_page',
-      meta: {
-        icon: 'md-contact',
-        title: '用户管理'
-      },
-      component: () => import( /* webpackChunkName: "rbac" */ '@/view/rbac/user.vue')
-    }, {
-      path: 'role',
-      name: 'rbac_role_page',
-      meta: {
-        icon: 'md-contacts',
-        title: '角色管理'
-      },
-      component: () => import( /* webpackChunkName: "rbac" */ '@/view/rbac/role.vue')
-    }, {
-      path: 'permission',
-      name: 'rbac_permission_page',
-      meta: {
-        icon: 'md-contacts',
-        title: '权限管理'
-      },
-      component: () => import( /* webpackChunkName: "rbac" */ '@/view/rbac/permission.vue')
-    }, {
-      path: 'menu',
-      name: 'rbac_menu_page',
-      meta: {
-        icon: 'md-menu',
-        title: '菜单管理'
-      },
-      component: () => import( /* webpackChunkName: "rbac" */ '@/view/rbac/menu.vue')
-    }, {
-      path: 'icon',
-      name: 'rbac_icon_page',
-      meta: {
-        icon: 'md-aperture',
-        title: '图标管理'
-      },
-      component: () => import( /* webpackChunkName: "rbac" */ '@/view/rbac/icon.vue')
-    }, {
-      path: 'role-permission',
-      name: 'rbac_role_permission_page',
-      meta: {
-        icon: 'md-aperture',
-        title: '角色权限分配'
-      },
-      component: () => import( /* webpackChunkName: "rbac" */ '@/view/rbac/role-permission.vue')
-    }]
-  },
-  {
-    path: '/tools_methods',
-    name: 'tools_methods',
-    meta: {
-      hideInBread: true
-    },
-    component: Main,
-    children: [{
-      path: 'tools_methods_page',
-      name: 'tools_methods_page',
-      meta: {
-        icon: 'ios-hammer',
-        title: '工具方法',
-        beforeCloseName: 'before_close_normal'
-      },
-      component: () => import('@/view/tools-methods/tools-methods.vue')
     }]
   },
   {
@@ -257,11 +146,18 @@ export default [{
     component: () => import('@/view/error-page/500.vue')
   },
   {
-    path: '*',
+    path: '/404',
     name: 'error_404',
     meta: {
       hideInMenu: true
     },
     component: () => import('@/view/error-page/404.vue')
   }
+]
+
+export const appRouter = []
+
+export default [
+  ...mainRouter,
+  ...appRouter
 ]

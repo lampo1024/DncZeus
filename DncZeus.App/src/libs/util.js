@@ -63,11 +63,63 @@ export const getMenuByRouter = (list, access, pages) => {
 }
 
 /**
+ * @param {Array} routes 通过路由列表得到菜单列表
+ * @returns {Array}
+ */
+export const getMenuListByRoutes = (routes) => {
+  let res = []
+  // res = [
+  //   {
+  //     icon: "md-contacts",
+  //     name: "rbac",
+  //     meta: {
+  //       hideInMenu: false,
+  //       title:"用户权限管理"
+  //     },
+  //     children: [
+  //       {
+  //         icon: "md-contacts",
+  //         name: "rbac_user_page",
+  //         meta: {
+  //           hideInMenu: false,
+  //           title:"用户管理"
+  //         }
+  //       },
+  //       {
+  //         icon: "md-contacts",
+  //         name: "rbac_role_page",
+  //         meta: {
+  //           hideInMenu: false,
+  //           title:"权限管理"
+  //         }
+  //       }
+  //     ]
+  //   }];
+  // return res;
+  forEach(routes, item => {
+    if (!item.meta || (item.meta && !item.meta.hideInMenu)) {
+      let obj = {
+        icon: (item.meta && item.meta.icon) || '',
+        name: item.name,
+        meta: item.meta
+      }
+      if ((hasChild(item) || (item.meta && item.meta.showAlways))) {
+        obj.children = getMenuListByRoutes(item.children)
+      }
+      if (item.meta && item.meta.href) obj.href = item.meta.href
+      res.push(obj);
+    }
+  })
+  return res
+}
+
+/**
  * @param {Array} routeMetched 当前路由metched
  * @returns {Array}
  */
 export const getBreadCrumbList = (route, homeRoute) => {
-  let homeItem = { ...homeRoute,
+  let homeItem = {
+    ...homeRoute,
     icon: homeRoute.meta.icon
   }
   let routeMetched = route.matched
@@ -75,7 +127,8 @@ export const getBreadCrumbList = (route, homeRoute) => {
   let res = routeMetched.filter(item => {
     return item.meta === undefined || !item.meta.hideInBread
   }).map(item => {
-    let meta = { ...item.meta
+    let meta = {
+      ...item.meta
     }
     if (meta.title && typeof meta.title === 'function') {
       meta.__titleIsFunction__ = true
@@ -91,15 +144,18 @@ export const getBreadCrumbList = (route, homeRoute) => {
   res = res.filter(item => {
     return !item.meta.hideInMenu
   })
-  return [{ ...homeItem,
+  return [{
+    ...homeItem,
     to: homeRoute.path
   }, ...res]
 }
 
 export const getRouteTitleHandled = (route) => {
-  let router = { ...route
+  let router = {
+    ...route
   }
-  let meta = { ...route.meta
+  let meta = {
+    ...route.meta
   }
   let title = ''
   if (meta.title) {
@@ -427,4 +483,12 @@ export const setTitle = (routeItem, vm) => {
   const pageTitle = showTitle(handledRoute, vm)
   const resTitle = pageTitle ? `${title} - ${pageTitle}` : title
   window.document.title = resTitle
+}
+
+
+export const getTagNavByRouteName = (routeName) => {
+  let tagNavList = getTagNavListFromLocalstorage();
+  let temp = tagNavList.filter((x) => x.name === routeName);
+  let tagNav = (temp && temp.length > 0) ? temp[0] : null;
+  return tagNav;
 }

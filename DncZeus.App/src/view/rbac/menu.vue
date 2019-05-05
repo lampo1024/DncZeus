@@ -140,9 +140,9 @@
     <Drawer
       :title="formTitle"
       v-model="formModel.opened"
-      width="400"
-      :mask-closable="false"
-      :mask="false"
+      width="600"
+      :mask-closable="true"
+      :mask="true"
       :styles="styles"
     >
       <Form :model="formModel.fields" ref="formMenu" :rules="formModel.rules" label-position="left">
@@ -154,6 +154,9 @@
         </FormItem>
         <FormItem label="URL地址" prop="url" label-position="left">
           <Input v-model="formModel.fields.url" placeholder="请输入URL地址"/>
+        </FormItem>
+        <FormItem label="前端组件(.vue)" prop="url" label-position="left">
+          <Input v-model="formModel.fields.component" placeholder="前端组件(以.vue结尾,组件必须位于/views文件夹)"/>
         </FormItem>
         <Row :gutter="8">
           <Col span="12">
@@ -227,6 +230,29 @@
           <Col span="12">
             <FormItem label="默认路由" label-position="left">
               <i-switch size="large" v-model="formModel.fields.isDefaultRouter" :true-value="1" :false-value="0">
+                <span slot="open">是</span>
+                <span slot="close">否</span>
+              </i-switch>
+            </FormItem>
+          </Col>
+        </Row>
+        <Row>
+          <Col span="12">
+            <FormItem label="菜单隐藏" label-position="left">
+              <i-switch
+                size="large"
+                v-model="formModel.fields.hideInMenu"
+                :true-value="1"
+                :false-value="0"
+              >
+                <span slot="open">是</span>
+                <span slot="close">否</span>
+              </i-switch>
+            </FormItem>
+          </Col>
+          <Col span="12">
+            <FormItem label="不缓存页面" label-position="left">
+              <i-switch size="large" v-model="formModel.fields.notCache" :true-value="1" :false-value="0">
                 <span slot="open">是</span>
                 <span slot="close">否</span>
               </i-switch>

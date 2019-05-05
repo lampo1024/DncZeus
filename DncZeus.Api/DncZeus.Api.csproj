@@ -16,6 +16,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20190504083800_Init.cs" />
+    <Compile Remove="Migrations\20190504083800_Init.Designer.cs" />
+    <Compile Remove="Migrations\20190504084421_Init.cs" />
+    <Compile Remove="Migrations\20190504084421_Init.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="8.0.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
@@ -29,7 +36,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Migrations\" />
     <Folder Include="wwwroot\css\" />
     <Folder Include="wwwroot\js\" />
     <Folder Include="wwwroot\images\" />

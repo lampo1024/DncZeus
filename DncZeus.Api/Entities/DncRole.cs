@@ -1,7 +1,7 @@
 ﻿/******************************************
  * AUTHOR:          Rector
  * CREATEDON:       2018-11-06
- * OFFICAL_SITE:    码友网(https://codedefault.com)--专注.NET/.NET Core
+ * OFFICIAL_SITE:    码友网(https://codedefault.com)--专注.NET/.NET Core
  * DESCRIPTION:     角色实体类
  ******************************************/
 using System;

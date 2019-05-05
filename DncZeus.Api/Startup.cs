@@ -1,7 +1,7 @@
 ﻿/******************************************
  * AUTHOR:          Rector
  * CREATEDON:       2018-09-26
- * OFFICAL_SITE:    码友网(https://codedefault.com)--专注.NET/.NET Core
+ * OFFICIAL_SITE:    码友网(https://codedefault.com)--专注.NET/.NET Core
  * 版权所有，请勿删除
  ******************************************/
 
@@ -55,6 +55,7 @@ namespace DncZeus.Api
                         .AllowAnyOrigin()
                         .AllowCredentials()
                 ));
+            services.AddMemoryCache();
             services.AddHttpContextAccessor();
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
             var appSettingsSection = Configuration.GetSection("AppSettings");

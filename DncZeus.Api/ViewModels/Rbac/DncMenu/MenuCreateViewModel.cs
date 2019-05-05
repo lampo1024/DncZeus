@@ -1,7 +1,7 @@
 ﻿/******************************************
  * AUTHOR:          Rector
  * CREATEDON:       2018-09-26
- * OFFICAL_SITE:    码友网(https://codedefault.com)--专注.NET/.NET Core
+ * OFFICIAL_SITE:    码友网(https://codedefault.com)--专注.NET/.NET Core
  * 版权所有，请勿删除
  ******************************************/
 
@@ -63,5 +63,21 @@ namespace DncZeus.Api.ViewModels.Rbac.DncMenu
         /// 是否为默认路由
         /// </summary>
         public YesOrNo IsDefaultRouter { get; set; }
+        /// <summary>
+        /// 前端组件(.vue)
+        /// </summary>
+        public string Component { get; set; }
+        /// <summary>
+        /// 在菜单中隐藏
+        /// </summary>
+        public YesOrNo HideInMenu { get; set; }
+        /// <summary>
+        /// 不缓存页面
+        /// </summary>
+        public YesOrNo NotCache { get; set; }
+        /// <summary>
+        /// 页面关闭前的回调函数
+        /// </summary>
+        public string BeforeCloseFun { get; set; }
     }
 }

@@ -20,7 +20,6 @@
         @on-page-change="handlePageChanged"
         @on-page-size-change="handlePageSizeChanged"
         @on-assign="handleAssignRole"
-        @on-sort-change="handleSortChange"
       >
         <div slot="search">
           <section class="dnc-toolbar-wrap">
@@ -300,8 +299,8 @@ export default {
           },
           columns: [
             { type: "selection", width: 50, key: "handle" },
-            { title: "登录名", key: "loginName", width: 250, sortable: "custom" },
-            { title: "显示名", key: "displayName", width: 250, sortable: "custom" },
+            { title: "登录名", key: "loginName", width: 250, sortable: true },
+            { title: "显示名", key: "displayName", width: 250 },
             {
               title: "用户类型",
               key: "userType",
@@ -730,11 +729,6 @@ export default {
           this.$Message.warning(res.data.message);
         }
       });
-    },
-    handleSortChange(sort) {
-      this.stores.user.query.sort[0]["direct"] = sort.order;
-      this.stores.user.query.sort[0]["field"] = sort.key;
-      this.loadUserList();
     }
   },
   mounted() {
