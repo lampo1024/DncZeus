@@ -33,7 +33,6 @@ export default {
     messageReadedList: [],
     messageTrashList: [],
     messageContentStore: {},
-    pages: [],
     permissions: {},
     profile: {}
   },
@@ -55,7 +54,7 @@ export default {
     },
     //设置用户可以访问的页面编码列表
     setPages(state, pages) {
-      state.pages = pages;
+      //state.pages = pages;
     },
     //设置用户可以访问页面的权限集合
     setPermissions(state, permissions) {
@@ -149,7 +148,7 @@ export default {
         // 如果你的退出登录无需请求接口，则可以直接使用下面三行代码而无需使用logout调用接口
         commit('setToken', '')
         commit('setAccess', [])
-        commit('setPages', [])
+        //commit('setPages', [])
         commit('setPermissions', {})
         setTagNavListInLocalstorage([]);
         resolve()
@@ -169,7 +168,7 @@ export default {
             commit('setUserName', data.user_name)
             commit('setUserGuid', data.user_guid)
             commit('setAccess', data.access)
-            commit('setPages', getUnion(data.pages, staticRouters))
+            //commit('setPages', getUnion(data.pages, staticRouters))
             commit('setPermissions', data.permissions)
             commit("setUserType", data.user_type);
             commit('setHasGetInfo', true)

@@ -6,10 +6,8 @@
  ******************************************/
 
 using DncZeus.Api.Entities;
-using DncZeus.Api.Entities.Enums;
 using DncZeus.Api.Extensions;
 using DncZeus.Api.Extensions.AuthContext;
-using DncZeus.Api.Extensions.DataAccess;
 using DncZeus.Api.ViewModels.Rbac.DncMenu;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -66,24 +64,8 @@ INNER JOIN DncMenu AS M ON M.Guid = P.MenuGuid
 WHERE P.IsDeleted=0 AND P.Status=1";
                 }
                 var permissions = _dbContext.DncPermissionWithMenu.FromSql(sqlPermission, user.Guid).ToList();
-                var allowPages = new List<string> { };
 
-                if (user.UserType == UserType.SuperAdministrator)
-                {
-                    allowPages.AddRange(menus.Select(x => x.Alias));
-                }
-                else
-                {
-                    allowPages.AddRange(menus.Where(x => x.IsDefaultRouter == YesOrNo.Yes).Select(x => x.Alias));
-                    foreach (var permission in permissions.Where(x => x.PermissionType == PermissionType.Menu))
-                    {
-                        allowPages.AddRange(FindParentMenuAlias(menus, permission.MenuGuid));
-                    }
-                }
-
-                //var allowPages = FindParentMenuAlias(menus);
-                var pages = allowPages.Distinct().ToList();
-                var pagePermissions = permissions.GroupBy(x => x.MenuAlias).ToDictionary(g => g.Key, g => g.Select(x => x.PermissionActionCode));
+                var pagePermissions = permissions.GroupBy(x => x.MenuAlias).ToDictionary(g => g.Key, g => g.Select(x => x.PermissionActionCode).Distinct());
                 response.SetData(new
                 {
                     access = new string[] { },
@@ -91,7 +73,6 @@ WHERE P.IsDeleted=0 AND P.Status=1";
                     user_guid = user.Guid,
                     user_name = user.DisplayName,
                     user_type = user.UserType,
-                    pages, // =new[] { "rbac", "rbac_user_page", "rbac_menu_page", "rbac_role_page", "rbac_permission_page", "rbac_role_permission_page" },
                     permissions = pagePermissions
 
                 });
@@ -141,17 +122,15 @@ WHERE P.IsDeleted=0 AND P.Status=1 AND P.Type=0 AND M.IsDeleted=0 AND M.Status=1
                 strSql = @"SELECT * FROM DncMenu WHERE IsDeleted=0 AND Status=1";
             }
             var menus = _dbContext.DncMenu.FromSql(strSql, AuthContextService.CurrentUser.Guid).ToList();
-            var rootMenus = _dbContext.DncMenu.Where(x => x.IsDeleted == IsDeleted.No && x.Status == Status.Normal && x.ParentGuid==Guid.Empty).ToList();
+            var rootMenus = _dbContext.DncMenu.Where(x => x.IsDeleted == IsDeleted.No && x.Status == Status.Normal && x.ParentGuid == Guid.Empty).ToList();
             foreach (var root in rootMenus)
             {
                 if (menus.Exists(x => x.Guid == root.Guid))
                 {
                     continue;
-                }   
+                }
                 menus.Add(root);
             }
-            //var menus = _dbContext.DncMenu.Where(x => x.IsDeleted == IsDeleted.No && x.Status == Status.Normal).ToList();
-            //menus.AddRange(rootMenus);
             var menu = MenuItemHelper.LoadMenuTree(menus, "0");
             return Ok(menu);
         }
@@ -180,20 +159,19 @@ WHERE P.IsDeleted=0 AND P.Status=1 AND P.Type=0 AND M.IsDeleted=0 AND M.Status=1
                      Guid = x.Guid,
                      ParentId = x.ParentId,
                      Children = build(x.Guid),
-                     Component = x.Component,
+                     Component = x.Component ?? "Main",
                      Name = x.Name,
                      Path = x.Path,
                      Meta = new MenuMeta
                      {
-                         ConfirmBeforeClose = x.MetaConfirmBeforeClose,
-                         HideInMenu = x.MetaHideInMenu,
-                         Icon = x.MetaIcon,
-                         NotCache = x.MetaNotCache,
-                         Title = x.MetaTitle,
-                         Permission = x.MetaPermission
+                         BeforeCloseFun = x.Meta.BeforeCloseFun,
+                         HideInMenu = x.Meta.HideInMenu,
+                         Icon = x.Meta.Icon,
+                         NotCache = x.Meta.NotCache,
+                         Title = x.Meta.Title,
+                         Permission = x.Meta.Permission
                      }
-                 })
-                 .ToList();
+                 }).ToList();
             };
             var result = build(selectedGuid);
             return result;
@@ -208,11 +186,14 @@ WHERE P.IsDeleted=0 AND P.Status=1 AND P.Type=0 AND M.IsDeleted=0 AND M.Status=1
                 Name = x.Alias,
                 Path = $"/{x.Url}",
                 Component = x.Component,
-                MetaTitle = x.Name,
-                MetaIcon = x.Icon,
-                MetaHideInMenu = x.HideInMenu== YesOrNo.Yes,
-                MetaConfirmBeforeClose = false,
-                MetaNotCache =  x.NotCache== YesOrNo.Yes
+                Meta = new MenuMeta
+                {
+                    BeforeCloseFun = x.BeforeCloseFun ?? "",
+                    HideInMenu = x.HideInMenu == YesOrNo.Yes,
+                    Icon = x.Icon,
+                    NotCache = x.NotCache == YesOrNo.Yes,
+                    Title = x.Name
+                }
             }).ToList();
             var tree = temp.BuildTree(selectedGuid);
             return tree;
