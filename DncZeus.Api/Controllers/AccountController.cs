@@ -150,30 +150,31 @@ WHERE P.IsDeleted=0 AND P.Status=1 AND P.Type=0 AND M.IsDeleted=0 AND M.Status=1
         public static List<MenuItem> BuildTree(this List<MenuItem> menus, string selectedGuid = null)
         {
             var lookup = menus.ToLookup(x => x.ParentId);
-            Func<string, List<MenuItem>> build = null;
-            build = pid =>
+
+            List<MenuItem> Build(string pid)
             {
                 return lookup[pid]
-                 .Select(x => new MenuItem()
-                 {
-                     Guid = x.Guid,
-                     ParentId = x.ParentId,
-                     Children = build(x.Guid),
-                     Component = x.Component ?? "Main",
-                     Name = x.Name,
-                     Path = x.Path,
-                     Meta = new MenuMeta
-                     {
-                         BeforeCloseFun = x.Meta.BeforeCloseFun,
-                         HideInMenu = x.Meta.HideInMenu,
-                         Icon = x.Meta.Icon,
-                         NotCache = x.Meta.NotCache,
-                         Title = x.Meta.Title,
-                         Permission = x.Meta.Permission
-                     }
-                 }).ToList();
-            };
-            var result = build(selectedGuid);
+                    .Select(x => new MenuItem()
+                    {
+                        Guid = x.Guid,
+                        ParentId = x.ParentId,
+                        Children = Build(x.Guid),
+                        Component = x.Component ?? "Main",
+                        Name = x.Name,
+                        Path = x.Path,
+                        Meta = new MenuMeta
+                        {
+                            BeforeCloseFun = x.Meta.BeforeCloseFun,
+                            HideInMenu = x.Meta.HideInMenu,
+                            Icon = x.Meta.Icon,
+                            NotCache = x.Meta.NotCache,
+                            Title = x.Meta.Title,
+                            Permission = x.Meta.Permission
+                        }
+                    }).ToList();
+            }
+
+            var result = Build(selectedGuid);
             return result;
         }
 
