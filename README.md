@@ -1,4 +1,4 @@
-![DncZeus用户授权数据流图](https://statics.codedefault.com/uploads/u/2019/05/u9n8n5wcsl.png)
+![DncZeus用户授权数据流图](https://statics.codedefault.com/uploads/u/2019/05/fb36qu19i7.png)
 # DncZeus
 
 ## 前言
