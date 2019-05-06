@@ -1,0 +1,31 @@
+为了简化初始化步骤，v2.0.0的用户建议直接按顺序执行目录[v2.0.0]中的两个脚本：[01.schema(结构脚本).sql]和[02.data(示例数据脚本).sql]。
+
+如果你是直接运行v2.0.0，则到此结束。
+
+*********************************************************************************
+
+如果你是从v1.1.0升级，请往下看。
+
+因为初始化数据做了部分调整，因此不提供从v1.1.0升级到v2.0.0的升级脚本，如果你是v1.1.0的用户，需要升级到v2.0.0，请自行修改实体[DncMenu]，其中新增了部分属性，如下：
+
+/// <summary>
+/// 前端组件(.vue)
+/// </summary>
+[StringLength(255)]
+public string Component { get; set; }
+
+/// <summary>
+/// 在菜单中隐藏
+/// </summary>
+public YesOrNo? HideInMenu { get; set; }
+/// <summary>
+/// 不缓存页面
+/// </summary>
+public YesOrNo? NotCache { get; set; }
+/// <summary>
+/// 页面关闭前的回调函数
+/// </summary>
+[StringLength(255)]
+public string BeforeCloseFun { get; set; }
+
+之后，你可以使用EF的Add-Migration 和Update-Database命令将实体的更改应用到数据表，也可以自行修改数据表[DncMenu]的设计。
