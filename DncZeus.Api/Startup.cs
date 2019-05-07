@@ -6,6 +6,7 @@
  ******************************************/
 
 using AutoMapper;
+using DncZeus.Api.Auth;
 using DncZeus.Api.Entities;
 using DncZeus.Api.Extensions.AuthContext;
 using DncZeus.Api.Extensions.CustomException;
@@ -18,6 +19,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.WebEncoders;
 using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.Swagger;
@@ -27,7 +29,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
-using DncZeus.Api.Auth;
 
 
 namespace DncZeus.Api
@@ -94,6 +95,12 @@ namespace DncZeus.Api
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
+            });
+
+            // 注入日志
+            services.AddLogging(config => 
+            {
+                config.AddLog4Net();
             });
         }
 

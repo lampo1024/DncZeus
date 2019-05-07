@@ -1,0 +1,20 @@
+2019-05-07 11:46:03,294 [1] INFO  Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager [(null)]  - User profile is available. Using 'C:\Users\taadis\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2019-05-07 11:46:04,121 [8] INFO  Microsoft.AspNetCore.Hosting.Internal.WebHost [(null)]  - Request starting HTTP/1.1 DEBUG http://localhost:54321/  0
+2019-05-07 11:46:04,122 [9] INFO  Microsoft.AspNetCore.Hosting.Internal.WebHost [(null)]  - Request starting HTTP/1.1 GET http://localhost:54321/api/values  
+2019-05-07 11:46:04,155 [8] INFO  Microsoft.AspNetCore.Hosting.Internal.WebHost [(null)]  - Request finished in 33.4476ms 200 
+2019-05-07 11:46:04,832 [9] INFO  Microsoft.AspNetCore.Hosting.Internal.WebHost [(null)]  - Request finished in 711.0816ms 404 
+2019-05-07 11:46:04,863 [8] INFO  Microsoft.AspNetCore.Hosting.Internal.WebHost [(null)]  - Request starting HTTP/1.1 GET http://localhost:54321/favicon.ico  
+2019-05-07 11:46:04,907 [8] INFO  Microsoft.AspNetCore.Hosting.Internal.WebHost [(null)]  - Request finished in 4.3518ms 404 
+2019-05-07 11:53:35,606 [1] INFO  Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager [(null)]  - User profile is available. Using 'C:\Users\taadis\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2019-05-07 11:53:36,296 [7] INFO  Microsoft.AspNetCore.Hosting.Internal.WebHost [(null)]  - Request starting HTTP/1.1 GET http://localhost:54321/api/values  
+2019-05-07 11:53:36,297 [8] INFO  Microsoft.AspNetCore.Hosting.Internal.WebHost [(null)]  - Request starting HTTP/1.1 DEBUG http://localhost:54321/  0
+2019-05-07 11:53:36,321 [8] INFO  Microsoft.AspNetCore.Hosting.Internal.WebHost [(null)]  - Request finished in 22.9673ms 200 
+2019-05-07 11:53:36,570 [7] INFO  Microsoft.AspNetCore.Hosting.Internal.WebHost [(null)]  - Request finished in 274.2284ms 404 
+2019-05-07 11:53:44,724 [9] INFO  Microsoft.AspNetCore.Hosting.Internal.WebHost [(null)]  - Request starting HTTP/1.1 GET http://localhost:54321/test/logger  
+2019-05-07 11:53:44,743 [9] INFO  Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker [(null)]  - Route matched with {action = "Logger", controller = "Test"}. Executing action DncZeus.Api.Controllers.TestController.Logger (DncZeus.Api)
+2019-05-07 11:53:44,757 [9] INFO  Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker [(null)]  - Executing action method DncZeus.Api.Controllers.TestController.Logger (DncZeus.Api) - Validation state: Valid
+2019-05-07 11:53:44,766 [9] INFO  DncZeus.Api.Controllers.TestController [(null)]  - LogInformation()...
+2019-05-07 11:53:44,801 [9] INFO  Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker [(null)]  - Executed action method DncZeus.Api.Controllers.TestController.Logger (DncZeus.Api), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 14.7608ms.
+2019-05-07 11:53:44,809 [9] INFO  Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor [(null)]  - Executing ObjectResult, writing value of type 'DncZeus.Api.Models.Response.ResponseResultModel'.
+2019-05-07 11:53:45,028 [9] INFO  Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker [(null)]  - Executed action DncZeus.Api.Controllers.TestController.Logger (DncZeus.Api) in 279.2843ms
+2019-05-07 11:53:45,032 [9] INFO  Microsoft.AspNetCore.Hosting.Internal.WebHost [(null)]  - Request finished in 308.3829ms 200 application/json; charset=utf-8
