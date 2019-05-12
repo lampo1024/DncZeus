@@ -31,6 +31,7 @@
 * [下载项目&安装依赖](https://codedefault.com/p/download-and-restore-dnczeus)
 * [DncZeus项目结构解析](https://codedefault.com/p/solution-structure-introduction)
 * [新建你的页面](https://codedefault.com/p/create-page)
+* [DncZeus框架用户动态权限数据流，鉴权、令牌、验证详解](https://codedefault.com/p/dnczeus-doc-support-dynamic-router-and-dynamic-menu-rendering)
 
 ## 在线体验(Demo)
 
@@ -186,6 +187,21 @@ DncZeus项目是一个开源项目，你可以直接基于本项目进行扩展�
 * 直接提交issue
 * QQ群：483350228
 * [码友网][8]
+
+## 版本变更日志
+
+### v2.0.0
+
+* 支持动态路由和动态菜单渲染
+* 优化登录逻辑
+* 添加退出系统确认，优化退出逻辑
+* 优化路由导航守护
+* 优化页面刷新的数据加载逻辑
+
+### v1.0.0
+
+* 支持基本的用户&权限管理
+* 前端静态路由
 
 
 [1]: https://github.com/iview/iview-admin
