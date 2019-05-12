@@ -31,6 +31,7 @@ const hasPermission = {
   install(Vue, options) {
     Vue.directive('can', {
       bind(el, binding, vnode) {
+        console.log("router check:",vnode.context.$route);
         let checkPermission = vnode.context.$route.meta.checkPermission;
         if (!checkPermission) {
           return;

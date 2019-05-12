@@ -41,6 +41,7 @@ namespace DncZeus.Api.Extensions.CustomException
         public void OnAuthorization(AuthorizationFilterContext context)
         {
             return;
+            // 以下权限拦截器未现实，所以直接return
             var user = context.HttpContext.User;
 
             if (!user.Identity.IsAuthenticated)
