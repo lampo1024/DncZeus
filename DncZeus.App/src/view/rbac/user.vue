@@ -106,6 +106,12 @@
             @on-page-size-change="handlePageSizeChanged"
             @on-sort-change="handleSortChange"
           >
+          <template slot-scope="{row,index}" slot="userType">
+            <span>{{renderUserType(row.userType)}}</span>
+          </template>
+          <template slot-scope="{row,index}" slot="status">
+            <Tag :color="renderStatus(row.status).color">{{renderStatus(row.status).text}}</Tag>
+          </template>
           <template slot-scope="{ row, index }" slot="action">
             <Poptip
               confirm
@@ -322,8 +328,8 @@ export default {
             { type: "selection", width: 50, key: "handle" },
             { title: "登录名", key: "loginName", width: 250, sortable: true },
             { title: "显示名", key: "displayName", width: 250 },
-            { title: "用户类型", key: "userType" },
-            { title: "状态", key: "status", align: "center", width: 120 },
+            { title: "用户类型", key: "userType",slot:"userType" },
+            { title: "状态", key: "status", align: "center", width: 120,slot:"status" },
             { title: "创建时间", width: 120, ellipsis: true, tooltip: true, key: "createdOn" },
             { title: "创建者", key: "createdByUserName" },
             { title: "操作", align: "center", width: 150, className: "table-command-column",slot:"action" }
@@ -550,6 +556,34 @@ export default {
           this.$Message.warning(res.data.message);
         }
       });
+    },
+    renderUserType(userType){
+      var userTypeText = "未知";
+      switch (userType) {
+        case 0:
+          userTypeText = "超级管理员";
+          break;
+        case 1:
+          userTypeText = "管理员";
+          break;
+        case 2:
+          userTypeText = "普通用户";
+          break;
+      }
+      return userTypeText;
+    },
+    renderStatus(status){
+      let _status = {
+        color:"success",
+        text:"正常"
+      };
+      switch(status){
+        case 0:
+        _status.text = "禁用";
+        _status.color = "error";
+        break;
+      }
+      return _status;
     }
   },
   mounted() {
