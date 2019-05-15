@@ -26,6 +26,7 @@ namespace DncZeus.Api.Controllers
         /// </summary>
         /// <returns></returns>
         // GET: /<controller>/
+        [HttpGet]
         public IActionResult Logger()
         {
             _logger.LogDebug(message: "LogDebug()...");
