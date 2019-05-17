@@ -180,7 +180,7 @@ DncZeus项目是一个开源项目，你可以直接基于本项目进行扩展�
 <img width="200" src="https://statics.codedefault.com/img/codedefault/public/pay/wechatpay.png" alt="微信支付" />
 </p>
 
-### 感谢友爱的同行们
+### 感谢热心，友爱的捐赠者
 
 名称 | 金额(元) | 方式
 -- | -- | --
