@@ -25,7 +25,6 @@
 
 ## 文档(Document)
 
-* [github](https://github.com/lampo1024/DncZeus/tree/master/Docs)
 * [关于 DncZeus](https://codedefault.com/p/getting-started)
 * [开发环境和工具](https://codedefault.com/p/environment-and-developement-tools)
 * [下载项目&安装依赖](https://codedefault.com/p/download-and-restore-dnczeus)
