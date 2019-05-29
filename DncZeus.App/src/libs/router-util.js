@@ -54,7 +54,8 @@ export const formatMenu = (list) => {
   forEach(list, item => {
     let obj = {
       path: item.path,
-      name: item.name
+      name: item.name,
+      icon: (item.meta && item.meta.icon) || ''
     }
     obj.meta = item.meta
     // 惰性递归 ****
