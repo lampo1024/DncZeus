@@ -29,7 +29,7 @@ const baseUrl =
 Vue.use(Router);
 const router = new Router({
   routes: [...routes], // , ...loadMenu()
-  mode: "history"
+  mode: "hash"
 });
 const LOGIN_PAGE_NAME = "login";
 
@@ -123,7 +123,7 @@ router.afterEach(to => {
 export default router;
 
 const createRouter = () => new Router({
-  mode: 'history',
+  mode: 'hash',
   routes: [...routes]
 })
 
