@@ -1,4 +1,4 @@
-﻿/******************************************
+/******************************************
  * AUTHOR:          Rector
  * CREATEDON:       2018-09-26
  * OFFICIAL_SITE:    码友网(https://codedefault.com)--专注.NET/.NET Core
@@ -131,6 +131,7 @@ WHERE P.IsDeleted=0 AND P.Status=1 AND P.Type=0 AND M.IsDeleted=0 AND M.Status=1
                 }
                 menus.Add(root);
             }
+            menus = menus.OrderBy(x => x.Sort).ThenBy(x=>x.CreatedOn).ToList();
             var menu = MenuItemHelper.LoadMenuTree(menus, "0");
             return Ok(menu);
         }
