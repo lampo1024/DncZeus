@@ -1,5 +1,6 @@
 import { getToken, hasChild, localSave, localRead } from '@/libs/util'
 import Main from '@/components/main'
+import parentView from '@/components/parent-view'
 // import axios from 'axios'
 import axios from '@/libs/api.request'
 import config from '@/config'
@@ -58,14 +59,19 @@ export const formatMenu = (list) => {
       icon: (item.meta && item.meta.icon) || ''
     }
     obj.meta = item.meta
+    //obj.meta.showAlways = true;
     // 惰性递归 ****
     if (item.parentId === "0") {
       obj.component = Main
     } else {
       // 惰性递归 ****
       let data = item.component
-      // 这里需要改成自己定义的 .vue 夜间路径
-      obj.component = () => import('@/view' + data)
+      if(item.children.length>0){
+        obj.component = parentView
+      }else{
+        // 这里需要改成自己定义的 .vue 路径
+        obj.component = () => import('@/view' + data)
+      }
     }
     if (hasChild(item)) {
       obj.children = formatMenu(item.children)

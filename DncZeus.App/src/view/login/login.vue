@@ -28,7 +28,7 @@ import LoginForm from "_c/login-form";
 import { mapActions } from "vuex";
 import axios from "@/libs/api.request";
 import store from "@/store";
-import { formatMenu, initRouter } from "@/libs/router-util";
+import { initRouter } from "@/libs/router-util";
 
 export default {
   components: {

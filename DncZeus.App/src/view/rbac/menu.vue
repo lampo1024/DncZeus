@@ -160,7 +160,7 @@
         </FormItem>
         <Row :gutter="8">
           <Col span="12">
-            <FormItem>
+            <FormItem prop="icon">
               <Select
                 v-model="formModel.fields.icon"
                 filterable
@@ -348,6 +348,13 @@ export default {
               message: "请输入菜单名称",
               min: 2
             }
+          ],
+          icon: [
+            {
+              type: "string",
+              required: true,
+              message: "请选择菜单图标"
+            }
           ]
         }
       },
@@ -403,7 +410,7 @@ export default {
               render: (h, params) => {
                 return h("Icon", {
                   props: {
-                    type: params.row.icon,
+                    type: params.row.icon==""?"md-menu":params.row.icon,
                     size: 24
                   }
                 });
@@ -539,9 +546,10 @@ export default {
               title: "操作",
               align: "center",
               key: "handle",
-              width: 150,
+              width: 100,
               className: "table-command-column",
               options: ["edit"],
+              fixed:"right",
               button: [
                 (h, params, vm) => {
                   return h(

@@ -1,4 +1,4 @@
-﻿/******************************************
+/******************************************
  * AUTHOR:          Rector
  * CREATEDON:       2018-09-26
  * OFFICIAL_SITE:    码友网(https://codedefault.com)--专注.NET/.NET Core
@@ -96,6 +96,8 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
                 entity.Guid = Guid.NewGuid();
                 entity.CreatedByUserGuid = AuthContextService.CurrentUser.Guid;
                 entity.CreatedByUserName = AuthContextService.CurrentUser.DisplayName;
+                entity.IsDeleted = CommonEnum.IsDeleted.No;
+                entity.Icon = string.IsNullOrEmpty(entity.Icon) ? "md-menu" : entity.Icon;
                 _dbContext.DncMenu.Add(entity);
                 _dbContext.SaveChanges();
                 var response = ResponseModelFactory.CreateInstance;
@@ -145,7 +147,7 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
             {
                 var entity = _dbContext.DncMenu.FirstOrDefault(x => x.Guid == model.Guid);
                 entity.Name = model.Name;
-                entity.Icon = model.Icon;
+                entity.Icon = string.IsNullOrEmpty(model.Icon) ? "md-menu" : model.Icon;
                 entity.Level = 1;
                 entity.ParentGuid = model.ParentGuid;
                 entity.Sort = model.Sort;

@@ -16,7 +16,7 @@ import staticRouters from '@/router/static-routers'
 import axios from '@/libs/api.request'
 import config from "@/config";
 // 引入加载菜单
-import { formatMenu, loadMenu } from '@/libs/router-util'
+import { formatMenu } from '@/libs/router-util'
 
 const {
   homeName
@@ -28,7 +28,7 @@ const baseUrl =
 
 Vue.use(Router);
 const router = new Router({
-  routes: [...routes], // , ...loadMenu()
+  routes: [...routes],
   mode: "hash"
 });
 const LOGIN_PAGE_NAME = "login";
@@ -39,7 +39,7 @@ const initRouter = () => {
     url: 'account/menu',
     method: 'get'
   }).then(res => {
-    var menuData = res.data
+    var menuData = res.data;
     // 格式化菜单
     list = formatMenu(menuData)
     // 刷新界面菜单
