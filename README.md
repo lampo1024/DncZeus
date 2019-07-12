@@ -31,6 +31,7 @@
 * [DncZeus项目结构解析](https://codedefault.com/p/solution-structure-introduction)
 * [新建你的页面](https://codedefault.com/p/create-page)
 * [DncZeus框架用户动态权限数据流，鉴权、令牌、验证详解](https://codedefault.com/p/dnczeus-doc-support-dynamic-router-and-dynamic-menu-rendering)
+* [DncZeus前后端分离项目打包/发布/部署及注意事项](https://codedefault.com/p/dnczeus-build-and-deploy)
 
 ## 在线体验(Demo)
 
