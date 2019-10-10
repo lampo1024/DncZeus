@@ -129,7 +129,7 @@ WHERE P.IsDeleted=0 AND P.Status=1 AND P.Type=0 AND M.IsDeleted=0 AND M.Status=1
                 {
                     continue;
                 }
-                menus.Add(root);
+                if(menus.Exists(x=>x.ParentGuid == root.Guid)) menus.Add(root);
             }
             menus = menus.OrderBy(x => x.Sort).ThenBy(x=>x.CreatedOn).ToList();
             var menu = MenuItemHelper.LoadMenuTree(menus, "0");
