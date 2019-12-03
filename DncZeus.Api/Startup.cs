@@ -46,6 +46,7 @@ namespace DncZeus.Api
         /// 
         /// </summary>
         /// <param name="services"></param>
+        /// todo:AllowAnyOrigin同源策略安全隐患,使用WithOrigins
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors(o =>
