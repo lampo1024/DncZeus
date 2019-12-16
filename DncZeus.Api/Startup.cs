@@ -84,11 +84,14 @@ namespace DncZeus.Api
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddDbContext<DncZeusDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
+                
                 // 如果使用SQL Server 2008数据库，请添加UseRowNumberForPaging的选项
                 // 参考资料:https://github.com/aspnet/EntityFrameworkCore/issues/4616
                 //options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),b=>b.UseRowNumberForPaging())
                 );
-
+            services.AddDbContext<ProductDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
+                );
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info { Title = "RBAC Management System API", Version = "v1" });

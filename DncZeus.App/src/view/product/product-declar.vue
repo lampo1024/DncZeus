@@ -14,6 +14,7 @@
         @on-delete="handleDelete"
         @on-edit="handleEdit"
         @on-select="handleSelect"
+        @on-select-cancel="handleSelectCancel"
         @on-selection-change="handleSelectionChange"
         @on-refresh="handleRefresh"
         :row-class-name="rowClsRender"
@@ -73,7 +74,7 @@
                   @on-search="handleSearchProduct()"
                 ></Input>
               </Col>
-              <Col span="8" class="dnc-toolbar-btns">
+              <Col span="9" class="dnc-toolbar-btns">
                 <!-- <ButtonGroup class="mr3">
                   <Button
                     class="txt-danger"
@@ -102,6 +103,20 @@
                   <Button icon="md-refresh" title="刷新" @click="handleRefresh"></Button>
                 </ButtonGroup>-->
                 <Button icon="md-search" type="primary" @click="handleRefresh" title="查询">查询</Button>
+                <Button
+                  icon="md-search"
+                  v-can="'export'"
+                  type="primary"
+                  @click="handleExport"
+                  title="查询"
+                >导出</Button>
+                <Upload :before-upload="handleImport" action>
+                  <Button icon="ios-cloud-upload-outline">导入</Button>
+                </Upload>
+                <!-- <Button icon="md-search" v-can="'import'" type="primary" title="导入">
+                  <input type="file" accept=".xlsx, .xls" @change="handleImport"></input>导入
+                </Button>-->
+                <!-- <Button icon="md-search" v-can="'import'" type="primary" @click="handleImport" title="查询">导入</Button> -->
                 <!-- <Button
                   icon="md-create"
                   type="primary"
@@ -205,14 +220,16 @@
 
 <script>
 import Tables from "_c/tables";
-import { getProductList } from "@/api/product";
+import { getProductList, importProduct } from "@/api/product";
+import * as XLSX from "xlsx";
 export default {
-  name: "home",
+  name: "product_declar",
   components: {
     Tables
   },
   data() {
     return {
+      file: null,
       commands: {
         // delete: { name: "delete", title: "删除" },
         // recover: { name: "recover", title: "恢复" },
@@ -280,7 +297,8 @@ export default {
             { title: "申报要素", key: "element", width: 500 },
             { title: "备注", key: "note", width: 200 }
           ],
-          data: []
+          data: [],
+          selection: []
         }
       },
       styles: {
@@ -333,7 +351,12 @@ export default {
       this.handleResetFormIcon();
       this.doLoadIcon(params.row.id);
     },
-    handleSelect(selection, row) {},
+    handleSelect(selection, row) {
+      this.stores.product.selection = selection;
+    },
+    handleSelectCancel(selection, row) {
+      this.stores.product.selection = selection;
+    },
     handleSelectionChange(selection) {
       this.formModel.selection = selection;
     },
@@ -475,16 +498,179 @@ export default {
       // });
     },
     handlePageChanged(page) {
-      this.stores.icon.query.currentPage = page;
+      this.stores.product.query.currentPage = page;
       this.loadProductList();
     },
     handlePageSizeChanged(pageSize) {
-      this.stores.icon.query.pageSize = pageSize;
+      this.stores.product.query.pageSize = pageSize;
       this.loadProductList();
+    },
+    handleImport(file) {
+      var reader = new FileReader();
+      reader.onload = event => {
+        // 以二进制流方式读取得到整份excel表格对象
+        const workbook = XLSX.read(event.target.result, { type: "binary" });
+        // 存储获取到的数据
+        let data = [];
+        // 遍历每张工作表进行读取（这里默认只读取第一张表）
+        for (const sheet in workbook.Sheets) {
+          // esline-disable-next-line
+          if (workbook.Sheets.hasOwnProperty(sheet)) {
+            // 利用 sheet_to_json 方法将 excel 转成 json 数据
+            data = data.concat(
+              XLSX.utils.sheet_to_json(workbook.Sheets[sheet])
+            );
+            break; // 只取第一张表
+          }
+        }
+        console.log(data);
+        const uploadData = data.map(item => {
+          return {
+            ItemNo: item["料件号"],
+            Type: item["型号"],
+            Country: item["原产国"],
+            Brand: item["品牌"],
+            TexNo: item["税号"],
+            Name_en: item["英文品名"],
+            Name_zh: item["中文品名"],
+            Element: item["申报要素"],
+            Note: item["备注"]
+          };
+        }); //映射对象数据
+        console.log(uploadData);
+        importProduct(uploadData);
+        this.loadProductList();
+      };
+      reader.readAsBinaryString(file);
+
+      return false;
+    },
+    handleExport() {
+      console.log(this.stores.product.selection);
+      if (
+        !this.stores.product.selection ||
+        this.stores.product.selection.length < 1
+      ) {
+        this.$Message.warning("请选择至少一条数据");
+        return;
+      }
+      let jsondata = JSON.parse(
+        JSON.stringify(this.stores.product.selection)
+      ); //深拷贝原始数据
+      let data = jsondata.map(item => {
+        return {
+          料件号: item.itemNo,
+          型号: item.type,
+          原产国: item.country,
+          品牌: item.brand,
+          税号: item.texNo,
+          英文品名: item.name_en,
+          中文品名: item.name_zh,
+          申报要素: item.element,
+          备注: item.note
+        };
+      }); //对象映射
+      download(data, "申报要素.xlsx");
     }
   },
   mounted() {
     this.loadProductList();
   }
 };
+function download(json, fileName) {
+  const type = "xlsx"; //定义导出文件的格式
+  var tmpDown; //导出的内容
+  var tmpdata = json[0];
+  json.unshift({});
+  var keyMap = []; //获取keys
+  for (var k in tmpdata) {
+    keyMap.push(k);
+    json[0][k] = k;
+  }
+  var tmpdata = []; //用来保存转换好的json
+
+  json
+    .map((v, i) =>
+      keyMap.map((k, j) =>
+        Object.assign(
+          {},
+          {
+            v: v[k],
+            position:
+              (j > 25 ? getCharCol(j) : String.fromCharCode(65 + j)) + (i + 1)
+          }
+        )
+      )
+    )
+    .reduce((prev, next) => prev.concat(next))
+    .forEach(
+      (v, i) =>
+        (tmpdata[v.position] = {
+          v: v.v
+        })
+    );
+  var outputPos = Object.keys(tmpdata); //设置区域,比如表格从A1到D10
+  var tmpWB = {
+    SheetNames: ["mySheet"], //保存的表标题
+    Sheets: {
+      mySheet: Object.assign(
+        {},
+        tmpdata, //内容
+        {
+          "!ref": outputPos[0] + ":" + outputPos[outputPos.length - 1] //设置填充区域
+        }
+      )
+    }
+  };
+  tmpDown = new Blob(
+    [
+      s2ab(
+        XLSX.write(
+          tmpWB,
+          {
+            bookType: type == undefined ? "xlsx" : type,
+            bookSST: false,
+            type: "binary"
+          } //这里的数据是用来定义导出的格式类型
+        )
+      )
+    ],
+    {
+      type: ""
+    }
+  ); //创建二进制对象写入转换好的字节流
+  saveAs(tmpDown, fileName);
+}
+
+function saveAs(obj, fileName) {
+  //导出功能实现
+  var tmpa = document.createElement("a");
+  tmpa.download = fileName || "下载";
+  tmpa.href = URL.createObjectURL(obj); //绑定a标签
+  tmpa.click(); //模拟点击实现下载
+  setTimeout(function() {
+    //延时释放
+    URL.revokeObjectURL(obj); //用URL.revokeObjectURL()来释放这个object URL
+  }, 100);
+}
+
+function s2ab(s) {
+  //字符串转字符流
+  var buf = new ArrayBuffer(s.length);
+  var view = new Uint8Array(buf);
+  for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xff;
+  return buf;
+}
+
+function getCharCol(n) {
+  let temCol = "",
+    s = "",
+    m = 0;
+  while (n > 0) {
+    m = (n % 26) + 1;
+    s = String.fromCharCode(m + 64) + s;
+    n = (n - m) / 26;
+  }
+  return s;
+}
 </script>
