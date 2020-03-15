@@ -13,19 +13,17 @@ using DncZeus.Api.Extensions.CustomException;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.WebEncoders;
-using Newtonsoft.Json.Serialization;
-using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.OpenApi.Models;
 using System;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
@@ -49,13 +47,15 @@ namespace DncZeus.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors(o =>
-                o.AddPolicy("*",
+                o.AddPolicy("CorsPolicy",
                     builder => builder
+                        .WithOrigins("http://localhost:9000")
                         .AllowAnyHeader()
                         .AllowAnyMethod()
-                        .AllowAnyOrigin()
+                        //.AllowAnyOrigin()
                         .AllowCredentials()
                 ));
+
             services.AddMemoryCache();
             services.AddHttpContextAccessor();
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
@@ -65,22 +65,25 @@ namespace DncZeus.Api
             var appSettings = appSettingsSection.Get<AppAuthenticationSettings>();
             services.AddJwtBearerAuthentication(appSettings);
             services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
-            services.AddAutoMapper();
+            services.AddAutoMapper(typeof(Startup));
 
             services.Configure<WebEncoderOptions>(options =>
                 options.TextEncoderSettings = new TextEncoderSettings(UnicodeRanges.BasicLatin, UnicodeRanges.CjkUnifiedIdeographs)
             );
 
-            services
-                .AddMvc(config =>
-                {
-                    //config.Filters.Add(new ValidateModelAttribute());
-                })
-                .AddJsonOptions(options =>
-                {
-                    options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-                })
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            //services
+            //    .AddMvc(config =>
+            //    {
+            //        //config.Filters.Add(new ValidateModelAttribute());
+            //    })
+            //    .AddJsonOptions(options =>
+            //    {
+            //        options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            //    })
+            //    .SetCompatibilityVersion(CompatibilityVersion.Latest);
+
+            services.AddControllers().AddNewtonsoftJson();
+
             services.AddDbContext<DncZeusDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
                 // 如果使用SQL Server 2008数据库，请添加UseRowNumberForPaging的选项
@@ -90,7 +93,7 @@ namespace DncZeus.Api
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Info { Title = "RBAC Management System API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "RBAC Management System API", Version = "v1" });
 
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
@@ -98,7 +101,7 @@ namespace DncZeus.Api
             });
 
             // 注入日志
-            services.AddLogging(config => 
+            services.AddLogging(config =>
             {
                 config.AddLog4Net();
             });
@@ -110,12 +113,14 @@ namespace DncZeus.Api
         /// <param name="app"></param>
         /// <param name="env"></param>
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 //app.UseDeveloperExceptionPage();
             }
+
+
             app.UseDeveloperExceptionPage();
             //app.UseExceptionHandler("/error/500");
             //app.UseStatusCodePagesWithReExecute("/error/{0}");
@@ -123,35 +128,44 @@ namespace DncZeus.Api
             app.UseStaticFiles();
             app.UseFileServer();
             app.UseAuthentication();
-            app.UseCors("*");
+            app.UseCors("CorsPolicy");
             app.ConfigureCustomExceptionMiddleware();
 
             var serviceProvider = app.ApplicationServices;
             var httpContextAccessor = serviceProvider.GetRequiredService<IHttpContextAccessor>();
             AuthContextService.Configure(httpContextAccessor);
 
-            app.UseMvc(routes =>
+            app.UseRouting();
+            app.UseAuthorization();
+            app.UseEndpoints(ep =>
             {
-
-                routes.MapRoute(
-                     name: "areaRoute",
-                     template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
-
-                routes.MapRoute(
-                    name: "apiDefault",
-                    template: "api/{controller=Home}/{action=Index}/{id?}");
-
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                ep.MapControllerRoute(name: "areaRoute", pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+                ep.MapControllerRoute(name: "apiDefault", pattern: "api/{controller=Home}/{action=Index}/{id?}");
+                ep.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            //app.UseMvc(routes =>
+            //{
+
+            //    routes.MapRoute(
+            //         name: "areaRoute",
+            //         template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+            //    routes.MapRoute(
+            //        name: "apiDefault",
+            //        template: "api/{controller=Home}/{action=Index}/{id?}");
+
+            //    routes.MapRoute(
+            //        name: "default",
+            //        template: "{controller=Home}/{action=Index}/{id?}");
+            //});
 
             app.UseSwagger(o =>
             {
-                o.PreSerializeFilters.Add((document, request) =>
-                {
-                    document.Paths = document.Paths.ToDictionary(p => p.Key.ToLowerInvariant(), p => p.Value);
-                });
+                //o.PreSerializeFilters.Add((document, request) =>
+                //{
+                //    document.Paths = document.Paths.ToDictionary(p => p.Key.ToLowerInvariant(), p => p.Value);
+                //});
             });
             app.UseSwaggerUI(c =>
             {

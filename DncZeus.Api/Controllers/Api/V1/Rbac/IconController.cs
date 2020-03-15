@@ -19,6 +19,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Data.SqlClient;
 using System.Linq;
+using Microsoft.Data.SqlClient;
 
 namespace DncZeus.Api.Controllers.Api.V1.Rbac
 {

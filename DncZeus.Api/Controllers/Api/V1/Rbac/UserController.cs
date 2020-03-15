@@ -3,7 +3,6 @@ using DncZeus.Api.Entities;
 using DncZeus.Api.Entities.Enums;
 using DncZeus.Api.Extensions;
 using DncZeus.Api.Extensions.AuthContext;
-using DncZeus.Api.Extensions.CustomException;
 using DncZeus.Api.Extensions.DataAccess;
 using DncZeus.Api.Models.Response;
 using DncZeus.Api.RequestPayload.Rbac.User;
@@ -11,8 +10,9 @@ using DncZeus.Api.ViewModels.Rbac.DncUser;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Data.SqlClient;
 using System.Linq;
+using Microsoft.Data.SqlClient;
+
 /******************************************
  * AUTHOR:          Rector
  * CREATEDON:       2018-09-26

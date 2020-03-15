@@ -5,9 +5,6 @@
  * 版权所有，请勿删除
  ******************************************/
 
-using System;
-using System.Data.SqlClient;
-using System.Linq;
 using AutoMapper;
 using DncZeus.Api.Entities;
 using DncZeus.Api.Entities.Enums;
@@ -20,6 +17,9 @@ using DncZeus.Api.Utils;
 using DncZeus.Api.ViewModels.Rbac.DncRole;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
+using Microsoft.Data.SqlClient;
 
 namespace DncZeus.Api.Controllers.Api.V1.Rbac
 {
@@ -313,7 +313,7 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
                 var sql = @"SELECT R.* FROM DncUserRoleMapping AS URM
 INNER JOIN DncRole AS R ON R.Code=URM.RoleCode
 WHERE URM.UserGuid={0}";
-                var query = _dbContext.DncRole.FromSql(sql, guid).ToList();
+                var query = _dbContext.DncRole.FromSqlRaw(sql, guid).ToList();
                 var assignedRoles = query.ToList().Select(x => x.Code).ToList();
                 var roles = _dbContext.DncRole.Where(x => x.IsDeleted == CommonEnum.IsDeleted.No && x.Status == CommonEnum.Status.Normal).ToList().Select(x => new { label = x.Name, key = x.Code });
                 response.SetData(new { roles, assignedRoles });

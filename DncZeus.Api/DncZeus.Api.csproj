@@ -1,51 +1,55 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>\bin\Debug\DncZeus.Api.xml</DocumentationFile>
-    <OutputPath></OutputPath>
-    <NoWarn>1701;1702;1591</NoWarn>
-  </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+        <DocumentationFile>\bin\Debug\DncZeus.Api.xml</DocumentationFile>
+        <OutputPath></OutputPath>
+        <NoWarn>1701;1702;1591</NoWarn>
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>bin\Release\netcoreapp2.1\DncZeus.Api.xml</DocumentationFile>
-    <NoWarn>1701;1702;1591</NoWarn>
-  </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+        <DocumentationFile>bin\Release\netcoreapp2.1\DncZeus.Api.xml</DocumentationFile>
+        <NoWarn>1701;1702;1591</NoWarn>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Migrations\20190504083800_Init.cs" />
-    <Compile Remove="Migrations\20190504083800_Init.Designer.cs" />
-    <Compile Remove="Migrations\20190504084421_Init.cs" />
-    <Compile Remove="Migrations\20190504084421_Init.Designer.cs" />
-  </ItemGroup>
+    <ItemGroup>
+        <Compile Remove="Migrations\20190504083800_Init.cs" />
+        <Compile Remove="Migrations\20190504083800_Init.Designer.cs" />
+        <Compile Remove="Migrations\20190504084421_Init.cs" />
+        <Compile Remove="Migrations\20190504084421_Init.Designer.cs" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="8.0.0" />
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.1.4">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="2.2.10" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="AutoMapper" Version="9.0.0" />
+        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.App" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.2" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.2" />
+        <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.2" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.2" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.2">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="3.1.0" />
+        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="5.1.0" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="wwwroot\css\" />
-    <Folder Include="wwwroot\js\" />
-    <Folder Include="wwwroot\images\" />
-  </ItemGroup>
+    <ItemGroup>
+        <Folder Include="wwwroot\css\" />
+        <Folder Include="wwwroot\js\" />
+        <Folder Include="wwwroot\images\" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <Content Update="log4net.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
+    <ItemGroup>
+        <Content Update="log4net.config">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
 
 </Project>

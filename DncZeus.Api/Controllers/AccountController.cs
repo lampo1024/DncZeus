@@ -63,7 +63,7 @@ WHERE P.IsDeleted=0 AND P.Status=1 AND EXISTS (SELECT 1 FROM DncUserRoleMapping 
 INNER JOIN DncMenu AS M ON M.Guid = P.MenuGuid
 WHERE P.IsDeleted=0 AND P.Status=1";
                 }
-                var permissions = _dbContext.DncPermissionWithMenu.FromSql(sqlPermission, user.Guid).ToList();
+                var permissions = _dbContext.DncPermissionWithMenu.FromSqlRaw(sqlPermission, user.Guid).ToList();
 
                 var pagePermissions = permissions.GroupBy(x => x.MenuAlias).ToDictionary(g => g.Key, g => g.Select(x => x.PermissionActionCode).Distinct());
                 response.SetData(new
@@ -121,7 +121,7 @@ WHERE P.IsDeleted=0 AND P.Status=1 AND P.Type=0 AND M.IsDeleted=0 AND M.Status=1
                 //如果是超级管理员
                 strSql = @"SELECT * FROM DncMenu WHERE IsDeleted=0 AND Status=1";
             }
-            var menus = _dbContext.DncMenu.FromSql(strSql, AuthContextService.CurrentUser.Guid).ToList();
+            var menus = _dbContext.DncMenu.FromSqlRaw(strSql, AuthContextService.CurrentUser.Guid).ToList();
             var rootMenus = _dbContext.DncMenu.Where(x => x.IsDeleted == IsDeleted.No && x.Status == Status.Normal && x.ParentGuid == Guid.Empty).ToList();
             foreach (var root in rootMenus)
             {
