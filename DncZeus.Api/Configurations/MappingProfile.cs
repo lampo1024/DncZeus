@@ -1,4 +1,4 @@
-﻿/******************************************
+/******************************************
  * AUTHOR:          Rector
  * CREATEDON:       2018-09-26
  * OFFICIAL_SITE:    码友网(https://codedefault.com)--专注.NET/.NET Core
@@ -40,6 +40,7 @@ namespace DncZeus.Api.Configurations
             CreateMap<DncMenu, MenuJsonModel>();
             CreateMap<MenuCreateViewModel, DncMenu>();
             CreateMap<MenuEditViewModel, DncMenu>();
+            CreateMap<DncMenu, MenuEditViewModel>();
             #endregion
 
             #region DncIcon

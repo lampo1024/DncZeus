@@ -1,6 +1,10 @@
-<template>
-  <div>二级菜单02</div>
+-<template>
+  <div>
+    二级菜单02
+  </div>
 </template>
 <script>
-export default {};
+export default {
+  name:"multi_menu_level_2_2"
+}
 </script>
