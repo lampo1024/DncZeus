@@ -87,7 +87,8 @@ namespace DncZeus.Api
             services.AddDbContext<DncZeusDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
                 // 如果使用SQL Server 2008数据库，请添加UseRowNumberForPaging的选项
-                // 参考资料:https://github.com/aspnet/EntityFrameworkCore/issues/4616
+                // 参考资料:https://github.com/aspnet/EntityFrameworkCore/issues/4616 
+                // 【重要说明】:2020-03-23更新，微软官方最新的Entity Framework Core已不再支持UseRowNumberForPaging()，请尽量使用SQL Server 2012 +版本
                 //options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),b=>b.UseRowNumberForPaging())
                 );
 
