@@ -1,28 +1,13 @@
 <template>
   <div>
     <Card>
-      <tables
-        ref="tables"
-        editable
-        searchable
-        :border="false"
-        size="small"
-        search-place="top"
-        v-model="stores.user.data"
+      <dz-table
         :totalCount="stores.user.query.totalCount"
-        :columns="stores.user.columns"
-        @on-delete="handleDelete"
-        @on-edit="handleEdit"
-        @on-select="handleSelect"
-        @on-selection-change="handleSelectionChange"
-        @on-refresh="handleRefresh"
-        :row-class-name="rowClsRender"
+        :pageSize="stores.user.query.pageSize"
         @on-page-change="handlePageChanged"
         @on-page-size-change="handlePageSizeChanged"
-        @on-assign="handleAssignRole"
-        @on-sort-change="handleSortChange"
       >
-        <div slot="search">
+        <div slot="searcher">
           <section class="dnc-toolbar-wrap">
             <Row :gutter="16">
               <Col span="16">
@@ -105,7 +90,48 @@
             </Row>
           </section>
         </div>
-      </tables>
+        <Table
+            slot="table"
+            ref="tables"
+            :border="false"
+            size="small"
+            :highlight-row="true"
+            :data="stores.user.data"
+            :columns="stores.user.columns"
+            @on-select="handleSelect"
+            @on-selection-change="handleSelectionChange"
+            @on-refresh="handleRefresh"
+            :row-class-name="rowClsRender"
+            @on-page-change="handlePageChanged"
+            @on-page-size-change="handlePageSizeChanged"
+            @on-sort-change="handleSortChange"
+          >
+          <template slot-scope="{row,index}" slot="userType">
+            <span>{{renderUserType(row.userType)}}</span>
+          </template>
+          <template slot-scope="{row,index}" slot="status">
+            <Tag :color="renderStatus(row.status).color">{{renderStatus(row.status).text}}</Tag>
+          </template>
+          <template slot-scope="{ row, index }" slot="action">
+            <Poptip
+              confirm
+              :transfer="true"
+              title="确定要删除吗?"
+              @on-ok="handleDelete(row)"
+              >
+              <Tooltip placement="top" content="删除" :delay="1000" :transfer="true">
+                <Button type="error" size="small" shape="circle" icon="md-trash"></Button>
+              </Tooltip>
+            </Poptip>
+            <Tooltip placement="top" content="编辑" :delay="1000" :transfer="true">
+              <Button v-can="'edit'" type="primary" size="small" shape="circle" icon="md-create" @click="handleEdit(row)"></Button>
+            </Tooltip>
+            <Tooltip placement="top" content="分配角色" :delay="1000" :transfer="true">
+              <Button type="success" size="small" shape="circle" icon="md-contacts" @click="handleAssignRole(row)"></Button>
+            </Tooltip>
+        </template>
+        </Table>
+      </dz-table>
     </Card>
     <Drawer
       :title="formTitle"
@@ -200,7 +226,7 @@
 </template>
 
 <script>
-import Tables from "_c/tables";
+import DzTable from "_c/tables/dz-table.vue";
 import {
   getUserList,
   createUser,
@@ -214,7 +240,7 @@ import { loadRoleListByUserGuid } from "@/api/rbac/role";
 export default {
   name: "rbac_user_page",
   components: {
-    Tables
+    DzTable
   },
   data() {
     return {
@@ -300,218 +326,13 @@ export default {
           },
           columns: [
             { type: "selection", width: 50, key: "handle" },
-            { title: "登录名", key: "loginName", width: 250, sortable: "custom" },
-            { title: "显示名", key: "displayName", width: 250, sortable: "custom" },
-            {
-              title: "用户类型",
-              key: "userType",
-              render: (h, params) => {
-                var userTypeText = "未知";
-                switch (params.row.userType) {
-                  case 0:
-                    userTypeText = "超级管理员";
-                    break;
-                  case 1:
-                    userTypeText = "管理员";
-                    break;
-                  case 2:
-                    userTypeText = "普通用户";
-                    break;
-                }
-                return h("p", userTypeText);
-              }
-            },
-            {
-              title: "状态",
-              key: "status",
-              align: "center",
-              width: 120,
-              render: (h, params) => {
-                let status = params.row.status;
-                let statusColor = "success";
-                let statusText = "正常";
-                switch (status) {
-                  case 0:
-                    statusText = "禁用";
-                    statusColor = "default";
-                    break;
-                }
-                return h(
-                  "Tooltip",
-                  {
-                    props: {
-                      placement: "top",
-                      transfer: true,
-                      delay: 500
-                    }
-                  },
-                  [
-                    //这个中括号表示是Tooltip标签的子标签
-                    h(
-                      "Tag",
-                      {
-                        props: {
-                          //type: "dot",
-                          color: statusColor
-                        }
-                      },
-                      statusText
-                    ), //表格列显示文字
-                    h(
-                      "p",
-                      {
-                        slot: "content",
-                        style: {
-                          whiteSpace: "normal"
-                        }
-                      },
-                      statusText //整个的信息即气泡内文字
-                    )
-                  ]
-                );
-              }
-            },
-            {
-              title: "创建时间",
-              width: 120,
-              ellipsis: true,
-              tooltip: true,
-              key: "createdOn"
-            },
+            { title: "登录名", key: "loginName", width: 250, sortable: true },
+            { title: "显示名", key: "displayName", width: 250 },
+            { title: "用户类型", key: "userType",slot:"userType" },
+            { title: "状态", key: "status", align: "center", width: 120,slot:"status" },
+            { title: "创建时间", width: 120, ellipsis: true, tooltip: true, key: "createdOn" },
             { title: "创建者", key: "createdByUserName" },
-            {
-              title: "操作",
-              align: "center",
-              key: "handle",
-              width: 150,
-              className: "table-command-column",
-              options: ["edit"],
-              button: [
-                (h, params, vm) => {
-                  return h(
-                    "Poptip",
-                    {
-                      props: {
-                        confirm: true,
-                        title: "你确定要删除吗?"
-                      },
-                      on: {
-                        "on-ok": () => {
-                          vm.$emit("on-delete", params);
-                        }
-                      }
-                    },
-                    [
-                      h(
-                        "Tooltip",
-                        {
-                          props: {
-                            placement: "left",
-                            transfer: true,
-                            delay: 1000
-                          }
-                        },
-                        [
-                          h("Button", {
-                            props: {
-                              shape: "circle",
-                              size: "small",
-                              icon: "md-trash",
-                              type: "error"
-                            }
-                          }),
-                          h(
-                            "p",
-                            {
-                              slot: "content",
-                              style: {
-                                whiteSpace: "normal"
-                              }
-                            },
-                            "删除"
-                          )
-                        ]
-                      )
-                    ]
-                  );
-                },
-                (h, params, vm) => {
-                  return h(
-                    "Tooltip",
-                    {
-                      props: {
-                        placement: "left",
-                        transfer: true,
-                        delay: 1000
-                      }
-                    },
-                    [
-                      h("Button", {
-                        props: {
-                          shape: "circle",
-                          size: "small",
-                          icon: "md-create",
-                          type: "primary"
-                        },
-                        on: {
-                          click: () => {
-                            vm.$emit("on-edit", params);
-                            //vm.$emit("input", params.tableData);
-                          }
-                        }
-                      }),
-                      h(
-                        "p",
-                        {
-                          slot: "content",
-                          style: {
-                            whiteSpace: "normal"
-                          }
-                        },
-                        "编辑"
-                      )
-                    ]
-                  );
-                },
-                (h, params, vm) => {
-                  return h(
-                    "Tooltip",
-                    {
-                      props: {
-                        placement: "left",
-                        transfer: true,
-                        delay: 1000
-                      }
-                    },
-                    [
-                      h("Button", {
-                        props: {
-                          shape: "circle",
-                          size: "small",
-                          icon: "md-contacts",
-                          type: "success"
-                        },
-                        on: {
-                          click: () => {
-                            vm.$emit("on-assign", params);
-                          }
-                        }
-                      }),
-                      h(
-                        "p",
-                        {
-                          slot: "content",
-                          style: {
-                            whiteSpace: "normal"
-                          }
-                        },
-                        "分配角色"
-                      )
-                    ]
-                  );
-                }
-              ]
-            }
+            { title: "操作", align: "center", width: 150, className: "table-command-column",slot:"action" }
           ],
           data: []
         }
@@ -561,10 +382,10 @@ export default {
       this.formModel.mode = "edit";
       this.handleOpenFormWindow();
     },
-    handleEdit(params) {
+    handleEdit(row) {
       this.handleSwitchFormModeToEdit();
       this.handleResetFormUser();
-      this.doLoadUser(params.row.guid);
+      this.doLoadUser(row.guid);
     },
     handleSelect(selection, row) {},
     handleSelectionChange(selection) {
@@ -630,8 +451,8 @@ export default {
         this.formModel.fields = res.data.data;
       });
     },
-    handleDelete(params) {
-      this.doDelete(params.row.guid);
+    handleDelete(row) {
+      this.doDelete(row.guid);
     },
     doDelete(ids) {
       if (!ids) {
@@ -689,6 +510,11 @@ export default {
       }
       return "";
     },
+    handleSortChange(column) {
+      this.stores.user.query.sort.direction = column.order;
+      this.stores.user.query.sort.field = column.key;
+      this.loadPostList();
+    },
     handlePageChanged(page) {
       this.stores.user.query.currentPage = page;
       this.loadUserList();
@@ -712,10 +538,10 @@ export default {
         this.formAssignRole.ownedRoles = result.assignedRoles;
       });
     },
-    handleAssignRole(params) {
+    handleAssignRole(row) {
       this.formAssignRole.opened = true;
-      this.formAssignRole.userGuid = params.row.guid;
-      this.loadUserRoleList(params.row.guid);
+      this.formAssignRole.userGuid = row.guid;
+      this.loadUserRoleList(row.guid);
     },
     handleSaveUserRoles() {
       var data = {
@@ -731,10 +557,33 @@ export default {
         }
       });
     },
-    handleSortChange(sort) {
-      this.stores.user.query.sort[0]["direct"] = sort.order;
-      this.stores.user.query.sort[0]["field"] = sort.key;
-      this.loadUserList();
+    renderUserType(userType){
+      var userTypeText = "未知";
+      switch (userType) {
+        case 0:
+          userTypeText = "超级管理员";
+          break;
+        case 1:
+          userTypeText = "管理员";
+          break;
+        case 2:
+          userTypeText = "普通用户";
+          break;
+      }
+      return userTypeText;
+    },
+    renderStatus(status){
+      let _status = {
+        color:"success",
+        text:"正常"
+      };
+      switch(status){
+        case 0:
+        _status.text = "禁用";
+        _status.color = "error";
+        break;
+      }
+      return _status;
     }
   },
   mounted() {

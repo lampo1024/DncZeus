@@ -1,14 +1,14 @@
-﻿/******************************************
+/******************************************
  * AUTHOR:          Rector
  * CREATEDON:       2018-09-26
- * OFFICAL_SITE:    码友网(https://codedefault.com)--专注.NET/.NET Core
+ * OFFICIAL_SITE:    码友网(https://codedefault.com)--专注.NET/.NET Core
  * 版权所有，请勿删除
  ******************************************/
 
 using DncZeus.Api.Entities;
 using DncZeus.Api.Extensions;
 using DncZeus.Api.Extensions.AuthContext;
-using DncZeus.Api.Extensions.DataAccess;
+using DncZeus.Api.ViewModels.Rbac.DncMenu;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -56,32 +56,16 @@ namespace DncZeus.Api.Controllers
 LEFT JOIN DncPermission AS P ON P.Code = RPM.PermissionCode
 INNER JOIN DncMenu AS M ON M.Guid = P.MenuGuid
 WHERE P.IsDeleted=0 AND P.Status=1 AND EXISTS (SELECT 1 FROM DncUserRoleMapping AS URM WHERE URM.UserGuid={0} AND URM.RoleCode=RPM.RoleCode)";
-                if (user.UserType == UserType.SuperAdministator)
+                if (user.UserType == UserType.SuperAdministrator)
                 {
                     //如果是超级管理员
                     sqlPermission = @"SELECT P.Code AS PermissionCode,P.ActionCode AS PermissionActionCode,P.Name AS PermissionName,P.Type AS PermissionType,M.Name AS MenuName,M.Guid AS MenuGuid,M.Alias AS MenuAlias,M.IsDefaultRouter FROM DncPermission AS P 
 INNER JOIN DncMenu AS M ON M.Guid = P.MenuGuid
 WHERE P.IsDeleted=0 AND P.Status=1";
                 }
-                var permissions = _dbContext.DncPermissionWithMenu.FromSql(sqlPermission, user.Guid).ToList();
-                var allowPages = new List<string> {  };
-                
-                if (user.UserType == UserType.SuperAdministator)
-                {
-                    allowPages.AddRange(menus.Select(x => x.Alias));
-                }
-                else
-                {
-                    allowPages.AddRange(menus.Where(x => x.IsDefaultRouter == YesOrNo.Yes).Select(x => x.Alias));
-                    foreach (var permission in permissions.Where(x => x.PermissionType == PermissionType.Menu))
-                    {
-                        allowPages.AddRange(FindParentMenuAlias(menus, permission.MenuGuid));
-                    }
-                }
-                
-                //var allowPages = FindParentMenuAlias(menus);
-                var pages = allowPages.Distinct().ToList();
-                var pagePermissions = permissions.GroupBy(x => x.MenuAlias).ToDictionary(g=>g.Key,g=>g.Select(x=>x.PermissionActionCode));
+                var permissions = _dbContext.DncPermissionWithMenu.FromSqlRaw(sqlPermission, user.Guid).ToList();
+
+                var pagePermissions = permissions.GroupBy(x => x.MenuAlias).ToDictionary(g => g.Key, g => g.Select(x => x.PermissionActionCode).Distinct());
                 response.SetData(new
                 {
                     access = new string[] { },
@@ -89,7 +73,6 @@ WHERE P.IsDeleted=0 AND P.Status=1";
                     user_guid = user.Guid,
                     user_name = user.DisplayName,
                     user_type = user.UserType,
-                    pages, // =new[] { "rbac", "rbac_user_page", "rbac_menu_page", "rbac_role_page", "rbac_permission_page", "rbac_role_permission_page" },
                     permissions = pagePermissions
 
                 });
@@ -119,6 +102,103 @@ WHERE P.IsDeleted=0 AND P.Status=1";
             }
 
             return pages.Distinct().ToList();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public IActionResult Menu()
+        {
+            var strSql = @"SELECT M.* FROM DncRolePermissionMapping AS RPM 
+LEFT JOIN DncPermission AS P ON P.Code = RPM.PermissionCode
+INNER JOIN DncMenu AS M ON M.Guid = P.MenuGuid
+WHERE P.IsDeleted=0 AND P.Status=1 AND P.Type=0 AND M.IsDeleted=0 AND M.Status=1 AND EXISTS (SELECT 1 FROM DncUserRoleMapping AS URM WHERE URM.UserGuid={0} AND URM.RoleCode=RPM.RoleCode)";
+
+            if (AuthContextService.CurrentUser.UserType == UserType.SuperAdministrator)
+            {
+                //如果是超级管理员
+                strSql = @"SELECT * FROM DncMenu WHERE IsDeleted=0 AND Status=1";
+            }
+            var menus = _dbContext.DncMenu.FromSqlRaw(strSql, AuthContextService.CurrentUser.Guid).ToList();
+            var rootMenus = _dbContext.DncMenu.Where(x => x.IsDeleted == IsDeleted.No && x.Status == Status.Normal && x.ParentGuid == Guid.Empty).ToList();
+            foreach (var root in rootMenus)
+            {
+                if (menus.Exists(x => x.Guid == root.Guid))
+                {
+                    continue;
+                }
+                menus.Add(root);
+            }
+            menus = menus.OrderBy(x => x.Sort).ThenBy(x=>x.CreatedOn).ToList();
+            var menu = MenuItemHelper.LoadMenuTree(menus, "0");
+            return Ok(menu);
+        }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public static class MenuItemHelper
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="menus"></param>
+        /// <param name="selectedGuid"></param>
+        /// <returns></returns>
+        public static List<MenuItem> BuildTree(this List<MenuItem> menus, string selectedGuid = null)
+        {
+            var lookup = menus.ToLookup(x => x.ParentId);
+
+            List<MenuItem> Build(string pid)
+            {
+                return lookup[pid]
+                    .Select(x => new MenuItem()
+                    {
+                        Guid = x.Guid,
+                        ParentId = x.ParentId,
+                        Children = Build(x.Guid),
+                        Component = x.Component ?? "Main",
+                        Name = x.Name,
+                        Path = x.Path,
+                        Meta = new MenuMeta
+                        {
+                            BeforeCloseFun = x.Meta.BeforeCloseFun,
+                            HideInMenu = x.Meta.HideInMenu,
+                            Icon = x.Meta.Icon,
+                            NotCache = x.Meta.NotCache,
+                            Title = x.Meta.Title,
+                            Permission = x.Meta.Permission
+                        }
+                    }).ToList();
+            }
+
+            var result = Build(selectedGuid);
+            return result;
+        }
+
+        public static List<MenuItem> LoadMenuTree(List<DncMenu> menus, string selectedGuid = null)
+        {
+            var temp = menus.Select(x => new MenuItem
+            {
+                Guid = x.Guid.ToString(),
+                ParentId = x.ParentGuid != null && ((Guid)x.ParentGuid) == Guid.Empty ? "0" : x.ParentGuid?.ToString(),
+                Name = x.Alias,
+                Path = $"/{x.Url}",
+                Component = x.Component,
+                Meta = new MenuMeta
+                {
+                    BeforeCloseFun = x.BeforeCloseFun ?? "",
+                    HideInMenu = x.HideInMenu == YesOrNo.Yes,
+                    Icon = x.Icon,
+                    NotCache = x.NotCache == YesOrNo.Yes,
+                    Title = x.Name
+                }
+            }).ToList();
+            var tree = temp.BuildTree(selectedGuid);
+            return tree;
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿/******************************************
  * AUTHOR:          Rector
  * CREATEDON:       2018-09-26
- * OFFICAL_SITE:    码友网(https://codedefault.com)--专注.NET/.NET Core
+ * OFFICIAL_SITE:    码友网(https://codedefault.com)--专注.NET/.NET Core
  * 版权所有，请勿删除
  ******************************************/
 
@@ -22,6 +22,7 @@ using System.Linq;
 using DncZeus.Api.ViewModels.Rbac.DncPermission;
 using static DncZeus.Api.Entities.Enums.CommonEnum;
 using DncZeus.Api.Extensions.CustomException;
+using Microsoft.Data.SqlClient;
 
 namespace DncZeus.Api.Controllers.Api.V1.Rbac
 {
@@ -105,7 +106,7 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
             }
             using (_dbContext)
             {
-                if (_dbContext.DncPermission.Count(x => x.ActionCode == model.ActionCode && x.MenuGuid==model.MenuGuid) > 0)
+                if (_dbContext.DncPermission.Count(x => x.ActionCode == model.ActionCode && x.MenuGuid == model.MenuGuid) > 0)
                 {
                     response.SetFailed("权限操作码已存在");
                     return Ok(response);
@@ -294,7 +295,7 @@ WHERE P.IsDeleted=0 AND P.Status=1";
                     sql = @"SELECT P.Code,P.MenuGuid,P.Name,P.ActionCode,'SUPERADM' AS RoleCode,(CASE WHEN P.Code IS NOT NULL THEN 1 ELSE 0 END) AS IsAssigned FROM DncPermission AS P 
 WHERE P.IsDeleted=0 AND P.Status=1";
                 }
-                var permissionList = _dbContext.DncPermissionWithAssignProperty.FromSql(sql, code).ToList();
+                var permissionList = _dbContext.DncPermissionWithAssignProperty.FromSqlRaw(sql, code).ToList();
                 var tree = menu.FillRecursive(permissionList, Guid.Empty, role.IsSuperAdministrator);
                 response.SetData(new { tree, selectedPermissions = permissionList.Where(x => x.IsAssigned == 1).Select(x => x.Code) });
             }

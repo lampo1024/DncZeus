@@ -1,7 +1,7 @@
 ﻿/******************************************
  * AUTHOR:          Rector
  * CREATEDON:       2018-09-26
- * OFFICAL_SITE:    码友网(https://codedefault.com)--专注.NET/.NET Core
+ * OFFICIAL_SITE:    码友网(https://codedefault.com)--专注.NET/.NET Core
  * 版权所有，请勿删除
  ******************************************/
 
@@ -15,25 +15,35 @@ namespace DncZeus.Api
     /// </summary>
     public class Program
     {
-        /// <summary>
-        /// 应用程序启动入口方法(Main)
-        /// </summary>
-        /// <param name="args"></param>
+        ///// <summary>
+        ///// 应用程序启动入口方法(Main)
+        ///// </summary>
+        ///// <param name="args"></param>
+        //public static void Main(string[] args)
+        //{
+        //    //CreateWebHostBuilder(args).Build().Run();
+        //    var host = CreateWebHostBuilder(args).Build();
+        //    host.Run();
+        //}
+
+        ///// <summary>
+        ///// 
+        ///// </summary>
+        ///// <param name="args"></param>
+        ///// <returns></returns>
+        //public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
+        //    WebHost.CreateDefaultBuilder(args)
+        //        .UseKestrel(c => c.AddServerHeader = false)
+        //        .UseStartup<Startup>();
+
         public static void Main(string[] args)
         {
-            //CreateWebHostBuilder(args).Build().Run();
-            var host = CreateWebHostBuilder(args).Build();
-            host.Run();
+            CreateWebHostBuilder(args).Build().Run();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="args"></param>
-        /// <returns></returns>
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseKestrel(c => c.AddServerHeader = false)
+                //.UseKestrel(c => c.AddServerHeader = false)
                 .UseStartup<Startup>();
     }
 }

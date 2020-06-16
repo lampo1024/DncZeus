@@ -1,3 +1,4 @@
+![DncZeus用户授权数据流图](https://statics.codedefault.com/uploads/u/2019/05/56f6756js4.png)
 # DncZeus
 
 ## 前言
@@ -14,7 +15,7 @@
 
 ## 项目简介
 
-**DncZeus**是一个基于 ASP.NET Core 2 + Vue.js 的前后端分离的通用后台管理系统框架。后端使用.NET Core 2 + Entity Framework Core 构建，UI 则是目前流行的基于 Vue.js 的 iView。项目实现了前后端的动态权限管理和控制以及基于 JWT 的用户令牌认证机制，让前后端的交互更流畅。
+**DncZeus**是一个基于 ASP.NET Core 3 + Vue.js 的前后端分离的通用后台管理系统框架。后端使用.NET Core 3 + Entity Framework Core 构建，UI 则是目前流行的基于 Vue.js 的 iView。项目实现了前后端的动态权限管理和控制以及基于 JWT 的用户令牌认证机制，让前后端的交互更流畅。
 
 **DncZeus**并不是一个完整的业务系统，但她提供完成业务系统的绝大多数开发场景，让每一位.NET 开发者都能基于**DncZeus**快速开发出交互、体验以及功能具佳的.NET Core 单页应用程序(SPA)。
 
@@ -24,12 +25,13 @@
 
 ## 文档(Document)
 
-* [github](https://github.com/lampo1024/DncZeus/tree/master/Docs)
 * [关于 DncZeus](https://codedefault.com/p/getting-started)
 * [开发环境和工具](https://codedefault.com/p/environment-and-developement-tools)
 * [下载项目&安装依赖](https://codedefault.com/p/download-and-restore-dnczeus)
 * [DncZeus项目结构解析](https://codedefault.com/p/solution-structure-introduction)
 * [新建你的页面](https://codedefault.com/p/create-page)
+* [DncZeus框架用户动态权限数据流，鉴权、令牌、验证详解](https://codedefault.com/p/dnczeus-doc-support-dynamic-router-and-dynamic-menu-rendering)
+* [DncZeus前后端分离项目打包/发布/部署及注意事项](https://codedefault.com/p/dnczeus-build-and-deploy)
 
 ## 在线体验(Demo)
 
@@ -64,14 +66,14 @@ ASP.NET Core 的知识能确保你可以看懂和了解后端是如何实现和�
 ## 环境和工具
 
 1. Node.js(同时安装 npm 前端包管理工具)
-2. Visual Studio 2017(15.8.8 或者以上版本)
+2. Visual Studio 2019
 3. VS Code 或者其他前端开发工具
 4. git 管理工具
 5. SQL Server CE 或者 SQL Server Express 或者 SQL Server 2014 +
 
 ## 技术实现
 
-- ASP.NET Core 2(.NET Core 2.1.502)
+- ASP.NET Core 3
 - ASP.NET WebApi Core
 - JWT 令牌认证
 - AutoMapper
@@ -169,14 +171,31 @@ DncZeus项目是一个开源项目，你可以直接基于本项目进行扩展�
 
 **但请保留原文件中的版权信息，尊重本人的劳动成果，违者必究，谢谢合作**。
 
-## 捐赠作者
+## 捐赠作者(Rector)
 
-如果你觉得**DncZeus**是你喜欢的类型，或者能帮你找到一些开发的灵感，请你捐赠我一杯啤酒，谢谢你的支持！！！
+如果你觉得**DncZeus**是你喜欢的类型，或者能帮你找到一些开发的灵感，请捐赠我(Rector)以维护DncZeus的体验服务器，谢谢支持！！！
 
 <p style="text-align:center;">
 <img width="200" src="https://statics.codedefault.com/img/codedefault/public/pay/alipay.png" alt="支付宝支付" />
 <img width="200" src="https://statics.codedefault.com/img/codedefault/public/pay/wechatpay.png" alt="微信支付" />
 </p>
+
+### 感谢热心，友爱的捐赠者
+
+名称 | 金额(元) | 方式
+-- | -- | --
+\*\*\*\*) | 20.00 | 微信
+\*\*\*\*宇 | 8.00 | 微信
+\*\*\*\*宇 | 50.00 | 微信
+\*\*\*\*佑 | 6.00 | 微信
+\*\*\*\*沫 | 20.00 | 微信
+\*\*\*\*离 | 8.00 | 微信
+\*\*\*\*害 | 50.00 | 微信
+\*\*\*\*头 | 10.00 | 微信
+\*\*\*\*) | 5.00 | 微信
+\*\*\*\*龙 | 21.00 | 微信
+北京:Net:柠檬 | 5.00 | 微信
+
 
 ## 问题与反馈
 
@@ -185,6 +204,21 @@ DncZeus项目是一个开源项目，你可以直接基于本项目进行扩展�
 * 直接提交issue
 * QQ群：483350228
 * [码友网][8]
+
+## 版本变更日志
+
+### v2.0.0
+
+* 支持动态路由和动态菜单渲染
+* 优化登录逻辑
+* 添加退出系统确认，优化退出逻辑
+* 优化路由导航守护
+* 优化页面刷新的数据加载逻辑
+
+### v1.0.0
+
+* 支持基本的用户&权限管理
+* 前端静态路由
 
 
 [1]: https://github.com/iview/iview-admin

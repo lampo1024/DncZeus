@@ -122,7 +122,8 @@ export default {
       ];
     },
     menuList() {
-      return this.$store.getters.menuList;
+      let menus = this.$store.getters.menuList;
+      return menus;
     },
     local() {
       return this.$store.state.app.local;

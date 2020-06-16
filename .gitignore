@@ -261,3 +261,6 @@ __pycache__/
 *.pyc
 /DncZeus.Api/DncZeus.Api.xml
 *.pubxml
+
+# logs
+**/logs/

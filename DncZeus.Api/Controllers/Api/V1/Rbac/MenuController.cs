@@ -1,7 +1,7 @@
-﻿/******************************************
+/******************************************
  * AUTHOR:          Rector
  * CREATEDON:       2018-09-26
- * OFFICAL_SITE:    码友网(https://codedefault.com)--专注.NET/.NET Core
+ * OFFICIAL_SITE:    码友网(https://codedefault.com)--专注.NET/.NET Core
  * 版权所有，请勿删除
  ******************************************/
 
@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using Microsoft.Data.SqlClient;
 
 namespace DncZeus.Api.Controllers.Api.V1.Rbac
 {
@@ -96,6 +97,8 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
                 entity.Guid = Guid.NewGuid();
                 entity.CreatedByUserGuid = AuthContextService.CurrentUser.Guid;
                 entity.CreatedByUserName = AuthContextService.CurrentUser.DisplayName;
+                entity.IsDeleted = CommonEnum.IsDeleted.No;
+                entity.Icon = string.IsNullOrEmpty(entity.Icon) ? "md-menu" : entity.Icon;
                 _dbContext.DncMenu.Add(entity);
                 _dbContext.SaveChanges();
                 var response = ResponseModelFactory.CreateInstance;
@@ -145,7 +148,7 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
             {
                 var entity = _dbContext.DncMenu.FirstOrDefault(x => x.Guid == model.Guid);
                 entity.Name = model.Name;
-                entity.Icon = model.Icon;
+                entity.Icon = string.IsNullOrEmpty(model.Icon) ? "md-menu" : model.Icon;
                 entity.Level = 1;
                 entity.ParentGuid = model.ParentGuid;
                 entity.Sort = model.Sort;
@@ -155,7 +158,10 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
                 entity.ModifiedOn = DateTime.Now;
                 entity.Description = model.Description;
                 entity.ParentName = model.ParentName;
-
+                entity.Component = model.Component;
+                entity.HideInMenu = model.HideInMenu;
+                entity.NotCache = model.NotCache;
+                entity.BeforeCloseFun = model.BeforeCloseFun;
                 if (!ConfigurationManager.AppSettings.IsTrialVersion)
                 {
                     entity.Alias = model.Alias;

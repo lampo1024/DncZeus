@@ -1,7 +1,7 @@
 ﻿/******************************************
  * AUTHOR:          Rector
  * CREATEDON:       2018-09-26
- * OFFICAL_SITE:    码友网(https://codedefault.com)--专注.NET/.NET Core
+ * OFFICIAL_SITE:    码友网(https://codedefault.com)--专注.NET/.NET Core
  * DESCRIPTION:     菜单信息实体类
  ******************************************/
 using System;
@@ -90,5 +90,21 @@ namespace DncZeus.Api.ViewModels.Rbac.DncMenu
         /// 最近修改者姓名
         /// </summary>
         public string ModifiedByUserName { get; set; }
+        /// <summary>
+        /// 前端组件(.vue)
+        /// </summary>
+        public string Component { get; set; }
+        /// <summary>
+        /// 在菜单中隐藏
+        /// </summary>
+        public YesOrNo HideInMenu { get; set; }
+        /// <summary>
+        /// 不缓存页面
+        /// </summary>
+        public YesOrNo NotCache { get; set; }
+        /// <summary>
+        /// 页面关闭前的回调函数
+        /// </summary>
+        public string BeforeCloseFun { get; set; }
     }
 }

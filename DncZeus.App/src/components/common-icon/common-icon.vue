@@ -10,14 +10,23 @@ export default {
   props: {
     type: {
       type: String,
-      required: true
+      required: true,
+       default () {
+        return "Icon"
+      }
     },
     color: String,
     size: Number
   },
   computed: {
     iconType () {
-      return this.type.indexOf('_') === 0 ? 'Icons' : 'Icon'
+      if(this.type)
+      {
+        return this.type.indexOf('_') === 0 ? 'Icons' : 'Icon'
+      }
+      else{
+        return "Icon"
+      }
     },
     iconName () {
       return this.iconType === 'Icons' ? this.getCustomIconName(this.type) : this.type

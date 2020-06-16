@@ -14,6 +14,12 @@
         </span>
       </Input>
     </FormItem>
+    <FormItem label="测试账户">
+      <RadioGroup v-model="form.userType" type="button" @on-change="handleUserTypeChange">
+        <Radio label="超级管理员"></Radio>
+        <Radio label="普通用户"></Radio>
+      </RadioGroup>
+    </FormItem>
     <FormItem>
       <Button
         :disabled="processing"
@@ -27,8 +33,6 @@
   </Form>
 </template>
 <script>
-const userName = process.env.NODE_ENV === "development" ? "admin" : "";
-const password = process.env.NODE_ENV === "development" ? "111111" : "";
 export default {
   name: "LoginForm",
   props: {
@@ -56,8 +60,9 @@ export default {
   data() {
     return {
       form: {
-        userName: userName,
-        password: password
+        userName: '',
+        password: '',
+        userType: 1
       }
     };
   },
@@ -82,6 +87,17 @@ export default {
           });
         }
       });
+    },
+    handleUserTypeChange(val){
+      switch(val){
+        case "超级管理员":
+          this.form.userName = "administrator";
+          break;
+        case "普通用户":
+        this.form.userName = "admin";
+        break;
+      }
+      this.form.password = "111111";
     }
   }
 };

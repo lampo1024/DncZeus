@@ -251,7 +251,7 @@ export default {
     },
     handleSearch() {
       this.insideTableData = this.value.filter(
-        item => item[this.searchKey].indexOf(this.searchValue) > -1
+         item => item[this.searchKey] ? (item[this.searchKey].indexOf(this.searchValue) > -1) : false
       );
     },
     handleTableData() {
