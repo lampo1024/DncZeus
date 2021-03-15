@@ -35,6 +35,7 @@ namespace DncZeus.Api.Configurations
             #region DncRole
             CreateMap<DncRole, RoleJsonModel>();
             CreateMap<RoleCreateViewModel, DncRole>();
+            CreateMap<DncRole, RoleCreateViewModel>();
             #endregion
 
             #region DncMenu
