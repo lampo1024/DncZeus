@@ -39,26 +39,28 @@
                         v-model="stores.role.query.isDeleted"
                         @on-change="handleSearchRole"
                         placeholder="删除状态"
-                        style="width:60px;"
+                        style="width: 60px"
                       >
                         <Option
                           v-for="item in stores.role.sources.isDeletedSources"
                           :value="item.value"
                           :key="item.value"
-                        >{{item.text}}</Option>
+                          >{{ item.text }}</Option
+                        >
                       </Select>
                       <Select
                         slot="prepend"
                         v-model="stores.role.query.status"
                         @on-change="handleSearchRole"
                         placeholder="角色状态"
-                        style="width:60px;"
+                        style="width: 60px"
                       >
                         <Option
                           v-for="item in stores.role.sources.statusSources"
                           :value="item.value"
                           :key="item.value"
-                        >{{item.text}}</Option>
+                          >{{ item.text }}</Option
+                        >
                       </Select>
                     </Input>
                   </FormItem>
@@ -90,14 +92,19 @@
                     title="启用"
                     @click="handleBatchCommand('normal')"
                   ></Button>
-                  <Button icon="md-refresh" title="刷新" @click="handleRefresh"></Button>
+                  <Button
+                    icon="md-refresh"
+                    title="刷新"
+                    @click="handleRefresh"
+                  ></Button>
                 </ButtonGroup>
                 <Button
                   icon="md-create"
                   type="primary"
                   @click="handleShowCreateWindow"
                   title="新增角色"
-                >新增角色</Button>
+                  >新增角色</Button
+                >
               </Col>
             </Row>
           </section>
@@ -112,12 +119,22 @@
       :mask="false"
       :styles="styles"
     >
-      <Form :model="formModel.fields" ref="formRole" :rules="formModel.rules" label-position="left">
+      <Form
+        :model="formModel.fields"
+        ref="formRole"
+        :rules="formModel.rules"
+        label-position="left"
+      >
         <FormItem label="角色名称" prop="name" label-position="left">
-          <Input v-model="formModel.fields.name" placeholder="请输入角色名称"/>
+          <Input v-model="formModel.fields.name" placeholder="请输入角色名称" />
         </FormItem>
         <FormItem label="角色状态" label-position="left">
-          <i-switch size="large" v-model="formModel.fields.status" :true-value="1" :false-value="0">
+          <i-switch
+            size="large"
+            v-model="formModel.fields.status"
+            :true-value="1"
+            :false-value="0"
+          >
             <span slot="open">正常</span>
             <span slot="close">禁用</span>
           </i-switch>
@@ -132,8 +149,18 @@
         </FormItem>
       </Form>
       <div class="demo-drawer-footer">
-        <Button icon="md-checkmark-circle" type="primary" @click="handleSubmitRole">保 存</Button>
-        <Button style="margin-left: 8px" icon="md-close" @click="formModel.opened = false">取 消</Button>
+        <Button
+          icon="md-checkmark-circle"
+          type="primary"
+          @click="handleSubmitRole"
+          >保 存</Button
+        >
+        <Button
+          style="margin-left: 8px"
+          icon="md-close"
+          @click="formModel.opened = false"
+          >取 消</Button
+        >
       </div>
     </Drawer>
   </div>
@@ -147,12 +174,12 @@ import {
   loadRole,
   editRole,
   deleteRole,
-  batchCommand
+  batchCommand,
 } from "@/api/rbac/role";
 export default {
   name: "rbac_role_page",
   components: {
-    Tables
+    Tables,
   },
   data() {
     return {
@@ -160,7 +187,7 @@ export default {
         delete: { name: "delete", title: "删除" },
         recover: { name: "recover", title: "恢复" },
         forbidden: { name: "forbidden", title: "禁用" },
-        normal: { name: "normal", title: "启用" }
+        normal: { name: "normal", title: "启用" },
       },
       formModel: {
         opened: false,
@@ -174,7 +201,7 @@ export default {
           isLocked: 0,
           status: 1,
           isDeleted: 0,
-          description: ""
+          description: "",
         },
         rules: {
           name: [
@@ -182,10 +209,10 @@ export default {
               type: "string",
               required: true,
               message: "请输入角色名称",
-              min: 2
-            }
-          ]
-        }
+              min: 2,
+            },
+          ],
+        },
       },
       stores: {
         role: {
@@ -199,25 +226,25 @@ export default {
             sort: [
               {
                 direct: "DESC",
-                field: "CreatedOn"
-              }
-            ]
+                field: "CreatedOn",
+              },
+            ],
           },
           sources: {
             isDeletedSources: [
               { value: -1, text: "全部" },
               { value: 0, text: "正常" },
-              { value: 1, text: "已删" }
+              { value: 1, text: "已删" },
             ],
             statusSources: [
               { value: -1, text: "全部" },
               { value: 0, text: "禁用" },
-              { value: 1, text: "正常" }
+              { value: 1, text: "正常" },
             ],
             statusFormSources: [
               { value: 0, text: "禁用" },
-              { value: 1, text: "正常" }
-            ]
+              { value: 1, text: "正常" },
+            ],
           },
           columns: [
             { type: "selection", width: 50, key: "handle" },
@@ -243,8 +270,8 @@ export default {
                     props: {
                       placement: "top",
                       transfer: true,
-                      delay: 500
-                    }
+                      delay: 500,
+                    },
                   },
                   [
                     //这个中括号表示是Tooltip标签的子标签
@@ -253,8 +280,8 @@ export default {
                       {
                         props: {
                           //type: "dot",
-                          color: statusColor
-                        }
+                          color: statusColor,
+                        },
                       },
                       statusText
                     ), //表格列显示文字
@@ -263,14 +290,14 @@ export default {
                       {
                         slot: "content",
                         style: {
-                          whiteSpace: "normal"
-                        }
+                          whiteSpace: "normal",
+                        },
                       },
                       statusText //整个的信息即气泡内文字
-                    )
+                    ),
                   ]
                 );
-              }
+              },
             },
             {
               title: "内置?",
@@ -293,8 +320,8 @@ export default {
                     props: {
                       placement: "top",
                       transfer: true,
-                      delay: 500
-                    }
+                      delay: 500,
+                    },
                   },
                   [
                     //这个中括号表示是Tooltip标签的子标签
@@ -303,8 +330,8 @@ export default {
                       {
                         props: {
                           //type: "dot",
-                          color: statusColor
-                        }
+                          color: statusColor,
+                        },
                       },
                       statusText
                     ), //表格列显示文字
@@ -313,14 +340,14 @@ export default {
                       {
                         slot: "content",
                         style: {
-                          whiteSpace: "normal"
-                        }
+                          whiteSpace: "normal",
+                        },
                       },
                       statusText //整个的信息即气泡内文字
-                    )
+                    ),
                   ]
                 );
-              }
+              },
             },
             {
               title: "超管?",
@@ -343,8 +370,8 @@ export default {
                     props: {
                       placement: "top",
                       transfer: true,
-                      delay: 500
-                    }
+                      delay: 500,
+                    },
                   },
                   [
                     //这个中括号表示是Tooltip标签的子标签
@@ -353,8 +380,8 @@ export default {
                       {
                         props: {
                           //type: "dot",
-                          color: statusColor
-                        }
+                          color: statusColor,
+                        },
                       },
                       statusText
                     ), //表格列显示文字
@@ -363,21 +390,21 @@ export default {
                       {
                         slot: "content",
                         style: {
-                          whiteSpace: "normal"
-                        }
+                          whiteSpace: "normal",
+                        },
                       },
                       statusText //整个的信息即气泡内文字
-                    )
+                    ),
                   ]
                 );
-              }
+              },
             },
             {
               title: "创建时间",
               width: 150,
               ellipsis: true,
               tooltip: true,
-              key: "createdOn"
+              key: "createdOn",
             },
             { title: "创建者", key: "createdByUserName" },
             {
@@ -394,13 +421,13 @@ export default {
                     {
                       props: {
                         confirm: true,
-                        title: "你确定要删除吗?"
+                        title: "你确定要删除吗?",
                       },
                       on: {
                         "on-ok": () => {
                           vm.$emit("on-delete", params);
-                        }
-                      }
+                        },
+                      },
                     },
                     [
                       h(
@@ -409,8 +436,8 @@ export default {
                           props: {
                             placement: "left",
                             transfer: true,
-                            delay: 1000
-                          }
+                            delay: 1000,
+                          },
                         },
                         [
                           h("Button", {
@@ -418,21 +445,21 @@ export default {
                               shape: "circle",
                               size: "small",
                               icon: "md-trash",
-                              type: "error"
-                            }
+                              type: "error",
+                            },
                           }),
                           h(
                             "p",
                             {
                               slot: "content",
                               style: {
-                                whiteSpace: "normal"
-                              }
+                                whiteSpace: "normal",
+                              },
                             },
                             "删除"
-                          )
+                          ),
                         ]
-                      )
+                      ),
                     ]
                   );
                 },
@@ -443,8 +470,8 @@ export default {
                       props: {
                         placement: "left",
                         transfer: true,
-                        delay: 1000
-                      }
+                        delay: 1000,
+                      },
                     },
                     [
                       h("Button", {
@@ -452,40 +479,40 @@ export default {
                           shape: "circle",
                           size: "small",
                           icon: "md-create",
-                          type: "primary"
+                          type: "primary",
                         },
                         on: {
                           click: () => {
                             vm.$emit("on-edit", params);
                             vm.$emit("input", params.tableData);
-                          }
-                        }
+                          },
+                        },
                       }),
                       h(
                         "p",
                         {
                           slot: "content",
                           style: {
-                            whiteSpace: "normal"
-                          }
+                            whiteSpace: "normal",
+                          },
                         },
                         "编辑"
-                      )
+                      ),
                     ]
                   );
-                }
-              ]
-            }
+                },
+              ],
+            },
           ],
-          data: []
-        }
+          data: [],
+        },
       },
       styles: {
         height: "calc(100% - 55px)",
         overflow: "auto",
         paddingBottom: "53px",
-        position: "static"
-      }
+        position: "static",
+      },
     };
   },
   computed: {
@@ -502,12 +529,12 @@ export default {
       return this.formModel.selection;
     },
     selectedRowsId() {
-      return this.formModel.selection.map(x => x.code);
-    }
+      return this.formModel.selection.map((x) => x.code);
+    },
   },
   methods: {
     loadRoleList() {
-      getRoleList(this.stores.role.query).then(res => {
+      getRoleList(this.stores.role.query).then((res) => {
         this.stores.role.data = res.data.data;
         this.stores.role.query.totalCount = res.data.totalCount;
       });
@@ -543,21 +570,24 @@ export default {
       this.handleResetFormRole();
     },
     handleSubmitRole() {
-      let valid = this.validateRoleForm();
-      if (valid) {
-        if (this.formModel.mode === "create") {
-          this.doCreateRole();
+      this.$refs["formRole"].validate((valid) => {
+        if (!valid) {
+          this.$Message.error("请完善表单信息");
+        } else {
+          if (this.formModel.mode === "create") {
+            this.doCreateRole();
+          }
+          if (this.formModel.mode === "edit") {
+            this.doEditRole();
+          }
         }
-        if (this.formModel.mode === "edit") {
-          this.doEditRole();
-        }
-      }
+      });
     },
     handleResetFormRole() {
       this.$refs["formRole"].resetFields();
     },
     doCreateRole() {
-      createRole(this.formModel.fields).then(res => {
+      createRole(this.formModel.fields).then((res) => {
         if (res.data.code === 200) {
           this.$Message.success(res.data.message);
           this.loadRoleList();
@@ -568,7 +598,7 @@ export default {
       });
     },
     doEditRole() {
-      editRole(this.formModel.fields).then(res => {
+      editRole(this.formModel.fields).then((res) => {
         if (res.data.code === 200) {
           this.$Message.success(res.data.message);
           this.loadRoleList();
@@ -579,19 +609,12 @@ export default {
       });
     },
     validateRoleForm() {
-      let _valid = false;
-      this.$refs["formRole"].validate(valid => {
-        if (!valid) {
-          this.$Message.error("请完善表单信息");
-          _valid = false;
-        } else {
-          _valid = true;
-        }
-      });
+      var _valid = false;
+
       return _valid;
     },
     doLoadRole(code) {
-      loadRole({ code: code }).then(res => {
+      loadRole({ code: code }).then((res) => {
         this.formModel.fields = res.data.data;
       });
     },
@@ -603,7 +626,7 @@ export default {
         this.$Message.warning("请选择至少一条数据");
         return;
       }
-      deleteRole(ids).then(res => {
+      deleteRole(ids).then((res) => {
         if (res.data.code === 200) {
           this.$Message.success(res.data.message);
           this.loadRoleList();
@@ -626,18 +649,18 @@ export default {
         loading: true,
         onOk: () => {
           this.doBatchCommand(command);
-        }
+        },
       });
     },
     doBatchCommand(command) {
       batchCommand({
         command: command,
-        ids: this.selectedRowsId.join(",")
-      }).then(res => {
+        ids: this.selectedRowsId.join(","),
+      }).then((res) => {
         if (res.data.code === 200) {
           this.$Message.success(res.data.message);
           this.loadRoleList();
-          this.formModel.selection=[];
+          this.formModel.selection = [];
         } else {
           this.$Message.warning(res.data.message);
         }
@@ -660,10 +683,10 @@ export default {
     handlePageSizeChanged(pageSize) {
       this.stores.role.query.pageSize = pageSize;
       this.loadRoleList();
-    }
+    },
   },
   mounted() {
     this.loadRoleList();
-  }
+  },
 };
 </script>
