@@ -16,10 +16,10 @@ using DncZeus.Api.RequestPayload.Rbac.Role;
 using DncZeus.Api.Utils;
 using DncZeus.Api.ViewModels.Rbac.DncRole;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
-using Microsoft.Data.SqlClient;
 
 namespace DncZeus.Api.Controllers.Api.V1.Rbac
 {
@@ -272,7 +272,7 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
                     return Ok(response);
                 }
                 //先删除当前角色原来已分配的权限
-                _dbContext.Database.ExecuteSqlCommand("DELETE FROM DncRolePermissionMapping WHERE RoleCode={0}", payload.RoleCode);
+                _dbContext.Database.ExecuteSqlRaw("DELETE FROM DncRolePermissionMapping WHERE RoleCode={0}", payload.RoleCode);
                 if (payload.Permissions != null || payload.Permissions.Count > 0)
                 {
                     var permissions = payload.Permissions.Select(x => new DncRolePermissionMapping
@@ -353,7 +353,7 @@ WHERE URM.UserGuid={0}";
                 var parameterNames = string.Join(", ", parameters.Select(p => p.ParameterName));
                 var sql = string.Format("UPDATE DncRole SET IsDeleted=@IsDeleted WHERE Code IN ({0})", parameterNames);
                 parameters.Add(new SqlParameter("@IsDeleted", (int)isDeleted));
-                _dbContext.Database.ExecuteSqlCommand(sql, parameters);
+                _dbContext.Database.ExecuteSqlRaw(sql, parameters);
                 var response = ResponseModelFactory.CreateInstance;
                 return response;
             }
@@ -373,7 +373,7 @@ WHERE URM.UserGuid={0}";
                 var parameterNames = string.Join(", ", parameters.Select(p => p.ParameterName));
                 var sql = string.Format("UPDATE DncRole SET Status=@Status WHERE Code IN ({0})", parameterNames);
                 parameters.Add(new SqlParameter("@Status", (int)status));
-                _dbContext.Database.ExecuteSqlCommand(sql, parameters);
+                _dbContext.Database.ExecuteSqlRaw(sql, parameters);
                 var response = ResponseModelFactory.CreateInstance;
                 return response;
             }

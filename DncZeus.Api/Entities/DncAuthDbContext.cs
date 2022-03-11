@@ -5,7 +5,6 @@
  * 版权所有，请勿删除
  ******************************************/
 
-using DncZeus.Api.Entities.QueryModels.DncPermission;
 using Microsoft.EntityFrameworkCore;
 
 namespace DncZeus.Api.Entities
@@ -54,14 +53,14 @@ namespace DncZeus.Api.Entities
         public DbSet<DncRolePermissionMapping> DncRolePermissionMapping { get; set; }
 
         #region DbQuery
-        /// <summary>
-        /// 
-        /// </summary>
-        public DbQuery<DncPermissionWithAssignProperty> DncPermissionWithAssignProperty { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        public DbQuery<DncPermissionWithMenu> DncPermissionWithMenu { get; set; }
+        ///// <summary>
+        ///// 
+        ///// </summary>
+        /////public DbQuery<DncPermissionWithAssignProperty> DncPermissionWithAssignProperty { get; set; }
+        ///// <summary>
+        ///// 
+        ///// </summary>
+        /////public DbQuery<DncPermissionWithMenu> DncPermissionWithMenu { get; set; }
         #endregion
 
         /// <summary>

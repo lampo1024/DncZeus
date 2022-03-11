@@ -8,6 +8,7 @@
 using DncZeus.Api.Entities;
 using DncZeus.Api.Extensions;
 using DncZeus.Api.Extensions.AuthContext;
+using DncZeus.Api.Extensions.DataAccess;
 using DncZeus.Api.ViewModels.Rbac.DncMenu;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -63,7 +64,7 @@ WHERE P.IsDeleted=0 AND P.Status=1 AND EXISTS (SELECT 1 FROM DncUserRoleMapping 
 INNER JOIN DncMenu AS M ON M.Guid = P.MenuGuid
 WHERE P.IsDeleted=0 AND P.Status=1";
                 }
-                var permissions = _dbContext.DncPermissionWithMenu.FromSqlRaw(sqlPermission, user.Guid).ToList();
+                var permissions = _dbContext.Database.FromSql<DncPermissionWithMenu>(sqlPermission, user.Guid).ToList();
 
                 var pagePermissions = permissions.GroupBy(x => x.MenuAlias).ToDictionary(g => g.Key, g => g.Select(x => x.PermissionActionCode).Distinct());
                 response.SetData(new
@@ -131,7 +132,7 @@ WHERE P.IsDeleted=0 AND P.Status=1 AND P.Type=0 AND M.IsDeleted=0 AND M.Status=1
                 }
                 menus.Add(root);
             }
-            menus = menus.OrderBy(x => x.Sort).ThenBy(x=>x.CreatedOn).ToList();
+            menus = menus.OrderBy(x => x.Sort).ThenBy(x => x.CreatedOn).ToList();
             var menu = MenuItemHelper.LoadMenuTree(menus, "0");
             return Ok(menu);
         }

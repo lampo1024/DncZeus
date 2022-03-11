@@ -10,19 +10,19 @@ using DncZeus.Api.Entities;
 using DncZeus.Api.Entities.QueryModels.DncPermission;
 using DncZeus.Api.Extensions;
 using DncZeus.Api.Extensions.AuthContext;
+using DncZeus.Api.Extensions.CustomException;
+using DncZeus.Api.Extensions.DataAccess;
 using DncZeus.Api.Models.Response;
 using DncZeus.Api.RequestPayload.Rbac.Permission;
 using DncZeus.Api.Utils;
+using DncZeus.Api.ViewModels.Rbac.DncPermission;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Linq;
-using DncZeus.Api.ViewModels.Rbac.DncPermission;
 using static DncZeus.Api.Entities.Enums.CommonEnum;
-using DncZeus.Api.Extensions.CustomException;
-using Microsoft.Data.SqlClient;
 
 namespace DncZeus.Api.Controllers.Api.V1.Rbac
 {
@@ -295,7 +295,7 @@ WHERE P.IsDeleted=0 AND P.Status=1";
                     sql = @"SELECT P.Code,P.MenuGuid,P.Name,P.ActionCode,'SUPERADM' AS RoleCode,(CASE WHEN P.Code IS NOT NULL THEN 1 ELSE 0 END) AS IsAssigned FROM DncPermission AS P 
 WHERE P.IsDeleted=0 AND P.Status=1";
                 }
-                var permissionList = _dbContext.DncPermissionWithAssignProperty.FromSqlRaw(sql, code).ToList();
+                var permissionList = _dbContext.Database.FromSql<DncPermissionWithAssignProperty>(sql, code).ToList();
                 var tree = menu.FillRecursive(permissionList, Guid.Empty, role.IsSuperAdministrator);
                 response.SetData(new { tree, selectedPermissions = permissionList.Where(x => x.IsAssigned == 1).Select(x => x.Code) });
             }
@@ -319,7 +319,7 @@ WHERE P.IsDeleted=0 AND P.Status=1";
                 var parameterNames = string.Join(", ", parameters.Select(p => p.ParameterName));
                 var sql = string.Format("UPDATE DncPermission SET IsDeleted=@IsDeleted WHERE Code IN ({0})", parameterNames);
                 parameters.Add(new SqlParameter("@IsDeleted", (int)isDeleted));
-                _dbContext.Database.ExecuteSqlCommand(sql, parameters);
+                _dbContext.Database.ExecuteSqlRaw(sql, parameters);
                 var response = ResponseModelFactory.CreateInstance;
                 return response;
             }
@@ -339,7 +339,7 @@ WHERE P.IsDeleted=0 AND P.Status=1";
                 var parameterNames = string.Join(", ", parameters.Select(p => p.ParameterName));
                 var sql = string.Format("UPDATE DncPermission SET Status=@Status WHERE Code IN ({0})", parameterNames);
                 parameters.Add(new SqlParameter("@Status", status));
-                _dbContext.Database.ExecuteSqlCommand(sql, parameters);
+                _dbContext.Database.ExecuteSqlRaw(sql, parameters);
                 var response = ResponseModelFactory.CreateInstance;
                 return response;
             }

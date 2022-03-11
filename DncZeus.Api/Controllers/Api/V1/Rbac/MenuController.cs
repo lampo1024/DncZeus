@@ -15,12 +15,11 @@ using DncZeus.Api.Models.Response;
 using DncZeus.Api.RequestPayload.Rbac.Menu;
 using DncZeus.Api.ViewModels.Rbac.DncMenu;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Linq;
-using Microsoft.Data.SqlClient;
 
 namespace DncZeus.Api.Controllers.Api.V1.Rbac
 {
@@ -276,7 +275,7 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
                 var parameterNames = string.Join(", ", parameters.Select(p => p.ParameterName));
                 var sql = string.Format("UPDATE DncMenu SET IsDeleted=@IsDeleted WHERE Guid IN ({0})", parameterNames);
                 parameters.Add(new SqlParameter("@IsDeleted", (int)isDeleted));
-                _dbContext.Database.ExecuteSqlCommand(sql, parameters);
+                _dbContext.Database.ExecuteSqlRaw(sql, parameters);
                 var response = ResponseModelFactory.CreateInstance;
                 return response;
             }
@@ -296,7 +295,7 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
                 var parameterNames = string.Join(", ", parameters.Select(p => p.ParameterName));
                 var sql = string.Format("UPDATE DncMenu SET Status=@Status WHERE Guid IN ({0})", parameterNames);
                 parameters.Add(new SqlParameter("@Status", (int)status));
-                _dbContext.Database.ExecuteSqlCommand(sql, parameters);
+                _dbContext.Database.ExecuteSqlRaw(sql, parameters);
                 var response = ResponseModelFactory.CreateInstance;
                 return response;
             }
