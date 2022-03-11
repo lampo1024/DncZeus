@@ -39,26 +39,28 @@
                         v-model="stores.icon.query.isDeleted"
                         @on-change="handleSearchIcon"
                         placeholder="删除状态"
-                        style="width:60px;"
+                        style="width: 60px"
                       >
                         <Option
                           v-for="item in stores.icon.sources.isDeletedSources"
                           :value="item.value"
                           :key="item.value"
-                        >{{item.text}}</Option>
+                          >{{ item.text }}</Option
+                        >
                       </Select>
                       <Select
                         slot="prepend"
                         v-model="stores.icon.query.status"
                         @on-change="handleSearchIcon"
                         placeholder="图标状态"
-                        style="width:60px;"
+                        style="width: 60px"
                       >
                         <Option
                           v-for="item in stores.icon.sources.statusSources"
                           :value="item.value"
                           :key="item.value"
-                        >{{item.text}}</Option>
+                          >{{ item.text }}</Option
+                        >
                       </Select>
                     </Input>
                   </FormItem>
@@ -90,14 +92,19 @@
                     title="启用"
                     @click="handleBatchCommand('normal')"
                   ></Button>
-                  <Button icon="md-refresh" title="刷新" @click="handleRefresh"></Button>
+                  <Button
+                    icon="md-refresh"
+                    title="刷新"
+                    @click="handleRefresh"
+                  ></Button>
                 </ButtonGroup>
                 <Button
                   icon="md-create"
                   type="primary"
                   @click="handleShowCreateWindow"
                   title="新增图标"
-                >新增图标</Button>
+                  >新增图标</Button
+                >
               </Col>
             </Row>
           </section>
@@ -114,10 +121,13 @@
     >
       <Form :model="formModel.fields" ref="formIcon" :rules="formModel.rules">
         <FormItem label="图标名称" prop="code" label-position="left">
-          <Input v-model="formModel.fields.code" placeholder="请输入图标名称"/>
+          <Input v-model="formModel.fields.code" placeholder="请输入图标名称" />
         </FormItem>
         <FormItem label="自定义图标" label-position="top">
-          <Input v-model="formModel.fields.custom" placeholder="请输入自定义图标"/>
+          <Input
+            v-model="formModel.fields.custom"
+            placeholder="请输入自定义图标"
+          />
         </FormItem>
         <Row :gutter="8">
           <Col span="12">
@@ -135,14 +145,20 @@
           </Col>
           <Col span="12">
             <FormItem label="图标大小" label-position="left">
-              <InputNumber v-model="formModel.fields.size" placeholder="图标大小"></InputNumber>
+              <InputNumber
+                v-model="formModel.fields.size"
+                placeholder="图标大小"
+              ></InputNumber>
             </FormItem>
           </Col>
         </Row>
         <Row :gutter="8">
           <Col span="12">
             <FormItem label="图标颜色" label-position="top">
-              <ColorPicker v-model="formModel.fields.color" placeholder="图标颜色"/>
+              <ColorPicker
+                v-model="formModel.fields.color"
+                placeholder="图标颜色"
+              />
             </FormItem>
           </Col>
         </Row>
@@ -156,13 +172,24 @@
         </FormItem>
       </Form>
       <div class="demo-drawer-footer">
-        <Button icon="md-checkmark-circle" type="primary" @click="handleSubmitIcon">保 存</Button>
-        <Button style="margin-left: 8px" icon="md-close" @click="formModel.opened = false">取 消</Button>
+        <Button
+          icon="md-checkmark-circle"
+          type="primary"
+          @click="handleSubmitIcon"
+          >保 存</Button
+        >
+        <Button
+          style="margin-left: 8px"
+          icon="md-close"
+          @click="formModel.opened = false"
+          >取 消</Button
+        >
         <Button
           style="margin-left: 8px"
           icon="md-arrow-up"
           @click="handleOpenBatchImportDrawer"
-        >批量导入</Button>
+          >批量导入</Button
+        >
       </div>
     </Drawer>
     <Drawer
@@ -182,12 +209,18 @@
         </FormItem>
       </Form>
       <div class="demo-drawer-footer">
-        <Button icon="md-checkmark-circle" type="primary" @click="handleBatchSubmitIcon">保 存</Button>
+        <Button
+          icon="md-checkmark-circle"
+          type="primary"
+          @click="handleBatchSubmitIcon"
+          >保 存</Button
+        >
         <Button
           style="margin-left: 8px"
           icon="md-close"
           @click="formModel.batchImport.opened = false"
-        >取 消</Button>
+          >取 消</Button
+        >
       </div>
     </Drawer>
   </div>
@@ -202,12 +235,12 @@ import {
   editIcon,
   deleteIcon,
   batchCommand,
-  batchImportIcon
+  batchImportIcon,
 } from "@/api/rbac/icon";
 export default {
   name: "rbac_icon_page",
   components: {
-    Tables
+    Tables,
   },
   data() {
     return {
@@ -215,7 +248,7 @@ export default {
         delete: { name: "delete", title: "删除" },
         recover: { name: "recover", title: "恢复" },
         forbidden: { name: "forbidden", title: "禁用" },
-        normal: { name: "normal", title: "启用" }
+        normal: { name: "normal", title: "启用" },
       },
       formModel: {
         opened: false,
@@ -231,7 +264,7 @@ export default {
           isLocked: 0,
           status: 1,
           isDeleted: 0,
-          description: ""
+          description: "",
         },
         rules: {
           code: [
@@ -239,14 +272,14 @@ export default {
               type: "string",
               required: true,
               message: "请输入图标名称",
-              min: 2
-            }
-          ]
+              min: 2,
+            },
+          ],
         },
         batchImport: {
           opened: false,
-          icons: ""
-        }
+          icons: "",
+        },
       },
       stores: {
         icon: {
@@ -260,25 +293,25 @@ export default {
             sort: [
               {
                 direct: "DESC",
-                field: "id"
-              }
-            ]
+                field: "id",
+              },
+            ],
           },
           sources: {
             isDeletedSources: [
               { value: -1, text: "全部" },
               { value: 0, text: "正常" },
-              { value: 1, text: "已删" }
+              { value: 1, text: "已删" },
             ],
             statusSources: [
               { value: -1, text: "全部" },
               { value: 0, text: "禁用" },
-              { value: 1, text: "正常" }
+              { value: 1, text: "正常" },
             ],
             statusFormSources: [
               { value: 0, text: "禁用" },
-              { value: 1, text: "正常" }
-            ]
+              { value: 1, text: "正常" },
+            ],
           },
           columns: [
             { type: "selection", width: 30, key: "handle" },
@@ -292,10 +325,10 @@ export default {
                   props: {
                     type: params.row.code,
                     size: 24,
-                    color: params.row.color
-                  }
+                    color: params.row.color,
+                  },
                 });
-              }
+              },
             },
             { title: "图标名称", key: "code", width: 250, sortable: true },
             { title: "自定义", key: "custom", width: 150 },
@@ -322,8 +355,8 @@ export default {
                     props: {
                       placement: "top",
                       transfer: true,
-                      delay: 500
-                    }
+                      delay: 500,
+                    },
                   },
                   [
                     //这个中括号表示是Tooltip标签的子标签
@@ -332,8 +365,8 @@ export default {
                       {
                         props: {
                           //type: "dot",
-                          color: statusColor
-                        }
+                          color: statusColor,
+                        },
                       },
                       statusText
                     ), //表格列显示文字
@@ -342,27 +375,27 @@ export default {
                       {
                         slot: "content",
                         style: {
-                          whiteSpace: "normal"
-                        }
+                          whiteSpace: "normal",
+                        },
                       },
                       statusText //整个的信息即气泡内文字
-                    )
+                    ),
                   ]
                 );
-              }
+              },
             },
             {
               title: "创建时间",
               width: 90,
               ellipsis: true,
               tooltip: true,
-              key: "createdOn"
+              key: "createdOn",
             },
             {
               title: "创建者",
               key: "createdByUserName",
               ellipsis: true,
-              tooltip: true
+              tooltip: true,
             },
             {
               title: "操作",
@@ -378,13 +411,13 @@ export default {
                     {
                       props: {
                         confirm: true,
-                        title: "你确定要删除吗?"
+                        title: "你确定要删除吗?",
                       },
                       on: {
                         "on-ok": () => {
                           vm.$emit("on-delete", params);
-                        }
-                      }
+                        },
+                      },
                     },
                     [
                       h(
@@ -393,8 +426,8 @@ export default {
                           props: {
                             placement: "left",
                             transfer: true,
-                            delay: 1000
-                          }
+                            delay: 1000,
+                          },
                         },
                         [
                           h("Button", {
@@ -402,21 +435,21 @@ export default {
                               shape: "circle",
                               size: "small",
                               icon: "md-trash",
-                              type: "error"
-                            }
+                              type: "error",
+                            },
                           }),
                           h(
                             "p",
                             {
                               slot: "content",
                               style: {
-                                whiteSpace: "normal"
-                              }
+                                whiteSpace: "normal",
+                              },
                             },
                             "删除"
-                          )
+                          ),
                         ]
-                      )
+                      ),
                     ]
                   );
                 },
@@ -427,8 +460,8 @@ export default {
                       props: {
                         placement: "left",
                         transfer: true,
-                        delay: 1000
-                      }
+                        delay: 1000,
+                      },
                     },
                     [
                       h("Button", {
@@ -436,40 +469,40 @@ export default {
                           shape: "circle",
                           size: "small",
                           icon: "md-create",
-                          type: "primary"
+                          type: "primary",
                         },
                         on: {
                           click: () => {
                             vm.$emit("on-edit", params);
                             vm.$emit("input", params.tableData);
-                          }
-                        }
+                          },
+                        },
                       }),
                       h(
                         "p",
                         {
                           slot: "content",
                           style: {
-                            whiteSpace: "normal"
-                          }
+                            whiteSpace: "normal",
+                          },
                         },
                         "编辑"
-                      )
+                      ),
                     ]
                   );
-                }
-              ]
-            }
+                },
+              ],
+            },
           ],
-          data: []
-        }
+          data: [],
+        },
       },
       styles: {
         height: "calc(100% - 55px)",
         overflow: "auto",
         paddingBottom: "53px",
-        position: "static"
-      }
+        position: "static",
+      },
     };
   },
   computed: {
@@ -486,12 +519,12 @@ export default {
       return this.formModel.selection;
     },
     selectedRowsId() {
-      return this.formModel.selection.map(x => x.id);
-    }
+      return this.formModel.selection.map((x) => x.id);
+    },
   },
   methods: {
     loadIconList() {
-      getIconList(this.stores.icon.query).then(res => {
+      getIconList(this.stores.icon.query).then((res) => {
         this.stores.icon.data = res.data.data;
         this.stores.icon.query.totalCount = res.data.totalCount;
       });
@@ -527,21 +560,25 @@ export default {
       this.handleResetFormIcon();
     },
     handleSubmitIcon() {
-      let valid = this.validateIconForm();
-      if (valid) {
-        if (this.formModel.mode === "create") {
-          this.doCreateIcon();
+      this.$refs["formIcon"].validate((valid) => {
+        if (!valid) {
+          this.$Message.error("请完善表单信息");
+          _valid = false;
+        } else {
+          if (this.formModel.mode === "create") {
+            this.doCreateIcon();
+          }
+          if (this.formModel.mode === "edit") {
+            this.doEditIcon();
+          }
         }
-        if (this.formModel.mode === "edit") {
-          this.doEditIcon();
-        }
-      }
+      });
     },
     handleResetFormIcon() {
       this.$refs["formIcon"].resetFields();
     },
     doCreateIcon() {
-      createIcon(this.formModel.fields).then(res => {
+      createIcon(this.formModel.fields).then((res) => {
         if (res.data.code === 200) {
           this.$Message.success(res.data.message);
           this.loadIconList();
@@ -552,7 +589,7 @@ export default {
       });
     },
     doEditIcon() {
-      editIcon(this.formModel.fields).then(res => {
+      editIcon(this.formModel.fields).then((res) => {
         if (res.data.code === 200) {
           this.$Message.success(res.data.message);
           this.loadIconList();
@@ -562,20 +599,8 @@ export default {
         }
       });
     },
-    validateIconForm() {
-      let _valid = false;
-      this.$refs["formIcon"].validate(valid => {
-        if (!valid) {
-          this.$Message.error("请完善表单信息");
-          _valid = false;
-        } else {
-          _valid = true;
-        }
-      });
-      return _valid;
-    },
     doLoadIcon(id) {
-      loadIcon({ id: id }).then(res => {
+      loadIcon({ id: id }).then((res) => {
         this.formModel.fields = res.data.data;
       });
     },
@@ -587,7 +612,7 @@ export default {
         this.$Message.warning("请选择至少一条数据");
         return;
       }
-      deleteIcon(ids).then(res => {
+      deleteIcon(ids).then((res) => {
         if (res.data.code === 200) {
           this.$Message.success(res.data.message);
           this.loadIconList();
@@ -610,20 +635,20 @@ export default {
         loading: true,
         onOk: () => {
           this.doBatchCommand(command);
-        }
+        },
       });
     },
     doBatchCommand(command) {
       batchCommand({
         command: command,
-        ids: this.selectedRowsId.join(",")
-      }).then(res => {
+        ids: this.selectedRowsId.join(","),
+      }).then((res) => {
         if (res.data.code === 200) {
           this.$Message.success(res.data.message);
           this.handleCloseFormWindow();
           this.formModel.batchImport.opened = false;
           this.loadIconList();
-          this.formModel.selection=[];
+          this.formModel.selection = [];
         } else {
           this.$Message.warning(res.data.message);
         }
@@ -644,7 +669,7 @@ export default {
     },
     handleBatchSubmitIcon() {
       var data = { icons: this.formModel.batchImport.icons };
-      batchImportIcon(data).then(res => {
+      batchImportIcon(data).then((res) => {
         if (res.data.code === 200) {
           this.$Message.success(res.data.message);
           this.handleCloseFormWindow();
@@ -662,10 +687,10 @@ export default {
     handlePageSizeChanged(pageSize) {
       this.stores.icon.query.pageSize = pageSize;
       this.loadIconList();
-    }
+    },
   },
   mounted() {
     this.loadIconList();
-  }
+  },
 };
 </script>

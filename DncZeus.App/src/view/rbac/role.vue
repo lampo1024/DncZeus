@@ -608,11 +608,6 @@ export default {
         this.handleCloseFormWindow();
       });
     },
-    validateRoleForm() {
-      var _valid = false;
-
-      return _valid;
-    },
     doLoadRole(code) {
       loadRole({ code: code }).then((res) => {
         this.formModel.fields = res.data.data;

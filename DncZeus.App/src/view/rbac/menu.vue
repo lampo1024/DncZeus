@@ -39,52 +39,60 @@
                         v-model="stores.menu.query.isDeleted"
                         @on-change="handleSearchMenu"
                         placeholder="删除状态"
-                        style="width:60px;"
+                        style="width: 60px"
                       >
                         <Option
                           v-for="item in stores.menu.sources.isDeletedSources"
                           :value="item.value"
                           :key="item.value"
-                        >{{item.text}}</Option>
+                          >{{ item.text }}</Option
+                        >
                       </Select>
                       <Select
                         slot="prepend"
                         v-model="stores.menu.query.status"
                         @on-change="handleSearchMenu"
                         placeholder="菜单状态"
-                        style="width:60px;"
+                        style="width: 60px"
                       >
                         <Option
                           v-for="item in stores.menu.sources.statusSources"
                           :value="item.value"
                           :key="item.value"
-                        >{{item.text}}</Option>
+                          >{{ item.text }}</Option
+                        >
                       </Select>
                       <Dropdown
                         slot="prepend"
                         trigger="click"
                         :transfer="true"
                         placement="bottom-start"
-                        style="min-width:80px;"
+                        style="min-width: 80px"
                         @on-visible-change="handleSearchMenuTreeVisibleChange"
                       >
                         <Button type="primary">
                           <span v-text="stores.menu.query.parentName"></span>
                           <Icon type="ios-arrow-down"></Icon>
                         </Button>
-                        <div class="text-left" slot="list" style="min-width:390px;">
+                        <div
+                          class="text-left"
+                          slot="list"
+                          style="min-width: 390px"
+                        >
                           <div>
                             <Button
                               type="primary"
                               icon="ios-search"
                               @click="handleRefreshSearchMenuTreeData"
-                            >刷新菜单</Button>
+                              >刷新菜单</Button
+                            >
                             <Button
                               class="ml3"
                               type="primary"
                               icon="md-close"
                               @click="handleClearSearchMenuTreeSelection"
-                            >清空</Button>
+                              >清空</Button
+                            >
                           </div>
                           <Tree
                             class="text-left dropdown-tree"
@@ -123,14 +131,19 @@
                     title="启用"
                     @click="handleBatchCommand('normal')"
                   ></Button>
-                  <Button icon="md-refresh" title="刷新" @click="handleRefresh"></Button>
+                  <Button
+                    icon="md-refresh"
+                    title="刷新"
+                    @click="handleRefresh"
+                  ></Button>
                 </ButtonGroup>
                 <Button
                   icon="md-create"
                   type="primary"
                   @click="handleShowCreateWindow"
                   title="新增菜单"
-                >新增菜单</Button>
+                  >新增菜单</Button
+                >
               </Col>
             </Row>
           </section>
@@ -145,18 +158,29 @@
       :mask="true"
       :styles="styles"
     >
-      <Form :model="formModel.fields" ref="formMenu" :rules="formModel.rules" label-position="left">
+      <Form
+        :model="formModel.fields"
+        ref="formMenu"
+        :rules="formModel.rules"
+        label-position="left"
+      >
         <FormItem label="菜单名称" prop="name" label-position="left">
-          <Input v-model="formModel.fields.name" placeholder="请输入菜单名称"/>
+          <Input v-model="formModel.fields.name" placeholder="请输入菜单名称" />
         </FormItem>
         <FormItem label="路由名称" prop="alias" label-position="left">
-          <Input v-model="formModel.fields.alias" placeholder="请输入路由名称"/>
+          <Input
+            v-model="formModel.fields.alias"
+            placeholder="请输入路由名称"
+          />
         </FormItem>
         <FormItem label="URL地址" prop="url" label-position="left">
-          <Input v-model="formModel.fields.url" placeholder="请输入URL地址"/>
+          <Input v-model="formModel.fields.url" placeholder="请输入URL地址" />
         </FormItem>
         <FormItem label="前端组件(.vue)" prop="url" label-position="left">
-          <Input v-model="formModel.fields.component" placeholder="前端组件(以.vue结尾,组件必须位于/views文件夹)"/>
+          <Input
+            v-model="formModel.fields.component"
+            placeholder="前端组件(以.vue结尾,组件必须位于/views文件夹)"
+          />
         </FormItem>
         <Row :gutter="8">
           <Col span="12">
@@ -174,33 +198,48 @@
                   :value="icon.code"
                   :key="index"
                 >
-                  <Icon :type="icon.code" :color="icon.color" :size="24"/>
-                  <span v-text="icon.code" style="margin-left:10px;"></span>
+                  <Icon :type="icon.code" :color="icon.color" :size="24" />
+                  <span v-text="icon.code" style="margin-left: 10px"></span>
                 </Option>
               </Select>
             </FormItem>
           </Col>
           <Col span="12">
             <FormItem>
-              <Icon :type="formModel.fields.icon" :size="32"/>
+              <Icon :type="formModel.fields.icon" :size="32" />
             </FormItem>
           </Col>
         </Row>
         <Row>
           <Col span="24">
             <FormItem label-position="left">
-              <Input v-model="formModel.fields.parentName" placeholder="请选择上级菜单" :readonly="true">
-                <Dropdown slot="append" trigger="click" :transfer="true" placement="bottom-end">
-                  <Button type="primary">选择...
+              <Input
+                v-model="formModel.fields.parentName"
+                placeholder="请选择上级菜单"
+                :readonly="true"
+              >
+                <Dropdown
+                  slot="append"
+                  trigger="click"
+                  :transfer="true"
+                  placement="bottom-end"
+                >
+                  <Button type="primary"
+                    >选择...
                     <Icon type="ios-arrow-down"></Icon>
                   </Button>
-                  <div class="text-left pad10" slot="list" style="min-width:360px;">
+                  <div
+                    class="text-left pad10"
+                    slot="list"
+                    style="min-width: 360px"
+                  >
                     <div>
                       <Button
                         type="primary"
                         icon="ios-search"
                         @click="handleRefreshMenuTreeData"
-                      >刷新菜单</Button>
+                        >刷新菜单</Button
+                      >
                     </div>
                     <Tree
                       class="text-left dropdown-tree"
@@ -229,7 +268,12 @@
           </Col>
           <Col span="12">
             <FormItem label="默认路由" label-position="left">
-              <i-switch size="large" v-model="formModel.fields.isDefaultRouter" :true-value="1" :false-value="0">
+              <i-switch
+                size="large"
+                v-model="formModel.fields.isDefaultRouter"
+                :true-value="1"
+                :false-value="0"
+              >
                 <span slot="open">是</span>
                 <span slot="close">否</span>
               </i-switch>
@@ -252,7 +296,12 @@
           </Col>
           <Col span="12">
             <FormItem label="不缓存页面" label-position="left">
-              <i-switch size="large" v-model="formModel.fields.notCache" :true-value="1" :false-value="0">
+              <i-switch
+                size="large"
+                v-model="formModel.fields.notCache"
+                :true-value="1"
+                :false-value="0"
+              >
                 <span slot="open">是</span>
                 <span slot="close">否</span>
               </i-switch>
@@ -262,7 +311,10 @@
         <Row>
           <Col span="12">
             <FormItem label="排序" label-position="left">
-              <InputNumber :min="0" v-model="formModel.fields.sort"></InputNumber>
+              <InputNumber
+                :min="0"
+                v-model="formModel.fields.sort"
+              ></InputNumber>
             </FormItem>
           </Col>
         </Row>
@@ -277,8 +329,18 @@
         </FormItem>
       </Form>
       <div class="demo-drawer-footer">
-        <Button icon="md-checkmark-circle" type="primary" @click="handleSubmitMenu">保 存</Button>
-        <Button style="margin-left: 8px" icon="md-close" @click="formModel.opened = false">取 消</Button>
+        <Button
+          icon="md-checkmark-circle"
+          type="primary"
+          @click="handleSubmitMenu"
+          >保 存</Button
+        >
+        <Button
+          style="margin-left: 8px"
+          icon="md-close"
+          @click="formModel.opened = false"
+          >取 消</Button
+        >
       </div>
     </Drawer>
   </div>
@@ -293,13 +355,13 @@ import {
   editMenu,
   deleteMenu,
   batchCommand,
-  loadMenuTree
+  loadMenuTree,
 } from "@/api/rbac/menu";
 import { findIconDataSourceByKeyword } from "@/api/rbac/icon";
 export default {
   name: "rbac_menu_page",
   components: {
-    Tables
+    Tables,
   },
   data() {
     return {
@@ -307,7 +369,7 @@ export default {
         delete: { name: "delete", title: "删除" },
         recover: { name: "recover", title: "恢复" },
         forbidden: { name: "forbidden", title: "禁用" },
-        normal: { name: "normal", title: "启用" }
+        normal: { name: "normal", title: "启用" },
       },
       formModel: {
         opened: false,
@@ -315,7 +377,7 @@ export default {
         mode: "create",
         selection: [],
         selectOption: {
-          icon: {}
+          icon: {},
         },
         fields: {
           guid: "",
@@ -330,7 +392,7 @@ export default {
           status: 1,
           isDeleted: 0,
           isDefaultRouter: false,
-          description: ""
+          description: "",
         },
         rules: {
           name: [
@@ -338,25 +400,25 @@ export default {
               type: "string",
               required: true,
               message: "请输入菜单名称",
-              min: 2
-            }
+              min: 2,
+            },
           ],
           alias: [
             {
               type: "string",
               required: true,
               message: "请输入菜单名称",
-              min: 2
-            }
+              min: 2,
+            },
           ],
           icon: [
             {
               type: "string",
               required: true,
-              message: "请选择菜单图标"
-            }
-          ]
-        }
+              message: "请选择菜单图标",
+            },
+          ],
+        },
       },
       stores: {
         menu: {
@@ -372,33 +434,33 @@ export default {
             sort: [
               {
                 direct: "DESC",
-                field: "id"
-              }
-            ]
+                field: "id",
+              },
+            ],
           },
           sources: {
             isDeletedSources: [
               { value: -1, text: "全部" },
               { value: 0, text: "正常" },
-              { value: 1, text: "已删" }
+              { value: 1, text: "已删" },
             ],
             statusSources: [
               { value: -1, text: "全部" },
               { value: 0, text: "禁用" },
-              { value: 1, text: "正常" }
+              { value: 1, text: "正常" },
             ],
             statusFormSources: [
               { value: 0, text: "禁用" },
-              { value: 1, text: "正常" }
+              { value: 1, text: "正常" },
             ],
             menuTree: {
               inited: false,
-              data: []
+              data: [],
             },
             iconSources: {
               loading: false,
-              data: []
-            }
+              data: [],
+            },
           },
           columns: [
             { type: "selection", width: 30, key: "handle" },
@@ -410,20 +472,20 @@ export default {
               render: (h, params) => {
                 return h("Icon", {
                   props: {
-                    type: params.row.icon==""?"md-menu":params.row.icon,
-                    size: 24
-                  }
+                    type: params.row.icon == "" ? "md-menu" : params.row.icon,
+                    size: 24,
+                  },
                 });
-              }
+              },
             },
-            { title: "菜单名称", key: "name", sortable: true,minWidth:200 },
+            { title: "菜单名称", key: "name", sortable: true, minWidth: 200 },
             {
               title: "请求地址",
               key: "url",
               width: 250,
               sortable: false,
               ellipsis: true,
-              tooltip: true
+              tooltip: true,
             },
             { title: "路由名称", key: "alias", width: 200 },
             { title: "上级菜单", key: "parentName", width: 150 },
@@ -449,8 +511,8 @@ export default {
                     props: {
                       placement: "top",
                       transfer: true,
-                      delay: 500
-                    }
+                      delay: 500,
+                    },
                   },
                   [
                     //这个中括号表示是Tooltip标签的子标签
@@ -459,8 +521,8 @@ export default {
                       {
                         props: {
                           //type: "dot",
-                          color: statusColor
-                        }
+                          color: statusColor,
+                        },
                       },
                       statusText
                     ), //表格列显示文字
@@ -469,14 +531,14 @@ export default {
                       {
                         slot: "content",
                         style: {
-                          whiteSpace: "normal"
-                        }
+                          whiteSpace: "normal",
+                        },
                       },
                       statusText //整个的信息即气泡内文字
-                    )
+                    ),
                   ]
                 );
-              }
+              },
             },
             {
               title: "默认路由",
@@ -499,8 +561,8 @@ export default {
                     props: {
                       placement: "top",
                       transfer: true,
-                      delay: 500
-                    }
+                      delay: 500,
+                    },
                   },
                   [
                     //这个中括号表示是Tooltip标签的子标签
@@ -509,8 +571,8 @@ export default {
                       {
                         props: {
                           //type: "dot",
-                          color: statusColor
-                        }
+                          color: statusColor,
+                        },
                       },
                       statusText
                     ), //表格列显示文字
@@ -519,28 +581,28 @@ export default {
                       {
                         slot: "content",
                         style: {
-                          whiteSpace: "normal"
-                        }
+                          whiteSpace: "normal",
+                        },
                       },
                       statusText //整个的信息即气泡内文字
-                    )
+                    ),
                   ]
                 );
-              }
+              },
             },
             {
               title: "创建时间",
               width: 150,
               ellipsis: true,
               tooltip: true,
-              key: "createdOn"
+              key: "createdOn",
             },
             {
               title: "创建者",
               key: "createdByUserName",
               ellipsis: true,
               tooltip: true,
-              width: 80
+              width: 80,
             },
             {
               title: "操作",
@@ -549,7 +611,7 @@ export default {
               width: 100,
               className: "table-command-column",
               options: ["edit"],
-              fixed:"right",
+              fixed: "right",
               button: [
                 (h, params, vm) => {
                   return h(
@@ -557,13 +619,13 @@ export default {
                     {
                       props: {
                         confirm: true,
-                        title: "你确定要删除吗?"
+                        title: "你确定要删除吗?",
                       },
                       on: {
                         "on-ok": () => {
                           vm.$emit("on-delete", params);
-                        }
-                      }
+                        },
+                      },
                     },
                     [
                       h(
@@ -572,8 +634,8 @@ export default {
                           props: {
                             placement: "left",
                             transfer: true,
-                            delay: 1000
-                          }
+                            delay: 1000,
+                          },
                         },
                         [
                           h("Button", {
@@ -581,21 +643,21 @@ export default {
                               shape: "circle",
                               size: "small",
                               icon: "md-trash",
-                              type: "error"
-                            }
+                              type: "error",
+                            },
                           }),
                           h(
                             "p",
                             {
                               slot: "content",
                               style: {
-                                whiteSpace: "normal"
-                              }
+                                whiteSpace: "normal",
+                              },
                             },
                             "删除"
-                          )
+                          ),
                         ]
-                      )
+                      ),
                     ]
                   );
                 },
@@ -606,8 +668,8 @@ export default {
                       props: {
                         placement: "left",
                         transfer: true,
-                        delay: 1000
-                      }
+                        delay: 1000,
+                      },
                     },
                     [
                       h("Button", {
@@ -615,43 +677,43 @@ export default {
                           shape: "circle",
                           size: "small",
                           icon: "md-create",
-                          type: "primary"
+                          type: "primary",
                         },
                         on: {
                           click: () => {
                             vm.$emit("on-edit", params);
                             vm.$emit("input", params.tableData);
-                          }
-                        }
+                          },
+                        },
                       }),
                       h(
                         "p",
                         {
                           slot: "content",
                           style: {
-                            whiteSpace: "normal"
-                          }
+                            whiteSpace: "normal",
+                          },
                         },
                         "编辑"
-                      )
+                      ),
                     ]
                   );
-                }
-              ]
-            }
+                },
+              ],
+            },
           ],
-          data: []
+          data: [],
         },
         menuTree: {
-          data: []
-        }
+          data: [],
+        },
       },
       styles: {
         height: "calc(100% - 55px)",
         overflow: "auto",
         paddingBottom: "53px",
-        position: "static"
-      }
+        position: "static",
+      },
     };
   },
   computed: {
@@ -668,12 +730,12 @@ export default {
       return this.formModel.selection;
     },
     selectedRowsId() {
-      return this.formModel.selection.map(x => x.guid);
-    }
+      return this.formModel.selection.map((x) => x.guid);
+    },
   },
   methods: {
     loadMenuList() {
-      getMenuList(this.stores.menu.query).then(res => {
+      getMenuList(this.stores.menu.query).then((res) => {
         this.stores.menu.data = res.data.data;
         this.stores.menu.query.totalCount = res.data.totalCount;
       });
@@ -709,21 +771,25 @@ export default {
       this.handleResetFormMenu();
     },
     handleSubmitMenu() {
-      let valid = this.validateMenuForm();
-      if (valid) {
-        if (this.formModel.mode === "create") {
-          this.doCreateMenu();
+      this.$refs["formMenu"].validate((valid) => {
+        if (!valid) {
+          this.$Message.error("请完善表单信息");
+          _valid = false;
+        } else {
+          if (this.formModel.mode === "create") {
+            this.doCreateMenu();
+          }
+          if (this.formModel.mode === "edit") {
+            this.doEditMenu();
+          }
         }
-        if (this.formModel.mode === "edit") {
-          this.doEditMenu();
-        }
-      }
+      });
     },
     handleResetFormMenu() {
       this.$refs["formMenu"].resetFields();
     },
     doCreateMenu() {
-      createMenu(this.formModel.fields).then(res => {
+      createMenu(this.formModel.fields).then((res) => {
         if (res.data.code === 200) {
           this.$Message.success(res.data.message);
           this.handleCloseFormWindow();
@@ -735,7 +801,7 @@ export default {
       });
     },
     doEditMenu() {
-      editMenu(this.formModel.fields).then(res => {
+      editMenu(this.formModel.fields).then((res) => {
         if (res.data.code === 200) {
           this.$Message.success(res.data.message);
           this.handleCloseFormWindow();
@@ -746,20 +812,8 @@ export default {
         }
       });
     },
-    validateMenuForm() {
-      let _valid = false;
-      this.$refs["formMenu"].validate(valid => {
-        if (!valid) {
-          this.$Message.error("请完善表单信息");
-          _valid = false;
-        } else {
-          _valid = true;
-        }
-      });
-      return _valid;
-    },
     doLoadMenu(guid) {
-      loadMenu({ guid: guid }).then(res => {
+      loadMenu({ guid: guid }).then((res) => {
         this.formModel.fields = res.data.data.model;
         this.stores.menuTree.data = res.data.data.tree;
       });
@@ -772,7 +826,7 @@ export default {
         this.$Message.warning("请选择至少一条数据");
         return;
       }
-      deleteMenu(ids).then(res => {
+      deleteMenu(ids).then((res) => {
         if (res.data.code === 200) {
           this.$Message.success(res.data.message);
           this.loadMenuList();
@@ -795,18 +849,18 @@ export default {
         loading: true,
         onOk: () => {
           this.doBatchCommand(command);
-        }
+        },
       });
     },
     doBatchCommand(command) {
       batchCommand({
         command: command,
-        ids: this.selectedRowsId.join(",")
-      }).then(res => {
+        ids: this.selectedRowsId.join(","),
+      }).then((res) => {
         if (res.data.code === 200) {
           this.$Message.success(res.data.message);
           this.loadMenuList();
-          this.formModel.selection=[];
+          this.formModel.selection = [];
         } else {
           this.$Message.warning(res.data.message);
         }
@@ -823,7 +877,7 @@ export default {
       return "";
     },
     doLoadMenuTree() {
-      loadMenuTree(null).then(res => {
+      loadMenuTree(null).then((res) => {
         this.stores.menuTree.data = res.data.data;
       });
     },
@@ -838,7 +892,7 @@ export default {
       this.doLoadMenuTree();
     },
     doLoadSearchMenuTree() {
-      loadMenuTree(null).then(res => {
+      loadMenuTree(null).then((res) => {
         this.stores.menu.sources.menuTree.data = res.data.data;
       });
     },
@@ -875,16 +929,16 @@ export default {
     handleLoadIconDataSource(keyword) {
       this.stores.menu.sources.iconSources.loading = true;
       let query = { keyword: keyword };
-      findIconDataSourceByKeyword(query).then(res => {
+      findIconDataSourceByKeyword(query).then((res) => {
         this.stores.menu.sources.iconSources.data = res.data.data;
         this.stores.menu.sources.iconSources.loading = false;
       });
-    }
+    },
   },
   mounted() {
     this.loadMenuList();
     this.doLoadMenuTree();
     this.doLoadSearchMenuTree();
-  }
+  },
 };
 </script>

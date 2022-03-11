@@ -11,7 +11,7 @@
             </span>
           </h3>
           <ul class="role-list-box">
-            <li :class="{'active': r.selected}" v-for="r in stores.role.data" @click="handleRoleClicked(r)">{{r.name}}</li>
+            <li :class="{'active': r.selected}" v-for="r in stores.role.data" @click="handleRoleClicked(r)" :key="r.code">{{r.name}}</li>
           </ul>
         </Col>
         <Col span="20">
