@@ -30,7 +30,8 @@
     "vuedraggable": "^2.24.3",
     "vuex": "^3.6.2",
     "wangeditor": "^4.7.12",
-    "xlsx": "^0.17.0"
+    "xlsx": "^0.17.0",
+    "nanoid": "^3.1.31"
   },
   "devDependencies": {
     "@babel/plugin-syntax-dynamic-import": "^7.8.3",
@@ -47,7 +48,8 @@
     "lint-staged": "^12.3.5",
     "mockjs": "^1.1.0",
     "vue-template-compiler": "^2.6.14",
-    "webpack": "^5.70.0"
+    "webpack": "^5.70.0",
+    "nanoid": "^3.1.31"
   },
   "browserslist": [
     "> 1%",
