@@ -11,13 +11,13 @@
 
 "Zeus"--中文译为**宙斯**，是古希腊神话中的众神之王，奥林匹斯十二主神之首，统治宇宙万物的至高无上的主神（在古希腊神话中主神专指宙斯），人们常用“众神和人类的父亲”、“神王”来称呼他，是希腊神话诸神中最伟大的神。
 
-**DncZeus**的愿景就是做一个.NET Core 领域的简易精致的通用后台权限管理模板系统基础框架，作.NET Core 领域低调但有内容的小"宙斯"。
+**DncZeus**的愿景就是做一个.NET Core 领域的简易精致的通用后台权限管理模板系统基础框架"。
 
 ## 项目简介
 
-**DncZeus**是一个基于 ASP.NET Core 3 + Vue.js 的前后端分离的通用后台管理系统框架。后端使用.NET Core 3 + Entity Framework Core 构建，UI 则是目前流行的基于 Vue.js 的 iView。项目实现了前后端的动态权限管理和控制以及基于 JWT 的用户令牌认证机制，让前后端的交互更流畅。
+**DncZeus**是一个基于 .NET 6 + Vue.js 的前后端分离的通用后台管理系统框架。后端使用.NET 6 + Entity Framework Core 构建，UI 则是目前流行的基于 Vue.js 的 iView。项目实现了前后端的动态权限管理和控制以及基于 JWT 的用户令牌认证机制，让前后端的交互更流畅。
 
-**DncZeus**并不是一个完整的业务系统，但她提供完成业务系统的绝大多数开发场景，让每一位.NET 开发者都能基于**DncZeus**快速开发出交互、体验以及功能具佳的.NET Core 单页应用程序(SPA)。
+**DncZeus**并不是一个完整的业务系统，但她提供完成业务系统的绝大多数开发场景，让每一位.NET 开发者都能基于**DncZeus**快速开发出交互、体验以及功能具佳的.NET 6 单页应用程序(SPA)。
 
 ## 支持DncZeus(求Star :))
 
@@ -52,15 +52,15 @@
 
 由于 DncZeus 考虑到初级.NET 开发者都可以使用，所以后端项目未涉及过多架构和封装(代码逻辑一目了然)，但为了你更好地熟悉和运用 DncZeus，你需要了解：
 
-- ASP.NET Core
+- .NET 6
 - Vue.js
 - iView
 
 ASP.NET Core 的知识能确保你可以看懂和了解后端是如何实现和工作的，而 Vue.js 框架则是前端实现的基石，当然 iView 这个基于 Vue.js 的 UI 框架也是必须要了解的，因为 DncZeus 正是基于 [iview-admin][1](iView 的一个后台管理系统示例项目)来实现的前端 UI 交互。
 
-如果你对这两个方面的知识还不熟悉，建议你可以先学习一些理论再来运用 DncZeus 这个框架。关于 ASP.NET Core 和 Vue.js 的入门请参考：
+如果你对这两个方面的知识还不熟悉，建议你可以先学习一些理论再来运用 DncZeus 这个框架。关于 .NET 6 和 Vue.js 的入门请参考：
 
-- [ASP.NET Core 官方文档][2]
+- [.NET 6 官方文档][2]
 - [Vue.js 官方文档][3]
 
 ## 环境和工具
@@ -73,12 +73,12 @@ ASP.NET Core 的知识能确保你可以看懂和了解后端是如何实现和�
 
 ## 技术实现
 
-- ASP.NET Core 3
+- .NET 6
 - ASP.NET WebApi Core
 - JWT 令牌认证
 - AutoMapper
-- Entity Framework Core 2.0
-- .NET Core 依赖注入
+- Entity Framework Core 6
+- .NET 6 依赖注入
 - Swagger UI
 - Vue.js(ES6 语法)
 - iView(基于 Vue.js 的 UI 框架)
@@ -153,7 +153,7 @@ Update-Database -verbose
 
 ## 运行
 
-1. 使用Visual Studio开发工具打开DncZeus根目录中的VS解决方案文件[DncZeus.sln](或者你喜欢的话，使用VS Code来进行ASP.NET Core的开发也是可以的)，设置DncZeus.Api项目为默认启动项并运行此项目。
+1. 使用Visual Studio开发工具打开DncZeus根目录中的VS解决方案文件[DncZeus.sln](或者你喜欢的话，使用VS Code来进行.NET 6的开发也是可以的)，设置DncZeus.Api项目为默认启动项并运行此项目。
 
 > 这时在浏览器中打开地址：http://localhost:54321/swagger ，便可以查看到DncZeus已经实现的后端API接口服务了。
 
