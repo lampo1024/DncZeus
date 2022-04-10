@@ -103,6 +103,6 @@ namespace DncZeus.Api.Entities
         /// </summary>
         public ICollection<DncRolePermissionMapping> Roles { get; set; }
 
-     
+
     }
 }

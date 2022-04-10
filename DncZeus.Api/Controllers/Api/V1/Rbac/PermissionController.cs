@@ -74,7 +74,9 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
                 {
                     query = query.Where(x => x.MenuGuid == payload.MenuGuid);
                 }
+                var sql = query.ToQueryString();
                 var list = query.Paged(payload.CurrentPage, payload.PageSize).Include(x => x.Menu).ToList();
+                // var list = query.Paged(payload.CurrentPage, payload.PageSize).ToList();
                 var totalCount = query.Count();
                 var data = list.Select(_mapper.Map<DncPermission, PermissionJsonModel>);
                 /*

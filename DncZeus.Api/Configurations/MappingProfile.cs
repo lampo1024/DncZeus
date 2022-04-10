@@ -43,6 +43,8 @@ namespace DncZeus.Api.Configurations
             CreateMap<MenuCreateViewModel, DncMenu>();
             CreateMap<MenuEditViewModel, DncMenu>();
             CreateMap<DncMenu, MenuEditViewModel>();
+            CreateMap<DncMenuQueryModel, DncMenu>();
+            CreateMap<DncMenu, DncMenuQueryModel>();
             #endregion
 
             #region DncIcon

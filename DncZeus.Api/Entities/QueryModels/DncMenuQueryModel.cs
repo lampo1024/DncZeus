@@ -17,7 +17,7 @@ namespace DncZeus.Api.Entities
     /// <summary>
     /// 菜单实体类
     /// </summary>
-    public class DncMenu
+    public class DncMenuQueryModel
     {
         /// <summary>
         /// GUID
@@ -70,15 +70,15 @@ namespace DncZeus.Api.Entities
         /// <summary>
         /// 是否可用(0:禁用,1:可用)
         /// </summary>
-        public Status Status { get; set; }
+        public int Status { get; set; }
         /// <summary>
         /// 是否已删
         /// </summary>
-        public IsDeleted IsDeleted { get; set; }
+        public int IsDeleted { get; set; }
         /// <summary>
         /// 是否为默认路由
         /// </summary>
-        public YesOrNo IsDefaultRouter { get; set; }
+        public int IsDefaultRouter { get; set; }
         /// <summary>
         /// 创建时间
         /// </summary>
@@ -112,11 +112,11 @@ namespace DncZeus.Api.Entities
         /// <summary>
         /// 在菜单中隐藏
         /// </summary>
-        public YesOrNo? HideInMenu { get; set; }
+        public int? HideInMenu { get; set; }
         /// <summary>
         /// 不缓存页面
         /// </summary>
-        public YesOrNo? NotCache { get; set; }
+        public int? NotCache { get; set; }
         /// <summary>
         /// 页面关闭前的回调函数
         /// </summary>

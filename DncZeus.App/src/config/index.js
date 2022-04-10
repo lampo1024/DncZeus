@@ -17,13 +17,13 @@ export default {
    * @description api请求基础路径
    */
   baseUrl: {
-    dev: 'http://localhost:54321/',
-    pro: 'http://localhost:54321/',
+    dev: 'http://localhost:5432/',
+    pro: 'http://localhost:5432/',
     defaultPrefix:"api/v1/"
   },
   authUrl: {
-    dev: 'http://localhost:54321/api/oauth/auth',
-    pro: 'http://localhost:54321/api/oauth/auth'
+    dev: 'http://localhost:5432/api/oauth/auth',
+    pro: 'http://localhost:5432/api/oauth/auth'
   },
   /**
    * @description 默认打开的首页的路由name值，默认为home

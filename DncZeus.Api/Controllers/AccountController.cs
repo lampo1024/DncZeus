@@ -16,6 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
 using static DncZeus.Api.Entities.Enums.CommonEnum;
 
 namespace DncZeus.Api.Controllers
@@ -29,13 +30,15 @@ namespace DncZeus.Api.Controllers
     public class AccountController : ControllerBase
     {
         private readonly DncZeusDbContext _dbContext;
+        private readonly IMapper _mapper;
         /// <summary>
         /// 
         /// </summary>
         /// <param name="dbContext"></param>
-        public AccountController(DncZeusDbContext dbContext)
+        public AccountController(DncZeusDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
+            _mapper = mapper;
         }
         /// <summary>
         /// 
@@ -56,7 +59,7 @@ namespace DncZeus.Api.Controllers
                 var sqlPermission = @"SELECT P.Code AS PermissionCode,P.ActionCode AS PermissionActionCode,P.Name AS PermissionName,P.Type AS PermissionType,M.Name AS MenuName,M.Guid AS MenuGuid,M.Alias AS MenuAlias,M.IsDefaultRouter FROM DncRolePermissionMapping AS RPM 
 LEFT JOIN DncPermission AS P ON P.Code = RPM.PermissionCode
 INNER JOIN DncMenu AS M ON M.Guid = P.MenuGuid
-WHERE P.IsDeleted=0 AND P.Status=1 AND EXISTS (SELECT 1 FROM DncUserRoleMapping AS URM WHERE URM.UserGuid={0} AND URM.RoleCode=RPM.RoleCode)";
+WHERE P.IsDeleted=0 AND P.Status=1 AND EXISTS (SELECT 1 FROM DncUserRoleMapping AS URM WHERE URM.UserGuid=@UserGuid AND URM.RoleCode=RPM.RoleCode)";
                 if (user.UserType == UserType.SuperAdministrator)
                 {
                     //如果是超级管理员
@@ -64,7 +67,7 @@ WHERE P.IsDeleted=0 AND P.Status=1 AND EXISTS (SELECT 1 FROM DncUserRoleMapping 
 INNER JOIN DncMenu AS M ON M.Guid = P.MenuGuid
 WHERE P.IsDeleted=0 AND P.Status=1";
                 }
-                var permissions = _dbContext.Database.FromSql<DncPermissionWithMenu>(sqlPermission, user.Guid).ToList();
+                var permissions = _dbContext.Database.FromSql<DncPermissionWithMenu>(sqlPermission, new { UserGuid = user.Guid }).ToList();
 
                 var pagePermissions = permissions.GroupBy(x => x.MenuAlias).ToDictionary(g => g.Key, g => g.Select(x => x.PermissionActionCode).Distinct());
                 response.SetData(new
@@ -82,7 +85,7 @@ WHERE P.IsDeleted=0 AND P.Status=1";
             return Ok(response);
         }
 
-        private List<string> FindParentMenuAlias(List<DncMenu> menus, Guid? parentGuid)
+        private List<string> FindParentMenuAlias(List<DncMenuQueryModel> menus, Guid? parentGuid)
         {
             var pages = new List<string>();
             var parent = menus.FirstOrDefault(x => x.Guid == parentGuid);
@@ -115,14 +118,14 @@ WHERE P.IsDeleted=0 AND P.Status=1";
             var strSql = @"SELECT M.* FROM DncRolePermissionMapping AS RPM 
 LEFT JOIN DncPermission AS P ON P.Code = RPM.PermissionCode
 INNER JOIN DncMenu AS M ON M.Guid = P.MenuGuid
-WHERE P.IsDeleted=0 AND P.Status=1 AND P.Type=0 AND M.IsDeleted=0 AND M.Status=1 AND EXISTS (SELECT 1 FROM DncUserRoleMapping AS URM WHERE URM.UserGuid={0} AND URM.RoleCode=RPM.RoleCode)";
+WHERE P.IsDeleted=0 AND P.Status=1 AND P.Type=0 AND M.IsDeleted=0 AND M.Status=1 AND EXISTS (SELECT 1 FROM DncUserRoleMapping AS URM WHERE URM.UserGuid=@UserGuid AND URM.RoleCode=RPM.RoleCode)";
 
             if (AuthContextService.CurrentUser.UserType == UserType.SuperAdministrator)
             {
                 //如果是超级管理员
                 strSql = @"SELECT * FROM DncMenu WHERE IsDeleted=0 AND Status=1";
             }
-            var menus = _dbContext.DncMenu.FromSqlRaw(strSql, AuthContextService.CurrentUser.Guid).ToList();
+            var menus = _dbContext.Database.FromSql<DncMenuQueryModel>(strSql, new { UserGuid = AuthContextService.CurrentUser.Guid }).ToList();
             var rootMenus = _dbContext.DncMenu.Where(x => x.IsDeleted == IsDeleted.No && x.Status == Status.Normal && x.ParentGuid == Guid.Empty).ToList();
             foreach (var root in rootMenus)
             {
@@ -130,7 +133,7 @@ WHERE P.IsDeleted=0 AND P.Status=1 AND P.Type=0 AND M.IsDeleted=0 AND M.Status=1
                 {
                     continue;
                 }
-                menus.Add(root);
+                menus.Add(_mapper.Map<DncMenu,DncMenuQueryModel>(root));
             }
             menus = menus.OrderBy(x => x.Sort).ThenBy(x => x.CreatedOn).ToList();
             var menu = MenuItemHelper.LoadMenuTree(menus, "0");
@@ -180,7 +183,7 @@ WHERE P.IsDeleted=0 AND P.Status=1 AND P.Type=0 AND M.IsDeleted=0 AND M.Status=1
             return result;
         }
 
-        public static List<MenuItem> LoadMenuTree(List<DncMenu> menus, string selectedGuid = null)
+        public static List<MenuItem> LoadMenuTree(List<DncMenuQueryModel> menus, string selectedGuid = null)
         {
             var temp = menus.Select(x => new MenuItem
             {
@@ -192,9 +195,9 @@ WHERE P.IsDeleted=0 AND P.Status=1 AND P.Type=0 AND M.IsDeleted=0 AND M.Status=1
                 Meta = new MenuMeta
                 {
                     BeforeCloseFun = x.BeforeCloseFun ?? "",
-                    HideInMenu = x.HideInMenu == YesOrNo.Yes,
+                    HideInMenu = x.HideInMenu == 1,
                     Icon = x.Icon,
-                    NotCache = x.NotCache == YesOrNo.Yes,
+                    NotCache = x.NotCache == 1,
                     Title = x.Name
                 }
             }).ToList();
