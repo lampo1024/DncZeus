@@ -36,20 +36,13 @@ const hasPermission = {
           return;
         }
         let permissionList = vnode.context.$route.meta.permissions;
-        if(permissionList===undefined){
-          // if(el.parentNode){
-          //   el.parentNode.removeChild(el);
-          // }
+        if (permissionList === undefined) {
           el.disabled = true;
-          commentNode(el,vnode)
+          commentNode(el, vnode)
         }
         if (permissionList && permissionList.length && !permissionList.includes(binding.value)) {
-          // if(el.parentNode){
-          //   console.log("run here 3...");
-          //   el.parentNode.removeChild(el);
-          // }
           el.disabled = true;
-          commentNode(el,vnode)
+          commentNode(el, vnode)
         }
       }
     });
