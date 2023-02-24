@@ -51,7 +51,7 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
         {
             using (_dbContext)
             {
-                var query = _dbContext.DncUser.AsQueryable();
+                var query = _dbContext.DncUser.Where(x => x.UserType != UserType.SuperAdministrator);
                 if (!string.IsNullOrEmpty(payload.Kw))
                 {
                     query = query.Where(x => x.LoginName.Contains(payload.Kw.Trim()) || x.DisplayName.Contains(payload.Kw.Trim()));

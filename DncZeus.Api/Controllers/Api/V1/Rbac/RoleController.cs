@@ -310,16 +310,14 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
                 //    x.DncRole.Code,
                 //    x.DncRole.Name
                 //});
-                var userGuid = AuthContextService.CurrentUser.Guid;
 
                 var query = from urm in _dbContext.DncUserRoleMapping
                             join r in _dbContext.DncRole on urm.RoleCode equals r.Code
-                            where urm.UserGuid == userGuid
-                            select r;
+                            where urm.UserGuid == guid
+                            select new { r.Code };
 
                 var assignedRoles = query.Select(x => x.Code).ToList();
-                var roles = _dbContext.DncRole.Where(x =>
-                        x.IsDeleted == CommonEnum.IsDeleted.No && x.Status == CommonEnum.Status.Normal)
+                var roles = _dbContext.DncRole.Where(x => x.IsDeleted == CommonEnum.IsDeleted.No && x.Status == CommonEnum.Status.Normal && !x.IsSuperAdministrator)
                     .Select(x => new { label = x.Name, key = x.Code })
                     .ToList();
                 response.SetData(new { roles, assignedRoles });
