@@ -5,7 +5,9 @@
  * 版权所有，请勿删除
  ******************************************/
 
+using AutoMapper;
 using DncZeus.Api.Entities;
+using DncZeus.Api.Entities.QueryModels;
 using DncZeus.Api.Extensions;
 using DncZeus.Api.Extensions.AuthContext;
 using DncZeus.Api.Extensions.DataAccess;
@@ -16,7 +18,6 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using AutoMapper;
 using static DncZeus.Api.Entities.Enums.CommonEnum;
 
 namespace DncZeus.Api.Controllers
@@ -55,19 +56,59 @@ namespace DncZeus.Api.Controllers
 
                 var menus = _dbContext.DncMenu.Where(x => x.IsDeleted == IsDeleted.No && x.Status == Status.Normal).ToList();
 
-                //查询当前登录用户拥有的权限集合(非超级管理员)
-                var sqlPermission = @"SELECT P.Code AS PermissionCode,P.ActionCode AS PermissionActionCode,P.Name AS PermissionName,P.Type AS PermissionType,M.Name AS MenuName,M.Guid AS MenuGuid,M.Alias AS MenuAlias,M.IsDefaultRouter FROM DncRolePermissionMapping AS RPM 
-LEFT JOIN DncPermission AS P ON P.Code = RPM.PermissionCode
-INNER JOIN DncMenu AS M ON M.Guid = P.MenuGuid
-WHERE P.IsDeleted=0 AND P.Status=1 AND EXISTS (SELECT 1 FROM DncUserRoleMapping AS URM WHERE URM.UserGuid=@UserGuid AND URM.RoleCode=RPM.RoleCode)";
-                if (user.UserType == UserType.SuperAdministrator)
+                //                //查询当前登录用户拥有的权限集合(非超级管理员)
+                //                var sqlPermission = @"SELECT P.Code AS PermissionCode,P.ActionCode AS PermissionActionCode,P.Name AS PermissionName,P.Type AS PermissionType,M.Name AS MenuName,M.Guid AS MenuGuid,M.Alias AS MenuAlias,M.IsDefaultRouter FROM DncRolePermissionMapping AS RPM 
+                //LEFT JOIN DncPermission AS P ON P.Code = RPM.PermissionCode
+                //INNER JOIN DncMenu AS M ON M.Guid = P.MenuGuid
+                //WHERE P.IsDeleted=0 AND P.Status=1 AND EXISTS (SELECT 1 FROM DncUserRoleMapping AS URM WHERE URM.UserGuid=@UserGuid AND URM.RoleCode=RPM.RoleCode)";
+                //                if (user.UserType == UserType.SuperAdministrator)
+                //                {
+                //                    //如果是超级管理员
+                //                    sqlPermission = @"SELECT P.Code AS PermissionCode,P.ActionCode AS PermissionActionCode,P.Name AS PermissionName,P.Type AS PermissionType,M.Name AS MenuName,M.Guid AS MenuGuid,M.Alias AS MenuAlias,M.IsDefaultRouter FROM DncPermission AS P 
+                //INNER JOIN DncMenu AS M ON M.Guid = P.MenuGuid
+                //WHERE P.IsDeleted=0 AND P.Status=1";
+                //                }
+
+
+                var userGuid = AuthContextService.CurrentUser.Guid;
+
+                var query = from rpm in _dbContext.DncRolePermissionMapping
+                            join p in _dbContext.DncPermission on rpm.PermissionCode equals p.Code
+                            join m in _dbContext.DncMenu on p.MenuGuid equals m.Guid
+                            where p.IsDeleted == IsDeleted.No && p.Status == Status.Normal && _dbContext.DncUserRoleMapping
+                                .Any(urm => urm.UserGuid == userGuid && urm.RoleCode == rpm.RoleCode)
+                            select new DncPermissionWithMenu
+                            {
+                                PermissionCode = p.Code,
+                                PermissionActionCode = p.ActionCode,
+                                PermissionName = p.Name,
+                                PermissionType = p.Type,
+                                MenuName = m.Name,
+                                MenuGuid = m.Guid,
+                                MenuAlias = m.Alias,
+                                IsDefaultRouter = m.IsDefaultRouter
+                            };
+
+                if (AuthContextService.CurrentUser.IsSupperAdministrator)
                 {
-                    //如果是超级管理员
-                    sqlPermission = @"SELECT P.Code AS PermissionCode,P.ActionCode AS PermissionActionCode,P.Name AS PermissionName,P.Type AS PermissionType,M.Name AS MenuName,M.Guid AS MenuGuid,M.Alias AS MenuAlias,M.IsDefaultRouter FROM DncPermission AS P 
-INNER JOIN DncMenu AS M ON M.Guid = P.MenuGuid
-WHERE P.IsDeleted=0 AND P.Status=1";
+                    query = from p in _dbContext.DncPermission
+                            join m in _dbContext.DncMenu on p.MenuGuid equals m.Guid
+                            where p.IsDeleted == IsDeleted.No && p.Status == Status.Normal
+                            select new DncPermissionWithMenu
+                            {
+                                PermissionCode = p.Code,
+                                PermissionActionCode = p.ActionCode,
+                                PermissionName = p.Name,
+                                PermissionType = p.Type,
+                                MenuName = m.Name,
+                                MenuGuid = m.Guid,
+                                MenuAlias = m.Alias,
+                                IsDefaultRouter = m.IsDefaultRouter
+                            };
                 }
-                var permissions = _dbContext.Database.FromSql<DncPermissionWithMenu>(sqlPermission, new { UserGuid = user.Guid }).ToList();
+
+
+                var permissions = query.ToList();
 
                 var pagePermissions = permissions.GroupBy(x => x.MenuAlias).ToDictionary(g => g.Key, g => g.Select(x => x.PermissionActionCode).Distinct());
                 response.SetData(new
@@ -115,17 +156,69 @@ WHERE P.IsDeleted=0 AND P.Status=1";
         [HttpGet]
         public IActionResult Menu()
         {
-            var strSql = @"SELECT M.* FROM DncRolePermissionMapping AS RPM 
+            /*
+             SELECT M.* FROM DncRolePermissionMapping AS RPM 
 LEFT JOIN DncPermission AS P ON P.Code = RPM.PermissionCode
 INNER JOIN DncMenu AS M ON M.Guid = P.MenuGuid
-WHERE P.IsDeleted=0 AND P.Status=1 AND P.Type=0 AND M.IsDeleted=0 AND M.Status=1 AND EXISTS (SELECT 1 FROM DncUserRoleMapping AS URM WHERE URM.UserGuid=@UserGuid AND URM.RoleCode=RPM.RoleCode)";
+WHERE P.IsDeleted=0 AND P.Status=1 AND P.Type=0 AND M.IsDeleted=0 AND M.Status=1 AND EXISTS (SELECT 1 FROM DncUserRoleMapping AS URM WHERE URM.UserGuid=@UserGuid AND URM.RoleCode=RPM.RoleCode)
+             */
 
-            if (AuthContextService.CurrentUser.UserType == UserType.SuperAdministrator)
+            /*
+             from drp in _dbContext.DncRolePermissionMapping
+                        join p in _dbContext.DncPermission on drp.PermissionCode equals p.Code
+                        join m in _dbContext.DncMenu on p.MenuGuid equals m.Guid
+                        where p.IsDeleted == IsDeleted.No && p.Status == Status.Normal && p.Type == PermissionType.Menu &&
+                              m.IsDeleted == IsDeleted.No && m.Status == Status.Normal && _dbContext.DncUserRoleMapping
+                                  .Any(urm => urm.UserGuid == userGuid && urm.RoleCode == drp.RoleCode)
+             */
+
+            var userGuid = AuthContextService.CurrentUser.Guid;
+
+            var query = from rpm in _dbContext.DncRolePermissionMapping
+                        join p in _dbContext.DncPermission on rpm.PermissionCode equals p.Code into perm
+                        from subperm in perm.DefaultIfEmpty()
+                        join m in _dbContext.DncMenu on subperm.MenuGuid equals m.Guid
+                        where subperm.IsDeleted == IsDeleted.No && subperm.Status == Status.Normal && subperm.Type == PermissionType.Menu && m.IsDeleted == IsDeleted.No && m.Status == Status.Normal
+                              && _dbContext.DncUserRoleMapping.Any(urm => urm.UserGuid == userGuid && urm.RoleCode == rpm.RoleCode)
+                        select new DncMenuQueryModel
+                        {
+                            Alias = m.Alias,
+                            BeforeCloseFun = m.BeforeCloseFun,
+                            Component = m.Component,
+                            Guid = m.Guid,
+                            ParentGuid = m.ParentGuid,
+                            Sort = m.Sort,
+                            IsDefaultRouter = (int)m.IsDefaultRouter,
+                            HideInMenu = (int)m.HideInMenu,
+                            Icon = m.Icon,
+                            Name = m.Name,
+                            NotCache = (int)m.NotCache,
+                            Url = m.Url
+                        };
+
+            if (AuthContextService.CurrentUser.IsSupperAdministrator)
             {
                 //如果是超级管理员
-                strSql = @"SELECT * FROM DncMenu WHERE IsDeleted=0 AND Status=1";
+                //@"SELECT * FROM DncMenu WHERE IsDeleted=0 AND Status=1";
+                query = from m in _dbContext.DncMenu
+                        where m.IsDeleted == IsDeleted.No && m.Status == Status.Normal
+                        select new DncMenuQueryModel
+                        {
+                            Alias = m.Alias,
+                            BeforeCloseFun = m.BeforeCloseFun,
+                            Component = m.Component,
+                            Guid = m.Guid,
+                            ParentGuid = m.ParentGuid,
+                            Sort = m.Sort,
+                            IsDefaultRouter = (int)m.IsDefaultRouter,
+                            HideInMenu = (int)m.HideInMenu,
+                            Icon = m.Icon,
+                            Name = m.Name,
+                            NotCache = (int)m.NotCache,
+                            Url = m.Url
+                        };
             }
-            var menus = _dbContext.Database.FromSql<DncMenuQueryModel>(strSql, new { UserGuid = AuthContextService.CurrentUser.Guid }).ToList();
+            var menus = query.ToList();
             var rootMenus = _dbContext.DncMenu.Where(x => x.IsDeleted == IsDeleted.No && x.Status == Status.Normal && x.ParentGuid == Guid.Empty).ToList();
             foreach (var root in rootMenus)
             {
@@ -133,7 +226,7 @@ WHERE P.IsDeleted=0 AND P.Status=1 AND P.Type=0 AND M.IsDeleted=0 AND M.Status=1
                 {
                     continue;
                 }
-                menus.Add(_mapper.Map<DncMenu,DncMenuQueryModel>(root));
+                menus.Add(_mapper.Map<DncMenu, DncMenuQueryModel>(root));
             }
             menus = menus.OrderBy(x => x.Sort).ThenBy(x => x.CreatedOn).ToList();
             var menu = MenuItemHelper.LoadMenuTree(menus, "0");

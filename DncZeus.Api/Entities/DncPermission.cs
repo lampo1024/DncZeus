@@ -8,7 +8,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using static DncZeus.Api.Entities.Enums.CommonEnum;
 
 namespace DncZeus.Api.Entities
@@ -30,7 +29,7 @@ namespace DncZeus.Api.Entities
         /// </summary>
         [Required]
         [Key]
-        [Column(TypeName = "nvarchar(20)")]
+        [StringLength(20)]
         public string Code { get; set; }
         /// <summary>
         /// 菜单GUID
@@ -40,13 +39,13 @@ namespace DncZeus.Api.Entities
         /// 权限名称
         /// </summary>
         [Required]
-        [Column(TypeName = "nvarchar(50)")]
+        [StringLength(50)]
         public string Name { get; set; }
         /// <summary>
         /// 权限操作码
         /// </summary>
         [Required]
-        [Column(TypeName = "nvarchar(80)")]
+        [StringLength(80)]
         public string ActionCode { get; set; }
         /// <summary>
         /// 图标(可选)
@@ -55,7 +54,7 @@ namespace DncZeus.Api.Entities
         /// <summary>
         /// 描述信息
         /// </summary>
-        [Column(TypeName = "nvarchar(max)")]
+        [StringLength(800)]
         public string Description { get; set; }
         /// <summary>
         /// 状态

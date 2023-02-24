@@ -15,11 +15,10 @@ using DncZeus.Api.Models.Response;
 using DncZeus.Api.RequestPayload.Rbac.Menu;
 using DncZeus.Api.ViewModels.Rbac.DncMenu;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static DncZeus.Api.Entities.Enums.CommonEnum;
 
 namespace DncZeus.Api.Controllers.Api.V1.Rbac
 {
@@ -96,7 +95,7 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
                 entity.Guid = Guid.NewGuid();
                 entity.CreatedByUserGuid = AuthContextService.CurrentUser.Guid;
                 entity.CreatedByUserName = AuthContextService.CurrentUser.DisplayName;
-                entity.IsDeleted = CommonEnum.IsDeleted.No;
+                entity.IsDeleted = IsDeleted.No;
                 entity.Icon = string.IsNullOrEmpty(entity.Icon) ? "md-menu" : entity.Icon;
                 _dbContext.DncMenu.Add(entity);
                 _dbContext.SaveChanges();
@@ -120,14 +119,6 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
                 var entity = _dbContext.DncMenu.FirstOrDefault(x => x.Guid == guid);
                 var response = ResponseModelFactory.CreateInstance;
                 var model = _mapper.Map<DncMenu, MenuEditViewModel>(entity);
-                //if (model.ParentGuid.HasValue)
-                //{
-                //    var parent = _dbContext.DncMenu.FirstOrDefault(x => x.Guid == entity.ParentGuid);
-                //    if (parent != null)
-                //    {
-                //        model.ParentName = parent.Name;
-                //    }
-                //}
                 var tree = LoadMenuTree(model.ParentGuid.ToString());
                 response.SetData(new { model, tree });
                 return Ok(response);
@@ -203,7 +194,7 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
                 response.SetIsTrial();
                 return Ok(response);
             }
-            response = UpdateIsDelete(CommonEnum.IsDeleted.Yes, ids);
+            response = UpdateIsDelete(IsDeleted.Yes, ids);
             return Ok(response);
         }
 
@@ -216,7 +207,7 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
         [ProducesResponseType(200)]
         public IActionResult Recover(string ids)
         {
-            var response = UpdateIsDelete(CommonEnum.IsDeleted.No, ids);
+            var response = UpdateIsDelete(IsDeleted.No, ids);
             return Ok(response);
         }
 
@@ -239,10 +230,10 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
                         response.SetIsTrial();
                         return Ok(response);
                     }
-                    response = UpdateIsDelete(CommonEnum.IsDeleted.Yes, ids);
+                    response = UpdateIsDelete(IsDeleted.Yes, ids);
                     break;
                 case "recover":
-                    response = UpdateIsDelete(CommonEnum.IsDeleted.No, ids);
+                    response = UpdateIsDelete(IsDeleted.No, ids);
                     break;
                 case "forbidden":
                     if (ConfigurationManager.AppSettings.IsTrialVersion)
@@ -250,10 +241,10 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
                         response.SetIsTrial();
                         return Ok(response);
                     }
-                    response = UpdateStatus(UserStatus.Forbidden, ids);
+                    response = UpdateStatus(Status.Forbidden, ids);
                     break;
                 case "normal":
-                    response = UpdateStatus(UserStatus.Normal, ids);
+                    response = UpdateStatus(Status.Normal, ids);
                     break;
                 default:
                     break;
@@ -271,11 +262,14 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
         {
             using (_dbContext)
             {
-                var parameters = ids.Split(",").Select((id, index) => new SqlParameter(string.Format("@p{0}", index), id)).ToList();
-                var parameterNames = string.Join(", ", parameters.Select(p => p.ParameterName));
-                var sql = string.Format("UPDATE DncMenu SET IsDeleted=@IsDeleted WHERE Guid IN ({0})", parameterNames);
-                parameters.Add(new SqlParameter("@IsDeleted", (int)isDeleted));
-                _dbContext.Database.ExecuteSqlRaw(sql, parameters);
+                var idList = ids.Split(",").Select(x => new Guid(x)).ToList();
+                var items = _dbContext.DncMenu.Where(x => idList.Contains(x.Guid)).ToList();
+                foreach (var item in items)
+                {
+                    item.IsDeleted = isDeleted;
+                }
+                _dbContext.SaveChanges();
+
                 var response = ResponseModelFactory.CreateInstance;
                 return response;
             }
@@ -287,15 +281,17 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
         /// <param name="status">菜单状态</param>
         /// <param name="ids">菜单ID字符串,多个以逗号隔开</param>
         /// <returns></returns>
-        private ResponseModel UpdateStatus(UserStatus status, string ids)
+        private ResponseModel UpdateStatus(Status status, string ids)
         {
             using (_dbContext)
             {
-                var parameters = ids.Split(",").Select((id, index) => new SqlParameter(string.Format("@p{0}", index), id)).ToList();
-                var parameterNames = string.Join(", ", parameters.Select(p => p.ParameterName));
-                var sql = string.Format("UPDATE DncMenu SET Status=@Status WHERE Guid IN ({0})", parameterNames);
-                parameters.Add(new SqlParameter("@Status", (int)status));
-                _dbContext.Database.ExecuteSqlRaw(sql, parameters);
+                var idList = ids.Split(",").Select(x => new Guid(x)).ToList();
+                var icons = _dbContext.DncMenu.Where(x => idList.Contains(x.Guid)).ToList();
+                foreach (var icon in icons)
+                {
+                    icon.Status = status;
+                }
+                _dbContext.SaveChanges();
                 var response = ResponseModelFactory.CreateInstance;
                 return response;
             }
@@ -303,7 +299,7 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
 
         private List<MenuTree> LoadMenuTree(string selectedGuid = null)
         {
-            var temp = _dbContext.DncMenu.Where(x => x.IsDeleted == CommonEnum.IsDeleted.No && x.Status == CommonEnum.Status.Normal).ToList().Select(x => new MenuTree
+            var temp = _dbContext.DncMenu.Where(x => x.IsDeleted == IsDeleted.No && x.Status == Status.Normal).ToList().Select(x => new MenuTree
             {
                 Guid = x.Guid.ToString(),
                 ParentGuid = x.ParentGuid,

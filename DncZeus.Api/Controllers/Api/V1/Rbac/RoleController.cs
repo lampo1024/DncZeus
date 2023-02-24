@@ -16,8 +16,6 @@ using DncZeus.Api.RequestPayload.Rbac.Role;
 using DncZeus.Api.Utils;
 using DncZeus.Api.ViewModels.Rbac.DncRole;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 
@@ -237,10 +235,10 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
                         response.SetIsTrial();
                         return Ok(response);
                     }
-                    response = UpdateStatus(UserStatus.Forbidden, ids);
+                    response = UpdateStatus(CommonEnum.Status.Forbidden, ids);
                     break;
                 case "normal":
-                    response = UpdateStatus(UserStatus.Normal, ids);
+                    response = UpdateStatus(CommonEnum.Status.Normal, ids);
                     break;
                 default:
                     break;
@@ -272,7 +270,9 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
                     return Ok(response);
                 }
                 //先删除当前角色原来已分配的权限
-                _dbContext.Database.ExecuteSqlRaw("DELETE FROM DncRolePermissionMapping WHERE RoleCode={0}", payload.RoleCode);
+                //_dbContext.Database.ExecuteSqlRaw("DELETE FROM DncRolePermissionMapping WHERE RoleCode={0}", payload.RoleCode);
+                _dbContext.DncRolePermissionMapping.RemoveRange(_dbContext.DncRolePermissionMapping.Where(x => x.RoleCode == payload.RoleCode));
+                _dbContext.SaveChanges();
                 if (payload.Permissions != null || payload.Permissions.Count > 0)
                 {
                     var permissions = payload.Permissions.Select(x => new DncRolePermissionMapping
@@ -310,12 +310,18 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
                 //    x.DncRole.Code,
                 //    x.DncRole.Name
                 //});
-                var sql = @"SELECT R.* FROM DncUserRoleMapping AS URM
-INNER JOIN DncRole AS R ON R.Code=URM.RoleCode
-WHERE URM.UserGuid={0}";
-                var query = _dbContext.DncRole.FromSqlRaw(sql, guid).ToList();
-                var assignedRoles = query.ToList().Select(x => x.Code).ToList();
-                var roles = _dbContext.DncRole.Where(x => x.IsDeleted == CommonEnum.IsDeleted.No && x.Status == CommonEnum.Status.Normal).ToList().Select(x => new { label = x.Name, key = x.Code });
+                var userGuid = AuthContextService.CurrentUser.Guid;
+
+                var query = from urm in _dbContext.DncUserRoleMapping
+                            join r in _dbContext.DncRole on urm.RoleCode equals r.Code
+                            where urm.UserGuid == userGuid
+                            select r;
+
+                var assignedRoles = query.Select(x => x.Code).ToList();
+                var roles = _dbContext.DncRole.Where(x =>
+                        x.IsDeleted == CommonEnum.IsDeleted.No && x.Status == CommonEnum.Status.Normal)
+                    .Select(x => new { label = x.Name, key = x.Code })
+                    .ToList();
                 response.SetData(new { roles, assignedRoles });
                 return Ok(response);
             }
@@ -349,11 +355,20 @@ WHERE URM.UserGuid={0}";
         {
             using (_dbContext)
             {
-                var parameters = ids.Split(",").Select((id, index) => new SqlParameter(string.Format("@p{0}", index), id)).ToList();
-                var parameterNames = string.Join(", ", parameters.Select(p => p.ParameterName));
-                var sql = string.Format("UPDATE DncRole SET IsDeleted=@IsDeleted WHERE Code IN ({0})", parameterNames);
-                parameters.Add(new SqlParameter("@IsDeleted", (int)isDeleted));
-                _dbContext.Database.ExecuteSqlRaw(sql, parameters);
+                //var parameters = ids.Split(",").Select((id, index) => new SqlParameter(string.Format("@p{0}", index), id)).ToList();
+                //var parameterNames = string.Join(", ", parameters.Select(p => p.ParameterName));
+                //var sql = string.Format("UPDATE DncRole SET IsDeleted=@IsDeleted WHERE Code IN ({0})", parameterNames);
+                //parameters.Add(new SqlParameter("@IsDeleted", (int)isDeleted));
+                //_dbContext.Database.ExecuteSqlRaw(sql, parameters);
+
+                var idList = ids.Split(",").ToList();
+                var items = _dbContext.DncRole.Where(x => idList.Contains(x.Code)).ToList();
+                foreach (var item in items)
+                {
+                    item.IsDeleted = isDeleted;
+                }
+                _dbContext.SaveChanges();
+
                 var response = ResponseModelFactory.CreateInstance;
                 return response;
             }
@@ -365,15 +380,24 @@ WHERE URM.UserGuid={0}";
         /// <param name="status">角色状态</param>
         /// <param name="ids">角色ID字符串,多个以逗号隔开</param>
         /// <returns></returns>
-        private ResponseModel UpdateStatus(UserStatus status, string ids)
+        private ResponseModel UpdateStatus(CommonEnum.Status status, string ids)
         {
             using (_dbContext)
             {
-                var parameters = ids.Split(",").Select((id, index) => new SqlParameter(string.Format("@p{0}", index), id)).ToList();
-                var parameterNames = string.Join(", ", parameters.Select(p => p.ParameterName));
-                var sql = string.Format("UPDATE DncRole SET Status=@Status WHERE Code IN ({0})", parameterNames);
-                parameters.Add(new SqlParameter("@Status", (int)status));
-                _dbContext.Database.ExecuteSqlRaw(sql, parameters);
+                //var parameters = ids.Split(",").Select((id, index) => new SqlParameter(string.Format("@p{0}", index), id)).ToList();
+                //var parameterNames = string.Join(", ", parameters.Select(p => p.ParameterName));
+                //var sql = string.Format("UPDATE DncRole SET Status=@Status WHERE Code IN ({0})", parameterNames);
+                //parameters.Add(new SqlParameter("@Status", (int)status));
+                //_dbContext.Database.ExecuteSqlRaw(sql, parameters);
+
+                var idList = ids.Split(",").ToList();
+                var items = _dbContext.DncRole.Where(x => idList.Contains(x.Code)).ToList();
+                foreach (var item in items)
+                {
+                    item.Status = status;
+                }
+                _dbContext.SaveChanges();
+
                 var response = ResponseModelFactory.CreateInstance;
                 return response;
             }

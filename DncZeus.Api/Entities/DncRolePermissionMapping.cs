@@ -7,7 +7,6 @@
 
 using System;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DncZeus.Api.Entities
 {
@@ -20,12 +19,12 @@ namespace DncZeus.Api.Entities
         /// 角色编码
         /// </summary>
         [Required]
-        [Column(TypeName = "nvarchar(50)")]
+        [StringLength(50)]
         public string RoleCode { get; set; }
         /// <summary>
         /// 权限编码
         /// </summary>
-        [Column(TypeName = "nvarchar(20)")]
+        [StringLength(20)]
         public string PermissionCode { get; set; }
 
         /// <summary>

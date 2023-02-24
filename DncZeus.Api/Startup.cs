@@ -5,7 +5,6 @@
  * 版权所有，请勿删除
  ******************************************/
 
-using AutoMapper;
 using DncZeus.Api.Auth;
 using DncZeus.Api.Entities;
 using DncZeus.Api.Extensions.AuthContext;
@@ -71,26 +70,33 @@ namespace DncZeus.Api
                 options.TextEncoderSettings = new TextEncoderSettings(UnicodeRanges.BasicLatin, UnicodeRanges.CjkUnifiedIdeographs)
             );
 
-            //services
-            //    .AddMvc(config =>
-            //    {
-            //        //config.Filters.Add(new ValidateModelAttribute());
-            //    })
-            //    .AddJsonOptions(options =>
-            //    {
-            //        options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-            //    })
-            //    .SetCompatibilityVersion(CompatibilityVersion.Latest);
-
             services.AddControllers().AddNewtonsoftJson();
 
             services.AddDbContext<DncZeusDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
-                // 如果使用SQL Server 2008数据库，请添加UseRowNumberForPaging的选项
-                // 参考资料:https://github.com/aspnet/EntityFrameworkCore/issues/4616 
-                // 【重要说明】:2020-03-23更新，微软官方最新的Entity Framework Core已不再支持UseRowNumberForPaging()，请尽量使用SQL Server 2012 +版本
-                //options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),b=>b.UseRowNumberForPaging())
-                );
+                {
+                    var provider = Configuration.GetValue<string>("DataProvider");
+                    switch (provider)
+                    {
+                        case "MSSQL":
+                            // 使用SQL Server数据库
+                            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+
+                            // 如果使用SQL Server 2008数据库，请添加UseRowNumberForPaging的选项
+                            // 参考资料:https://github.com/aspnet/EntityFrameworkCore/issues/4616 
+                            // 【重要说明】:2020-03-23更新，微软官方最新的Entity Framework Core已不再支持UseRowNumberForPaging()，请尽量使用SQL Server 2012 +版本
+                            //options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),b=>b.UseRowNumberForPaging())
+
+                            break;
+                        case "MYSQL":
+                            // 使用MySQL数据库
+                            options.UseMySql(Configuration.GetConnectionString("MySQLConnection"),
+                                ServerVersion.AutoDetect(Configuration.GetConnectionString("MySQLConnection")));
+                            break;
+                    }
+
+                }
+            );
+
 
             services.AddSwaggerGen(c =>
             {

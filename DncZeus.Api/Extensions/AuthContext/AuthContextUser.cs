@@ -39,5 +39,9 @@ namespace DncZeus.Api.Extensions.AuthContext
         /// 头像地址
         /// </summary>
         public string Avator { get; set; }
+        /// <summary>
+        /// 当前用户是否是超级管理员
+        /// </summary>
+        public bool IsSupperAdministrator => UserType == UserType.SuperAdministrator;
     }
 }

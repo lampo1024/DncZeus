@@ -8,8 +8,6 @@ using DncZeus.Api.Models.Response;
 using DncZeus.Api.RequestPayload.Rbac.User;
 using DncZeus.Api.ViewModels.Rbac.DncUser;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 
@@ -260,7 +258,10 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
                 CreatedOn = DateTime.Now,
                 RoleCode = x.Trim()
             }).ToList();
-            _dbContext.Database.ExecuteSqlRaw("DELETE FROM DncUserRoleMapping WHERE UserGuid={0}", model.UserGuid);
+            //_dbContext.Database.ExecuteSqlRaw("DELETE FROM DncUserRoleMapping WHERE UserGuid={0}", model.UserGuid);
+            var rm = _dbContext.DncUserRoleMapping.Where(x => x.UserGuid == model.UserGuid).ToList();
+            _dbContext.DncUserRoleMapping.RemoveRange(rm);
+            _dbContext.SaveChanges();
             var success = true;
             if (roles.Count > 0)
             {
@@ -291,16 +292,18 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
         {
             using (_dbContext)
             {
-                //var idList = ids.Split(",").ToList();
-                ////idList.ForEach(x => {
-                ////  _dbContext.Database.ExecuteSqlCommand($"UPDATE DncUser SET IsDeleted=1 WHERE Id = {x}");
-                ////});
-                //_dbContext.Database.ExecuteSqlCommand($"UPDATE DncUser SET IsDeleted={(int)isDeleted} WHERE Id IN ({ids})");
-                var parameters = ids.Split(",").Select((id, index) => new SqlParameter(string.Format("@p{0}", index), id)).ToList();
-                var parameterNames = string.Join(", ", parameters.Select(p => p.ParameterName));
-                var sql = string.Format("UPDATE DncUser SET IsDeleted=@IsDeleted WHERE Guid IN ({0})", parameterNames);
-                parameters.Add(new SqlParameter("@IsDeleted", (int)isDeleted));
-                _dbContext.Database.ExecuteSqlRaw(sql, parameters);
+                //var parameters = ids.Split(",").Select((id, index) => new SqlParameter(string.Format("@p{0}", index), id)).ToList();
+                //var parameterNames = string.Join(", ", parameters.Select(p => p.ParameterName));
+                //var sql = string.Format("UPDATE DncUser SET IsDeleted=@IsDeleted WHERE Guid IN ({0})", parameterNames);
+                //parameters.Add(new SqlParameter("@IsDeleted", (int)isDeleted));
+                //_dbContext.Database.ExecuteSqlRaw(sql, parameters);
+                var idList = ids.Split(",").Select(x => new Guid(x)).ToList();
+                var users = _dbContext.DncUser.Where(x => idList.Contains(x.Guid)).ToList();
+                foreach (var user in users)
+                {
+                    user.IsDeleted = isDeleted;
+                }
+                _dbContext.SaveChanges();
                 var response = ResponseModelFactory.CreateInstance;
                 return response;
             }
@@ -316,11 +319,21 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
         {
             using (_dbContext)
             {
-                var parameters = ids.Split(",").Select((id, index) => new SqlParameter(string.Format("@p{0}", index), id)).ToList();
-                var parameterNames = string.Join(", ", parameters.Select(p => p.ParameterName));
-                var sql = string.Format("UPDATE DncUser SET Status=@Status WHERE Guid IN ({0})", parameterNames);
-                parameters.Add(new SqlParameter("@Status", (int)status));
-                _dbContext.Database.ExecuteSqlRaw(sql, parameters);
+                //var parameters = ids.Split(",").Select((id, index) => new SqlParameter(string.Format("@p{0}", index), id)).ToList();
+                //var parameterNames = string.Join(", ", parameters.Select(p => p.ParameterName));
+                //var sql = string.Format("UPDATE DncUser SET Status=@Status WHERE Guid IN ({0})", parameterNames);
+                //parameters.Add(new SqlParameter("@Status", (int)status));
+                //_dbContext.Database.ExecuteSqlRaw(sql, parameters);
+
+                var idList = ids.Split(",").Select(x => new Guid(x)).ToList();
+                var users = _dbContext.DncUser.Where(x => idList.Contains(x.Guid)).ToList();
+                foreach (var user in users)
+                {
+                    user.Status = status;
+                }
+
+                _dbContext.SaveChanges();
+
                 var response = ResponseModelFactory.CreateInstance;
                 return response;
             }

@@ -7,6 +7,7 @@
 
 using AutoMapper;
 using DncZeus.Api.Entities;
+using DncZeus.Api.Entities.QueryModels;
 using DncZeus.Api.ViewModels.Rbac.DncIcon;
 using DncZeus.Api.ViewModels.Rbac.DncMenu;
 using DncZeus.Api.ViewModels.Rbac.DncPermission;

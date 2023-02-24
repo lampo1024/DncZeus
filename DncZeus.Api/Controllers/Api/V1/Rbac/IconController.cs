@@ -15,8 +15,6 @@ using DncZeus.Api.Models.Response;
 using DncZeus.Api.RequestPayload.Rbac.Icon;
 using DncZeus.Api.ViewModels.Rbac.DncIcon;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 
@@ -265,11 +263,11 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
                     }
                     else
                     {
-                        response = UpdateStatus(UserStatus.Forbidden, ids);
+                        response = UpdateStatus(CommonEnum.Status.Forbidden, ids);
                     }
                     break;
                 case "normal":
-                    response = UpdateStatus(UserStatus.Normal, ids);
+                    response = UpdateStatus(CommonEnum.Status.Normal, ids);
                     break;
                 default:
                     break;
@@ -323,11 +321,20 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
         {
             using (_dbContext)
             {
-                var parameters = ids.Split(",").Select((id, index) => new SqlParameter(string.Format("@p{0}", index), id)).ToList();
-                var parameterNames = string.Join(", ", parameters.Select(p => p.ParameterName));
-                var sql = string.Format("UPDATE DncIcon SET IsDeleted=@IsDeleted WHERE Id IN ({0})", parameterNames);
-                parameters.Add(new SqlParameter("@IsDeleted", (int)isDeleted));
-                _dbContext.Database.ExecuteSqlRaw(sql, parameters);
+                //var parameters = ids.Split(",").Select((id, index) => new SqlParameter(string.Format("@p{0}", index), id)).ToList();
+                //var parameterNames = string.Join(", ", parameters.Select(p => p.ParameterName));
+                //var sql = string.Format("UPDATE DncIcon SET IsDeleted=@IsDeleted WHERE Id IN ({0})", parameterNames);
+                //parameters.Add(new SqlParameter("@IsDeleted", (int)isDeleted));
+                //_dbContext.Database.ExecuteSqlRaw(sql, parameters);
+
+                var idList = ids.Split(",").Select(int.Parse).ToList();
+                var icons = _dbContext.DncIcon.Where(x => idList.Contains(x.Id)).ToList();
+                foreach (var icon in icons)
+                {
+                    icon.IsDeleted = isDeleted;
+                }
+                _dbContext.SaveChanges();
+
                 var response = ResponseModelFactory.CreateInstance;
                 return response;
             }
@@ -339,15 +346,24 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
         /// <param name="status">图标状态</param>
         /// <param name="ids">图标ID字符串,多个以逗号隔开</param>
         /// <returns></returns>
-        private ResponseModel UpdateStatus(UserStatus status, string ids)
+        private ResponseModel UpdateStatus(CommonEnum.Status status, string ids)
         {
             using (_dbContext)
             {
-                var parameters = ids.Split(",").Select((id, index) => new SqlParameter(string.Format("@p{0}", index), id)).ToList();
-                var parameterNames = string.Join(", ", parameters.Select(p => p.ParameterName));
-                var sql = string.Format("UPDATE DncIcon SET Status=@Status WHERE Id IN ({0})", parameterNames);
-                parameters.Add(new SqlParameter("@Status", (int)status));
-                _dbContext.Database.ExecuteSqlRaw(sql, parameters);
+                //var parameters = ids.Split(",").Select((id, index) => new SqlParameter(string.Format("@p{0}", index), id)).ToList();
+                //var parameterNames = string.Join(", ", parameters.Select(p => p.ParameterName));
+                //var sql = string.Format("UPDATE DncIcon SET Status=@Status WHERE Id IN ({0})", parameterNames);
+                //parameters.Add(new SqlParameter("@Status", (int)status));
+                //_dbContext.Database.ExecuteSqlRaw(sql, parameters);
+
+                var idList = ids.Split(",").Select(int.Parse).ToList();
+                var icons = _dbContext.DncIcon.Where(x => idList.Contains(x.Id)).ToList();
+                foreach (var icon in icons)
+                {
+                    icon.Status = status;
+                }
+                _dbContext.SaveChanges();
+
                 var response = ResponseModelFactory.CreateInstance;
                 return response;
             }

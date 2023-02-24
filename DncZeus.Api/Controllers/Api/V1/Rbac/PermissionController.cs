@@ -17,7 +17,6 @@ using DncZeus.Api.RequestPayload.Rbac.Permission;
 using DncZeus.Api.Utils;
 using DncZeus.Api.ViewModels.Rbac.DncPermission;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -252,10 +251,10 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
                         response.SetIsTrial();
                         return Ok(response);
                     }
-                    response = UpdateStatus(UserStatus.Forbidden, ids);
+                    response = UpdateStatus(Status.Forbidden, ids);
                     break;
                 case "normal":
-                    response = UpdateStatus(UserStatus.Normal, ids);
+                    response = UpdateStatus(Status.Normal, ids);
                     break;
                 default:
                     break;
@@ -288,16 +287,48 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
                         Title = x.Name
                     }).ToList();
                 //DncPermissionWithAssignProperty
-                var sql = @"SELECT P.Code,P.MenuGuid,P.Name,P.ActionCode,ISNULL(S.RoleCode,'') AS RoleCode,(CASE WHEN S.PermissionCode IS NOT NULL THEN 1 ELSE 0 END) AS IsAssigned FROM DncPermission AS P 
-LEFT JOIN (SELECT * FROM DncRolePermissionMapping AS RPM WHERE RPM.RoleCode={0}) AS S 
-ON S.PermissionCode= P.Code
-WHERE P.IsDeleted=0 AND P.Status=1";
+                //                var sql = @"SELECT P.Code,P.MenuGuid,P.Name,P.ActionCode,ISNULL(S.RoleCode,'') AS RoleCode,(CASE WHEN S.PermissionCode IS NOT NULL THEN 1 ELSE 0 END) AS IsAssigned FROM DncPermission AS P 
+                //LEFT JOIN (SELECT * FROM DncRolePermissionMapping AS RPM WHERE RPM.RoleCode={0}) AS S 
+                //ON S.PermissionCode= P.Code
+                //WHERE P.IsDeleted=0 AND P.Status=1";
+                //                if (role.IsSuperAdministrator)
+                //                {
+                //                    sql = @"SELECT P.Code,P.MenuGuid,P.Name,P.ActionCode,'SUPERADM' AS RoleCode,(CASE WHEN P.Code IS NOT NULL THEN 1 ELSE 0 END) AS IsAssigned FROM DncPermission AS P 
+                //WHERE P.IsDeleted=0 AND P.Status=1";
+                //                }
+
+                var query = from p in _dbContext.DncPermission
+                            join s in (from rpm in _dbContext.DncRolePermissionMapping
+                                       where rpm.RoleCode == code
+                                       select rpm) on p.Code equals s.PermissionCode into perm
+                            from subperm in perm.DefaultIfEmpty()
+                            where p.IsDeleted == IsDeleted.No && p.Status == Status.Normal
+                            select new DncPermissionWithAssignProperty
+                            {
+                                Code = p.Code,
+                                MenuGuid = p.MenuGuid,
+                                Name = p.Name,
+                                ActionCode = p.ActionCode,
+                                RoleCode = subperm == null ? "" : subperm.RoleCode,
+                                IsAssigned = subperm != null ? 1 : 0
+                            };
                 if (role.IsSuperAdministrator)
                 {
-                    sql = @"SELECT P.Code,P.MenuGuid,P.Name,P.ActionCode,'SUPERADM' AS RoleCode,(CASE WHEN P.Code IS NOT NULL THEN 1 ELSE 0 END) AS IsAssigned FROM DncPermission AS P 
-WHERE P.IsDeleted=0 AND P.Status=1";
+                    query = from p in _dbContext.DncPermission
+                            where p.IsDeleted == IsDeleted.No && p.Status == Status.Normal
+                            select new DncPermissionWithAssignProperty
+                            {
+                                Code = p.Code,
+                                MenuGuid = p.MenuGuid,
+                                Name = p.Name,
+                                ActionCode = p.ActionCode,
+                                RoleCode = "SUPERADM",
+                                IsAssigned = p.Code != null ? 1 : 0
+                            };
+
                 }
-                var permissionList = _dbContext.Database.FromSql<DncPermissionWithAssignProperty>(sql, code).ToList();
+
+                var permissionList = query.ToList();
                 var tree = menu.FillRecursive(permissionList, Guid.Empty, role.IsSuperAdministrator);
                 response.SetData(new { tree, selectedPermissions = permissionList.Where(x => x.IsAssigned == 1).Select(x => x.Code) });
             }
@@ -317,11 +348,20 @@ WHERE P.IsDeleted=0 AND P.Status=1";
         {
             using (_dbContext)
             {
-                var parameters = ids.Split(",").Select((id, index) => new SqlParameter(string.Format("@p{0}", index), id)).ToList();
-                var parameterNames = string.Join(", ", parameters.Select(p => p.ParameterName));
-                var sql = string.Format("UPDATE DncPermission SET IsDeleted=@IsDeleted WHERE Code IN ({0})", parameterNames);
-                parameters.Add(new SqlParameter("@IsDeleted", (int)isDeleted));
-                _dbContext.Database.ExecuteSqlRaw(sql, parameters);
+                //var parameters = ids.Split(",").Select((id, index) => new SqlParameter(string.Format("@p{0}", index), id)).ToList();
+                //var parameterNames = string.Join(", ", parameters.Select(p => p.ParameterName));
+                //var sql = string.Format("UPDATE DncPermission SET IsDeleted=@IsDeleted WHERE Code IN ({0})", parameterNames);
+                //parameters.Add(new SqlParameter("@IsDeleted", (int)isDeleted));
+                //_dbContext.Database.ExecuteSqlRaw(sql, parameters);
+
+                var idList = ids.Split(",").ToList();
+                var items = _dbContext.DncPermission.Where(x => idList.Contains(x.Code)).ToList();
+                foreach (var item in items)
+                {
+                    item.IsDeleted = isDeleted;
+                }
+                _dbContext.SaveChanges();
+
                 var response = ResponseModelFactory.CreateInstance;
                 return response;
             }
@@ -333,15 +373,24 @@ WHERE P.IsDeleted=0 AND P.Status=1";
         /// <param name="status">权限状态</param>
         /// <param name="ids">权限ID字符串,多个以逗号隔开</param>
         /// <returns></returns>
-        private ResponseModel UpdateStatus(UserStatus status, string ids)
+        private ResponseModel UpdateStatus(Status status, string ids)
         {
             using (_dbContext)
             {
-                var parameters = ids.Split(",").Select((id, index) => new SqlParameter(string.Format("@p{0}", index), id)).ToList();
-                var parameterNames = string.Join(", ", parameters.Select(p => p.ParameterName));
-                var sql = string.Format("UPDATE DncPermission SET Status=@Status WHERE Code IN ({0})", parameterNames);
-                parameters.Add(new SqlParameter("@Status", status));
-                _dbContext.Database.ExecuteSqlRaw(sql, parameters);
+                //var parameters = ids.Split(",").Select((id, index) => new SqlParameter(string.Format("@p{0}", index), id)).ToList();
+                //var parameterNames = string.Join(", ", parameters.Select(p => p.ParameterName));
+                //var sql = string.Format("UPDATE DncPermission SET Status=@Status WHERE Code IN ({0})", parameterNames);
+                //parameters.Add(new SqlParameter("@Status", status));
+                //_dbContext.Database.ExecuteSqlRaw(sql, parameters);
+
+                var idList = ids.Split(",").ToList();
+                var items = _dbContext.DncPermission.Where(x => idList.Contains(x.Code)).ToList();
+                foreach (var item in items)
+                {
+                    item.Status = status;
+                }
+                _dbContext.SaveChanges();
+
                 var response = ResponseModelFactory.CreateInstance;
                 return response;
             }
@@ -365,7 +414,7 @@ WHERE P.IsDeleted=0 AND P.Status=1";
         /// <returns></returns>
         public static List<PermissionMenuTree> FillRecursive(this List<PermissionMenuTree> menus, List<DncPermissionWithAssignProperty> permissions, Guid? parentGuid, bool isSuperAdministrator = false)
         {
-            List<PermissionMenuTree> recursiveObjects = new List<PermissionMenuTree>();
+            var recursiveObjects = new List<PermissionMenuTree>();
             foreach (var item in menus.Where(x => x.ParentGuid == parentGuid))
             {
                 var children = new PermissionMenuTree
