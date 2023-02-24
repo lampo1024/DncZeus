@@ -18,12 +18,12 @@ export default {
    */
   baseUrl: {
     dev: 'http://localhost:5432/',
-    pro: 'http://localhost:5432/',
-    defaultPrefix:"api/v1/"
+    pro: 'https://api.dnczeus.codedefault.com/',
+    defaultPrefix: "api/v1/"
   },
   authUrl: {
     dev: 'http://localhost:5432/api/oauth/auth',
-    pro: 'http://localhost:5432/api/oauth/auth'
+    pro: 'https://api.dnczeus.codedefault.com/api/oauth/auth'
   },
   /**
    * @description 默认打开的首页的路由name值，默认为home

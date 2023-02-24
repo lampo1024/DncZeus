@@ -48,10 +48,9 @@ namespace DncZeus.Api
             services.AddCors(o =>
                 o.AddPolicy("CorsPolicy",
                     builder => builder
-                        .WithOrigins("http://localhost:9000")
+                        .WithOrigins(Configuration.GetValue<string>("AllowedOrigins").Split(","))
                         .AllowAnyHeader()
                         .AllowAnyMethod()
-                        //.AllowAnyOrigin()
                         .AllowCredentials()
                 ));
 
