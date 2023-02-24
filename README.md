@@ -69,7 +69,7 @@ ASP.NET Core 的知识能确保你可以看懂和了解后端是如何实现和�
 2. Visual Studio 2022
 3. VS Code 或者其他前端开发工具
 4. git 管理工具
-5. SQL Server CE 或者 SQL Server Express 或者 SQL Server 2014 +
+5. MySQL或SQL Server(SQL Server 2012+)
 
 ## 技术实现
 
@@ -206,6 +206,11 @@ DncZeus项目是一个开源项目，你可以直接基于本项目进行扩展�
 * [码友网][8]
 
 ## 版本变更日志
+
+### v2.1.0(2023-02-24)
+* .NET SDK升级到.NET 7
+* 同时支持MySQL和MS SQL Server数据库(请修改appsettings.json的配置项`DataProvider`，可选值：`MYSQL`,`MSSQL`)
+* 将SQL脚本全部使用Linq语法重构
 
 ### v2.0.0
 
