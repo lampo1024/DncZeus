@@ -5,6 +5,7 @@
  * DESCRIPTION:     图标实体类
  ******************************************/
 using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using static DncZeus.Api.Entities.Enums.CommonEnum;
@@ -80,5 +81,10 @@ namespace DncZeus.Api.Entities
         /// 
         /// </summary>
         public string ModifiedByUserName { get; set; }
+        /// <summary>
+        /// 是否为种子数据
+        /// </summary>
+        [DefaultValue(0)]
+        public YesOrNo IsSeed { get; set; }
     }
 }

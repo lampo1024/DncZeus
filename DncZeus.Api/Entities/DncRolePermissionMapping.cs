@@ -6,7 +6,9 @@
  ******************************************/
 
 using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using static DncZeus.Api.Entities.Enums.CommonEnum;
 
 namespace DncZeus.Api.Entities
 {
@@ -40,5 +42,10 @@ namespace DncZeus.Api.Entities
         /// 创建时间
         /// </summary>
         public DateTime CreatedOn { get; set; }
+        /// <summary>
+        /// 是否为种子数据
+        /// </summary>
+        [DefaultValue(0)]
+        public YesOrNo IsSeed { get; set; }
     }
 }

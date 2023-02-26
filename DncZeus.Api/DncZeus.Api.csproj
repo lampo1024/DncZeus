@@ -36,10 +36,12 @@
         </PackageReference>
         <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="6.1.0" />
         <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="7.0.0" />
+        <PackageReference Include="Quartz.AspNetCore" Version="3.6.2" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     </ItemGroup>
 
     <ItemGroup>
+        <Folder Include="Migrations\" />
         <Folder Include="wwwroot\css\" />
         <Folder Include="wwwroot\js\" />
         <Folder Include="wwwroot\images\" />

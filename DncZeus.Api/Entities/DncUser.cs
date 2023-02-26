@@ -71,6 +71,11 @@ namespace DncZeus.Api.Entities
         /// 用户的角色集合
         /// </summary>
         public ICollection<DncUserRoleMapping> UserRoles { get; set; }
+        /// <summary>
+        /// 是否为种子数据
+        /// </summary>
+        [DefaultValue(0)]
+        public YesOrNo IsSeed { get; set; }
     }
 
     /// <summary>

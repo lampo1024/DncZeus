@@ -128,5 +128,10 @@ namespace DncZeus.Api.Entities
         /// 菜单拥有的权限列表
         /// </summary>
         public ICollection<DncPermission> Permissions { get; set; }
+        /// <summary>
+        /// 是否为种子数据
+        /// </summary>
+        [DefaultValue(0)]
+        public YesOrNo IsSeed { get; set; }
     }
 }
