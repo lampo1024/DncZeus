@@ -18,7 +18,7 @@ namespace DncZeus.Api.Extensions
                 q.AddTrigger(opts => opts
                         .ForJob(jobKey)
                         .WithIdentity("ResetDatabase-trigger")
-                        .WithCronSchedule("/10 * * ? * * ") //0 2 0 ? * *,0 2 * * *,0 * * ? * *
+                        .WithCronSchedule("0 2 0 ? * *") //0 2 0 ? * *,0 2 * * *,0 * * ? * *
                 );
             });
             services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
