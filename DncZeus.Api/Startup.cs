@@ -92,6 +92,10 @@ namespace DncZeus.Api
                             options.UseMySql(Configuration.GetConnectionString("MySQLConnection"),
                                 ServerVersion.AutoDetect(Configuration.GetConnectionString("MySQLConnection")));
                             break;
+                        case "PGSQL":
+                            // 使用PGSQL数据库
+                            options.UseNpgsql(Configuration.GetConnectionString("PGSQLConnection"));
+                            break;
                     }
 
                 }
@@ -113,6 +117,7 @@ namespace DncZeus.Api
                 config.AddLog4Net();
             });
 
+            // 定期重置示例数据(如果你不需要此功能，可以删除这个服务)
             services.AddRestoreScheduler();
 
         }

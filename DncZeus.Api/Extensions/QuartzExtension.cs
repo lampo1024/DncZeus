@@ -6,6 +6,11 @@ namespace DncZeus.Api.Extensions
 {
     public static class QuartzExtension
     {
+        /// <summary>
+        /// 每天定期重置示例数据
+        /// </summary>
+        /// <param name="services"></param>
+        /// <returns></returns>
         public static IServiceCollection AddRestoreScheduler(this IServiceCollection services)
         {
             if (!ConfigurationManager.AppSettings.IsTrialVersion) return services;
