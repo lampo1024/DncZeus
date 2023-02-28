@@ -1,6 +1,7 @@
-为了简化初始化步骤，专门准备了数据库初始化脚本，v2.1.0开始已支持SQL Server两种数据库，用户可以直接执行初始化脚本：
+为了简化初始化步骤，专门准备了数据库初始化脚本，v2.1.0开始已支持SQL Server,MySQL,PostgreSQL三种数据库，直接执行初始化脚本：
 
 - SQL Server数据库：按顺序执行目录[v2.0.0]中的两个脚本：[01.schema(结构脚本).sql]和[02.data(示例数据脚本).sql]。
-- MySQL数据库：执行[mysql-schema-and-data(结构和示例数据脚本).sql]脚本
+- MySQL数据库：执行[MySQL结构和示例数据脚本]脚本
+- PostgreSQL数据库：执行[PostgreSQL结构和示例数据脚本]脚本
 
-要切换数据库类型，请修改appsettings.json的`DataProvider`配置参数值，目前支持：MSSQL,MYSQL。默认值：MSSQL
+要切换数据库类型，请修改appsettings.json的`DataProvider`配置参数值，可选值：MSSQL,MYSQL,PGSQL。默认值：MYSQL

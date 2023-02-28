@@ -69,7 +69,7 @@ ASP.NET Core 的知识能确保你可以看懂和了解后端是如何实现和�
 2. Visual Studio 2022
 3. VS Code 或者其他前端开发工具
 4. git 管理工具
-5. MySQL或SQL Server(SQL Server 2012+)
+5. MySQL,PostgreSQL或SQL Server(SQL Server 2012+)
 
 ## 技术实现
 
@@ -141,7 +141,7 @@ npm i
 
 打开项目根目录中的脚本文件夹[Scripts]，执行你的数据库类型对应的脚本文件以初始化系统数据。
 
-**v2.1.0开始，DncZeus同时支持MySQL和MSSQL两种类型数据库啦！！！你可以根据需要选择适合自己的数据库哟**
+**v2.1.0开始，DncZeus同时支持MySQL,PostgreSQL,MSSQL三种类型数据库啦！！！你可以根据需要选择适合自己的数据库哟**
 
 恭喜你，到这里所有的准备工作就完成了。
 
@@ -204,9 +204,12 @@ DncZeus项目是一个开源项目，你可以直接基于本项目进行扩展�
 
 ## 版本变更日志
 
+### v2.1.1(2023-02-28)
+* 新增PostgreSQL数据支持
+
 ### v2.1.0(2023-02-24)
 * .NET SDK升级到.NET 7
-* 同时支持MySQL和MS SQL Server数据库(请修改appsettings.json的配置项`DataProvider`，可选值：`MYSQL`,`MSSQL`)
+* 同时支持MySQL,PostgreSQL,MS SQL Server数据库(请修改appsettings.json的配置项`DataProvider`，可选值：`MYSQL`,`MSSQL`)
 * 将SQL脚本全部使用Linq语法重构
 
 ### v2.0.0
